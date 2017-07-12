@@ -1,0 +1,40 @@
+#Tomcat
+server:
+  port: 8080
+  context-path: /SEIN
+
+#mysql
+spring:
+  #环境:pro/dev
+  profiles:
+    active: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+  #jackson时间格式化
+  jackson:
+    time-zone: GMT-8
+    date-format: yyyy-MM-dd HH:mm:ss
+
+#mybatis
+mybatis:
+  type-aliases-package: com.sein.pojo.po
+  mapper-locations: classpath:mappers/*.xml
+
+#通用Mapper
+mapper:
+  mappers: com.sein.utils.MyMapper
+  not-empty: false
+  identity: MYSQL
+
+#pageHelper
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+#logbakc配置
+logging:
+  config:
+
