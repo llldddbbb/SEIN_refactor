@@ -19,20 +19,19 @@
         <div class="searchbar" id="searchbar">
             <div style="float:left;margin-top: 33px;margin-left: -500px;font-size:20px; z-index:2" class="autocomplete"
                  id="autocomplete"></div>
-
             <input style="float: left" id="placesearch" type="text" placeholder="地点搜索(search)"
                    onkeyup="if(event.keyCode==13) searchPlace();">
             <a id="placesearchbtn" href="javascript:searchPlace()"></a>
         </div>
         <div class="citylist">
             <div class="cities" style="margin-right:10px!important;" th:each="devicePollu:${devicePolluList}">
-                <a th:href="@{'/detail/devices/'+${devicePollu.devicePO.id}}">
-                    <img th:src="@{'/images/'+${devicePollu.devicePO.picture}}"/>
-                    <h3 th:text="${devicePollu.devicePO.cityName}"></h3>
+                <a th:href="@{'/detail/devices/'+${devicePollu.device.id}}">
+                    <img th:src="@{'/images/'+${devicePollu.device.picture}}"/>
+                    <h3 th:text="${devicePollu.device.cityName}"></h3>
                     <div class="city-bottom">
                         <marquee drection="left" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="scroll">
 								<span>
-                                    <span th:each="pollutant:${devicePollu.pollutantItemBOList}">
+                                    <span th:each="pollutant:${devicePollu.pollutantItemList}">
                                         <span th:if="${pollutant.type}==PM25"
                                               th:utext="'[ PM<sub>2.5</sub> '+${#numbers.formatInteger(pollutant.value,0)}+' &micro;g/m<sup>3</sup> ]'"></span>
                                         <span th:if="${pollutant.type}==PM10"
@@ -64,8 +63,8 @@
                                     </span>
                                 </span>
                         </marquee>
-                        <p class="airlevel level-3" th:if="${devicePollu.devicePO.status}=='离线'" th:text="#{STATUS_OFF}">${device.getStatus() }</p>
-                        <p class="airlevel level-1" th:if="${devicePollu.devicePO.status}=='在线'" th:text="#{STATUS_ON}">${device.getStatus() }</p>
+                        <p class="airlevel level-3" th:if="${devicePollu.device.status}=='离线'" th:text="#{STATUS_OFF}">${device.getStatus() }</p>
+                        <p class="airlevel level-1" th:if="${devicePollu.device.status}=='在线'" th:text="#{STATUS_ON}">${device.getStatus() }</p>
                     </div>
                 </a>
             </div>

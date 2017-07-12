@@ -26,12 +26,10 @@
 			return;
 		}
 		$.post("/SEIN/account/login",{userName:userName,password:password},function(result){
-			var result=eval("("+result+")");
 			if(result.success){
 			    window.location.href="/SEIN/list/devices"
 			}else{
-				alert("用户名或密码错误!");
-				return;
+				alert(result.msg);
 			}
 		});
 	}
