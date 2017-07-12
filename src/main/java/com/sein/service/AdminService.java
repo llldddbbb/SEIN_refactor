@@ -24,7 +24,7 @@ public class AdminService {
     public Result checkLogin(Admin admin){
         Admin currentAdmin= adminDAO.selectOne(admin);
         if(currentAdmin!=null){
-            //将登录用户绑定给Controller
+            //将登录用户返回给Controller
             return Result.isOK(currentAdmin);
         }else{
             return Result.isNotOK(ResultEnum.LOGIN_ERROR.getInfo());

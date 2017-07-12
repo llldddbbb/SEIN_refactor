@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Platform</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href='@{/css/bootstrap-datetimepicker.min.css}' rel='stylesheet'>
+    <link th:href="@{/css/environment.css}" rel="stylesheet">
+</head>
+<body style="background:#4585d7">
+<nav class="navbar navbar-default navbar-fixed-top header" role="navigation"  th:include="common/header::header"></nav>
+
+<div class="detail-main">
+    <div class="detail-left">
+        <a class="map-left" href="#" th:text="#{HISTORYDATA}">历史数据查询</a>
+        <a class="map-left" href="#" th:text="#{ALERTDATA}">报警数据查询</a>
+        <a class="map-left" href="javascript:history.go(-1)" th:text="#{BACK}">返回</a>
+    </div>
+
+    <div class="detail-right" style="height: auto">
+        <div>
+            <div style="height:100px;">
+                <div style="display:inline;">
+                    <div class="table-select" style="margin-left:30px;">
+                        <div class="table-select2" th:text="#{SITE}">地点</div>
+                        <select name="place" id="place">
+                                <option th:each="device:${deviceList}" th:value="${device.id}" th:text="${device.cityName}"></option>
+                        </select>
+                    </div>
+                    <div class="table-select">
+                        <div class="table-select2" th:text="#{INTERVAL}">时间间隔</div>
+                        <select name="timepicker" id="timepicker">
+                            <option value="_1h" selected th:if="${session.displayConfig.getH1()}==1" th:text="#{H1}">1小时</option>
+                            <option value="_30min" th:if="${session.displayConfig.getMin30()}==1" th:text="#{MIN30}">30分钟</option>
+                            <option value="_15min" th:if="${session.displayConfig.getMin15()}==1" th:text="#{MIN15}">15分钟</option>
+                            <option value="_10min" th:if="${session.displayConfig.getMin10()}==1" th:text="#{MIN10}">10分钟</option>
+                            <option value="_1min" th:if="${session.displayConfig.getMin1()}==1" th:text="#{MIN1}">1分钟</option>
+                            <option value="_1d" th:if="${session.displayConfig.getD1()}==1" th:text="#{D1}">1天</option>
+                            <option value="_original" th:if="${session.displayConfig.getOriginal()}==1" th:text="#{ORIGIANL}">1天</option>
+                        </select>
+                    </div>
+                    <div class="table-select">
+                        <div class="table-select2" th:text="#{STARTTIME}">开始时间</div>
+                        <div style="margin-top:0px;">
+                            <input type="text" id="startTime" style="height:30px;width:200px;">
+                        </div>
+                    </div>
+                    <div class="table-select">
+                        <div class="table-select2" th:text="#{ENDTIME}">结束时间</div>
+                        <div style="margin-top:0px;">
+                            <input type="text" id="endTime" style="height:30px;width:200px;" >
+                        </div>
+                    </div>
+                    <div class="table-select">
+                        <div class="table-select2" th:text="#{DURATION}">时间段</div>
+                        <div style="margin-top:5px;">
+                            <select id="duration" onchange="changeDuration()">
+                                <option value="">请选择</option>
+                                <option th:value="${duration.startTime}+'-'+${duration.endTime}" th:each="duration:${session.durationList}" th:text="${duration.event}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-select" style="display:none;">
+                        <div class="table-select2" th:text="#{LINENUM}">每页行数</div>
+                        <div style="margin-top:5px;">
+                            <input type="number" id="lineNum" name="lineNum"  style="width:55px;height:30px;" value="30">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="height:100px;margin-top:-25px">
+                <div >
+                    <div class="table-select" style="margin-left:30px;">
+                        <div class="table-select2" th:text="#{UNIT}">单位标准</div>
+                        <input type="radio" class="radio" id="umgm" name="standard" value="umgm"/><span >µg/m³</span><br>
+                        <input type="radio" class="radio" id="ppbm" name="standard" value="ppbm" checked   /><span >ppb or ppm</span>
+                    </div>
+                    <div>
+                        <div class="table-select" th:if="${session.displayConfig.getPm25()}==1">
+                            <div class="table-select2" th:text="#{POLLUTANTTYPE}">污染物</div>
+                            <input type="checkbox" name="airQulityType" id="PM25" value="PM25" checked class="radio" >PM<sub>2.5</sub>
+                            <br>
+                            <div th:if="${session.displayConfig.getPress()}==1" style="margin-top: 3px;">
+                                <input type="checkbox" name="airQulityType" id="Press" value="Press" checked class="radio" th:text="#{Press}"><br>
+                            </div>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getPm10()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="PM10" value="PM10" checked class="radio" >PM<sub>10</sub><br>
+                            <div th:if="${session.displayConfig.getLongitude()}==1" style="margin-top: 3px;">
+                                <input type="checkbox" name="airQulityType" id="Longitude" value="Longitude" checked class="radio" th:text="#{Longitude}"><br>
+                            </div>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getPm1()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="PM1" value="PM1" checked class="radio" >PM<sub>1</sub><br>
+                            <div th:if="${session.displayConfig.getLatitude()}==1" style="margin-top: 3px;">
+                                <input type="checkbox" name="airQulityType" id="Latitude" value="Latitude" checked class="radio" th:text="#{Latitude}"><br>
+                            </div>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getCo()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="CO" value="CO" checked class="radio" >CO<br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getCo2()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="CO2" value="CO2" checked class="radio" >CO<sub>2</sub><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getNo()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="NO" value="NO" checked class="radio" >NO<br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getNo2()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="NO2" value="NO2" checked class="radio" >NO<sub>2</sub><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getSo()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="SO" value="SO" checked class="radio" >SO<br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getSo2()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="SO2" value="SO2" checked class="radio" >SO<sub>2</sub><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getO3()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="O3" value="O3" checked class="radio" >O<sub>3</sub><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getCl2()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="CL2" value="CL2" checked  class="radio" >CL<sub>2</sub><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getVoc()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="VOC" value="VOC" checked  class="radio" >VOC<br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getTemp()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="Temp" value="Temp" checked  class="radio" th:text="#{TEMP}" ><br>
+                        </div>
+                        <div class="table-select"th:if="${session.displayConfig.getHumi()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="Humi" value="Humi" checked class="radio" th:text="#{HUMI}"><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="alerm" style="margin-top:-25px;">
+                <div style="display:inline;">
+                    <div class="table-select" style="margin-left:30px; float: none">
+                        <div class="table-select2" th:text="#{ALERTVALUE}">警戒值</div>
+                        <table style="margin-top: 0px;float: left;width: 100%">
+                            <tr>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getPm25()}==1" >PM<sub>2.5</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getPm25()}==1"><input type="text" id="PM25_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getPm10()}==1" >PM<sub>10</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getPm10()}==1"><input type="text" id="PM10_alerm" /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getPm1()}==1" >PM<sub>1</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getPm1()}==1"><input type="text" id="PM1_alerm" /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getCo()}==1" >CO&nbsp;</td>
+                                <td th:if="${session.displayConfig.getCo()}==1"><input type="text" id="CO_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getCo2()}==1" >CO<sub>2</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getCo2()}==1"><input type="text" id="CO2_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getNo()}==1" >NO&nbsp;</td>
+                                <td th:if="${session.displayConfig.getNo()}==1"><input type="text" id="NO_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getNo2()}==1" >NO<sub>2</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getNo2()}==1"><input type="text" id="NO2_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getSo()}==1" >SO&nbsp;</td>
+                                <td th:if="${session.displayConfig.getSo()}==1"><input type="text" id="SO_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getSo2()}==1" >SO<sub>2</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getSo2()}==1"><input type="text" id="SO2_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getO3()}==1">O<sub>3</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getO3()}==1"><input type="text" id="O3_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getCl2()}==1">CL<sub>2</sub>&nbsp;</td>
+                                <td th:if="${session.displayConfig.getCl2()}==1"><input type="text" id="CL2_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getVoc()}==1">VOC&nbsp;</td>
+                                <td th:if="${session.displayConfig.getVoc()}==1"><input type="text" id="VOC_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getTemp()}==1" th:text="#{TEMP}+'&nbsp;'">温度&nbsp;</td>
+                                <td th:if="${session.displayConfig.getTemp()}==1"><input type="text"id="Temp_alerm"  /></td>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getHumi()}==1" th:text="#{HUMI}+'&nbsp;'">湿度&nbsp;</td>
+                                <td th:if="${session.displayConfig.getHumi()}==1" ><input type="text"id="Humi_alerm"/></td>
+                            </tr>
+                            <tr>
+                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getPress()}==1" th:text="#{Press}+'&nbsp;'">压力&nbsp;</td>
+                                <td th:if="${session.displayConfig.getPress()}==1" ><input type="text"id="Press_alerm"/></td>
+                            </tr>
+                        </table>
+                        <div style="margin-top: 10px;float: left;margin-bottom: 10px;">
+                            <input type="button" style="padding-left:0px;width:100px; height:27px; font-size:10px;" th:value="#{SUBMIT}" onclick="javascript:loadPollutantTable()"/>
+                            <input type="button" style="margin-left:10px;padding-left:0px;width:100px; height:27px; font-size:10px; " onclick="javascript:exportExcel()" th:value="#{EXPROTEXCEL}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <table style="solid:#000; width: 95%; margin-top:20px; margin-left:30px; text-align:center" border="2 " id="pollutantTable">
+            
+        </table>
+        <nav aria-label="Page navigation" style="text-align: center">
+            <ul class="pagination" id="pageNation">
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script th:src="@{/js/environment.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.fr.js}"></script>
+<script th:src="@{/js/echarts.min.js}"></script>
+<script>
+    $(function(){
+        $('#startTime').datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,//选中之后自动隐藏日期选择框
+            clearBtn: true,//清除按钮
+            todayBtn: true,//今日按钮
+            todayHighlight: true
+        });
+        $('#endTime').datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,//选中之后自动隐藏日期选择框
+            clearBtn: true,//清除按钮
+            todayBtn: true,//今日按钮
+            todayHighlight: true
+        });
+
+    });
+    function switchToChart(){
+        var id=$("#place").val();
+        window.location.href="/SEIN/detail/devices/"+id;
+    }
+
+    function loadPollutantTable(page){
+        var id=$("#place").val();
+        var interval= $('#timepicker').val();
+        var lineNum=$("#lineNum").val();
+        var unit=$('input[name="standard"]:checked ').val();
+        var pollutantTypeAndAlermArr =[];
+        $('input[name="airQulityType"]:checked').each(function(){
+            if($(this).val()=="PM25"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#PM25_alerm").val());
+            }else if($(this).val()=="PM10"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#PM10_alerm").val());
+            }else if($(this).val()=="PM1"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#PM1_alerm").val());
+            }else if($(this).val()=="CO"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#CO_alerm").val());
+            }else if($(this).val()=="CO2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#CO2_alerm").val());
+            }else if($(this).val()=="NO"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO_alerm").val());
+            }else if($(this).val()=="NO2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO2_alerm").val());
+            }else if($(this).val()=="SO"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO_alerm").val());
+            }else if($(this).val()=="SO2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO2_alerm").val());
+            }else if($(this).val()=="O3"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#O3_alerm").val());
+            }else if($(this).val()=="CL2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#CL2_alerm").val());
+            }else if($(this).val()=="VOC"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#VOC_alerm").val());
+            }else if($(this).val()=="Temp"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#Temp_alerm").val());
+            }else if($(this).val()=="Humi"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#Humi_alerm").val());
+            }
+        });
+        $('input[name="airQulityType"]:checked').each(function(){
+            if($(this).val()=="Press"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#Press_alerm").val());
+            }else if($(this).val()=="Longitude"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-");
+            }else if($(this).val()=="Latitude"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-");
+            }
+        });
+        var pollutantTypeAndAlerm=pollutantTypeAndAlermArr.join(",");
+        var startTime=$("#startTime").val();
+        var endTime=$("#endTime").val();
+
+        $("#pollutantTable tr").empty("");
+        $.ajax({
+            url:"/SEIN/table/pollutantTable",
+            type:"GET",
+            data:{
+                id:id,
+                interval:interval,
+                lineNum:lineNum,
+                page:page,
+                startTime:startTime,
+                endTime:endTime,
+                pollutantTypeAndAlerm:pollutantTypeAndAlerm,
+                unit,unit
+            },
+            success:function (result) {
+                var result=eval("("+result+")");
+                for(var i in result){
+                    if(i=="pageNation"){
+                        $("#pageNation").html(result[i]);
+                    }else if(i=="tableHeader"){
+                        $("#pollutantTable").html(result[i]);
+                    }else{
+                        $(result[i]).appendTo($("#pollutantTable"));
+                    }
+                }
+            }
+        });
+    }
+    loadPollutantTable();
+
+    function exportExcel(){
+        var id=$("#place").val();
+        var interval= $('#timepicker').val();
+        var pollutantTypeAndAlermArr =[];
+        var unit=$('input[name="standard"]:checked ').val();
+        $('input[name="airQulityType"]:checked').each(function(){
+            if($(this).val()=="PM25"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#PM25_alerm").val());
+            }else if($(this).val()=="PM1"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#PM1_alerm").val());
+            }else if($(this).val()=="PM10"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#PM10_alerm").val());
+            }else if($(this).val()=="CO"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#CO_alerm").val());
+            }else if($(this).val()=="CO2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#CO2_alerm").val());
+            }else if($(this).val()=="NO"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO_alerm").val());
+            }else if($(this).val()=="NO2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO2_alerm").val());
+            }else if($(this).val()=="SO"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO_alerm").val());
+            }else if($(this).val()=="SO2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO2_alerm").val());
+            }else if($(this).val()=="O3"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#O3_alerm").val());
+            }else if($(this).val()=="CL2"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#CL2_alerm").val());
+            }else if($(this).val()=="VOC"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#VOC_alerm").val());
+            }else if($(this).val()=="Temp"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#Temp_alerm").val());
+            }else if($(this).val()=="Humi"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#Humi_alerm").val());
+            }
+        });
+        $('input[name="airQulityType"]:checked').each(function(){
+            if($(this).val()=="Press"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#Press_alerm").val());
+            }else if($(this).val()=="Longitude"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-");
+            }else if($(this).val()=="Latitude"){
+                pollutantTypeAndAlermArr.push($(this).val()+"-");
+            }
+        });
+        var pollutantTypeAndAlerm=pollutantTypeAndAlermArr.join(",");
+        var startTime=$("#startTime").val();
+        var endTime=$("#endTime").val();
+        window.location.href="/SEIN/table/exportExcel?id="+id+"&interval="+interval+"&pollutantTypeAndAlerm="+pollutantTypeAndAlerm+"&startTime="+startTime+"&endTime="+endTime+"&unit="+unit;
+    }
+
+    function changeLanguage(){
+        var id=$("#place").val();
+        window.location.href="/SEIN/changeSessionLanguage?page=table/devices/"+id;
+    }
+
+    function changeDuration() {
+        var objS = document.getElementById("duration");
+        var grade = objS.options[objS.selectedIndex].value;
+        if(grade==""){
+            $("#startTime").val("");
+            $("#endTime").val("");
+        }else{
+            $("#startTime").val(getTaskTime(grade.split("-")[0]));
+            $("#endTime").val(getTaskTime(grade.split("-")[1]));
+        }
+    }
+    function getTaskTime(strDate) {
+        if(null==strDate || "null"==strDate.trim()){
+            return "";
+        }
+        var dateStr=strDate.trim().split(" ");
+        var strGMT = dateStr[0]+" "+dateStr[1]+" "+dateStr[2]+" "+dateStr[5]+" "+dateStr[3]+" GMT+0800";
+        var date = new Date(Date.parse(strGMT));
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        return y+"-"+m+"-"+d+" "+h+":"+minute;
+    };
+
+
+</script>
+</html>

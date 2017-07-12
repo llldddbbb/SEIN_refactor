@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Cloud Platform</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{/css/environment.css}" rel="stylesheet" >
+	<link th:href="@{/css/environment_640.css}" media="screen and (max-width:640px)" rel="stylesheet"/>
+	<style>
+		body{
+			background: url("/SEIN/images/back.jpg") no-repeat fixed;
+		}
+	</style>
+	<script type="text/javascript">
+	function login(){
+		var userName=$("#userName").val();
+		var password=$("#password").val();
+		if(userName==''||userName==null){
+			alert("用户名不能为空!");
+			return;
+		}
+		if(password==''||password==null){
+			alert("密码不能为空");
+			return;
+		}
+		$.post("/SEIN/account/login",{userName:userName,password:password},function(result){
+			var result=eval("("+result+")");
+			if(result.success){
+			    window.location.href="/SEIN/list/devices"
+			}else{
+				alert("用户名或密码错误!");
+				return;
+			}
+		});
+	}
+	</script>
+</head>
+<body onkeypress="if (event.keyCode == 13) login();">
+	 <div class="login_nav">
+        <a href="#" th:text="#{VISITOR}">游客</a>
+        <a id="changeLanguage" href="/SEIN/changeSessionLanguage?page=login" th:text="#{CHANGELANGUAGE}">English</a>
+    </div><!--导航区结束-->
+    <div class="login_main">
+        <h2>Sapiens Environmental IoT Network (SEIN)</h2>
+        <h2>Cloud Platform</h2>
+        <h2>环境物联网云平台</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h2 th:text="#{ACCOUNT}">用户名</h2>
+                    <input type="text" id="userName"/>
+                </div>
+                <div class="col-md-6">
+                    <h2 th:text="#{PASSWORD}">密码&nbsp;&nbsp;&nbsp;</h2>
+                    <input type="password" id="password"/>
+                </div>
+            </div>
+        </div><!--输入框结束-->
+        <div class="login_btn">
+            <h2 th:text="#{LOGIN}">登录</h2>
+            <button onclick="login()"></button>
+        </div>
+    </div><!--登录模块结束-->
+<div class="copyright">
+    <h2>2016 © Environmental Technology Co Limited. ALL Rights Reserved.</h2>
+</div><!--底部版权区-->
+</body>
+<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+</html>

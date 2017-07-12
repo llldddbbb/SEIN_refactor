@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Platform</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/environment.css}" rel="stylesheet" >
+    <link th:href="@{/css/environment_640.css}" media="screen and (max-width:640px)" rel="stylesheet"/>
+    <style type="text/css">
+        #allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+        .BMap_bubble_title{
+            color:black;
+            font-size:15px;
+            text-align:left;
+        }
+        .BMap_pop div:nth-child(1){
+            border-radius:7px 0 0 0;
+        }
+        .BMap_pop div:nth-child(3){
+            border-radius:0 7px 0 0;
+        }
+        .BMap_pop div:nth-child(3) div{
+            border-radius:7px;
+        }
+        .BMap_pop div:nth-child(5){
+            border-radius:0 0 0 7px;
+        }
+        .BMap_pop div:nth-child(5) div{
+            border-radius:7px;
+        }
+        .BMap_pop div:nth-child(7){
+            border-radius:0 0 7px 0 ;
+        }
+        .BMap_pop div:nth-child div(7){
+            border-radius:7px ;
+        }
+
+
+    </style>
+</head>
+<body style="background:#4585d7">
+<nav class="navbar navbar-default navbar-fixed-top header" role="navigation"  th:include="common/header::header"></nav>
+
+<div class="detail-main" style="position:fixed">
+    <div style="background:#4585d7; float:left; width:20%; height:100%; display:inline;color:#fff;">
+        <div class="places">
+            <div style="margin:20px 5px;text-align:center;" th:each="device:${deviceList}">
+                <a th:onMouseOver="'javascript:loadGeo(\''+${device.cityName}+'\')'">
+                    <img style="margin-bottom:5px;" th:src="@{'/images/'+${device.picture}}" width="95%" height="70px"/>
+                    <span th:text="${device.cityName}"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div style="background:#fff; float:left; width:80%; height:100%; display:inline;">
+        <div id="allmap" style="min-height: 600px;height:89%;width: 100%; float:left; overflow:hidden;">
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script th:src="@{/js/jquery.i18n.properties-1.0.9.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/environment.js}"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=Um05HtLey0wwsiGAy01LWoQu9KaMAaEq"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    var displayConfig=[[${session.displayConfig}]];
+
+    // 百度地图API功能
+    var map = new BMap.Map("allmap");    // 创建Map实例
+    map.addControl(new BMap.MapTypeControl({mapTypes: [BMAP_NORMAL_MAP,BMAP_SATELLITE_MAP ]}));   //添加地图类型控件（没有三维）
+    var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+    map.addControl(top_left_navigation);
+    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+
+    function loadGeo(highlightCityName){
+        var url;
+        url='/SEIN/map/loadGeo';
+        map.clearOverlays();
+        //异步加载地图数据
+        $.post(url,{},function(result){
+            var result=eval("("+result+")");
+            map.centerAndZoom(new BMap.Point(result[0].devicePO.longitude, result[0].devicePO.latitude), 11);  // 初始化地图,设置中心点坐标和地图级别
+            if(result){
+                $.each(result, function(i,val){
+                    var marker;
+                    var point;
+                    point = new BMap.Point(val.devicePO.longitude,val.devicePO.latitude);
+                    marker = new BMap.Marker(point);
+                    map.addOverlay(marker);
+                    if(val.devicePO.cityName==highlightCityName){
+                        marker.setAnimation(BMAP_ANIMATION_BOUNCE);
+                        map.centerAndZoom(new BMap.Point(result[0].devicePO.longitude, result[0].devicePO.latitude), 11);
+                    }
+                    var content="<div class='mapInfo_content'><div class='mapInfo_content_left' ><span style='font-size: 14px;' id='AQITITLE'>空气质量指数<br></span><span>";
+                    if(displayConfig.aqi==1){
+                        content=content+"AQI</span></div><div class='mapInfo_content_middle'>"+val.devicePO.aqi+"</div><div class='mapInfo_content_right'>";
+                    }
+                    if(displayConfig.aqhi==1){
+                        content=content+"AQHI</span></div><div class='mapInfo_content_middle'>"+val.devicePO.aqhi+"</div><div class='mapInfo_content_right'>";
+                    }
+                    for(var j in val.pollutantItemBOList){
+                        if(val.pollutantItemBOList[j].type=="Temp"){
+                            content=content+"<span><span id='TEMP'>温度</span>:"+val.pollutantItemBOList[j].value+"℃<br/>";
+                        }
+                        if(val.pollutantItemBOList[j].type=="Humi"){
+                            content=content+"<span id='HUMI'>湿度</span>:"+val.pollutantItemBOList[j].value+"%</span></div></div>";
+                        }
+                    }
+                    content=content+"<table class='map-view'>";
+                    var time="";
+                    for(var k in val.pollutantItemBOList){
+                        if(val.pollutantItemBOList[k].type=="time"){
+                            time=val.pollutantItemBOList[k].value;
+                        }else if(val.pollutantItemBOList[k].type=="PM25"){
+                            content=content+"<tr><td >PM<sub>2.5</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="PM10"){
+                            content=content+"<tr><td >PM<sub>10</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="PM1"){
+                            content=content+"<tr><td >PM<sub>1</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="CO"){
+                            content=content+"<tr><td >CO</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppm</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="CO2"){
+                            content=content+"<tr><td >CO<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppm</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="NO"){
+                            content=content+"<tr><td >NO</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="NO2"){
+                            content=content+"<tr><td >NO<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="SO"){
+                            content=content+"<tr><td >SO</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="SO2"){
+                            content=content+"<tr><td >SO<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="O3"){
+                            content=content+"<tr><td >O<sub>3</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="CL2"){
+                            content=content+"<tr><td >CL<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemBOList[k].type=="VOC"){
+                            content=content+"<tr><td >VOC</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                        }
+                    }
+                    var content_final=content+"</table><div class='mapInfo_foot'><span id='UPDATETIME'>最后更新时间</span>&nbsp;&nbsp;&nbsp;"+time+"<div>"
+
+                    marker.addEventListener("mouseover",function(e){
+                        var opts = {
+                            width : 320,     // 信息窗口宽度
+                            height: 420,     // 信息窗口高度
+                            title : "<div class='mapInfo_title'><div class='mapInfo_title_left'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+val.devicePO.cityName+"</div><div class='mapInfo_title_right'>"+val.devicePO.pollutantTable+"</div></div>", // 信息窗口标题
+                            enableMessage:true//设置允许信息窗发送短息
+                        };
+                        var p = e.target;
+                        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+                        var content=content_final;
+                        var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
+                        map.openInfoWindow(infoWindow,point); //开启信息窗口
+                        changeMessageInfoLanguage();
+                    });
+                    marker.addEventListener("click",function(e){
+                        window.location.href='/SEIN/table/devices/'+val.devicePO.id;
+                    });
+                });
+            }else{
+                alert("加载地图失败!");
+            }
+        });
+    }
+    //调用方法
+    loadGeo();
+    function changeLanguage(){
+        window.location.href="/SEIN/changeSessionLanguage?page=map/devices";
+    }
+    function changeMessageInfoLanguage() {
+        $.ajax({
+            url:"/SEIN/changeMessageInfoLanguage",
+            success:function (result) {
+                var result=eval("("+result+")");
+                if(result.success){
+                    $("#TEMP").each(function(){
+                        $(this).html("TEMP");
+                    });
+                    $("#HUMI").each(function(){
+                        $(this).html("RH");
+                    });
+                    $("#AQITITLE").each(function(){
+                        $(this).html("<p style='margin: 25px;'></p>");
+                    });
+                    $("#UPDATETIME").each(function(){
+                        $(this).html("Last Update");
+                    })
+
+                }
+            }
+        });
+    }
+
+
+</script>
+</body>
+</html>

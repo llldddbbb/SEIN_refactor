@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Platform</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/environment.css}" rel="stylesheet">
+    <link th:href="@{/css/environment_640.css}" media="screen and (max-width:640px)" rel="stylesheet"/>
+    <link th:href="@{/css/searchbar.css}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top header" role="navigation"  th:include="common/header::header"></nav>
+
+<div class="content">
+    <div class="content-main">
+
+        <div class="searchbar" id="searchbar">
+            <div style="float:left;margin-top: 33px;margin-left: -500px;font-size:20px; z-index:2" class="autocomplete"
+                 id="autocomplete"></div>
+
+            <input style="float: left" id="placesearch" type="text" placeholder="地点搜索(search)"
+                   onkeyup="if(event.keyCode==13) searchPlace();">
+            <a id="placesearchbtn" href="javascript:searchPlace()"></a>
+        </div>
+        <div class="citylist">
+            <div class="cities" style="margin-right:10px!important;" th:each="devicePollu:${devicePolluList}">
+                <a th:href="@{'/detail/devices/'+${devicePollu.devicePO.id}}">
+                    <img th:src="@{'/images/'+${devicePollu.devicePO.picture}}"/>
+                    <h3 th:text="${devicePollu.devicePO.cityName}"></h3>
+                    <div class="city-bottom">
+                        <marquee drection="left" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="scroll">
+								<span>
+                                    <span th:each="pollutant:${devicePollu.pollutantItemBOList}">
+                                        <span th:if="${pollutant.type}==PM25"
+                                              th:utext="'[ PM<sub>2.5</sub> '+${#numbers.formatInteger(pollutant.value,0)}+' &micro;g/m<sup>3</sup> ]'"></span>
+                                        <span th:if="${pollutant.type}==PM10"
+                                              th:utext="'[ PM<sub>10</sub> '+${#numbers.formatInteger(pollutant.value,0)}+' &micro;g/m<sup>3</sup> ]'"></span>
+                                        <span th:if="${pollutant.type}==PM1"
+                                              th:utext="'[ PM<sub>1</sub> '+${#numbers.formatInteger(pollutant.value,0)}+' &micro;g/m<sup>3</sup> ]'"></span>
+                                        <span th:if="${pollutant.type}==CO"
+                                              th:utext="'[ CO : '+${#numbers.formatDecimal(pollutant.value,1,3)}+' ppm ]'"></span>
+                                        <span th:if="${pollutant.type}==CO2"
+                                              th:utext="'[ CO<sub>2</sub> : '+${#numbers.formatDecimal(pollutant.value,1,3)}+' ppm ]'"></span>
+                                        <span th:if="${pollutant.type}==NO"
+                                              th:utext="'[ NO : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==NO2"
+                                              th:utext="'[ NO<sub>2</sub> : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==SO"
+                                              th:utext="'[ SO : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==SO2"
+                                              th:utext="'[ SO<sub>2</sub> : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==O3"
+                                              th:utext="'[ O<sub>3</sub> : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==CL2"
+                                              th:utext="'[ CL<sub>2</sub> : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==VOC"
+                                              th:utext="'[ VOC : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
+                                        <span th:if="${pollutant.type}==Temp"
+                                              th:utext="'[ 温度 : '+${#numbers.formatInteger(pollutant.value,0)}+' ℃ ]'"></span>
+                                        <span th:if="${pollutant.type}==Humi"
+                                              th:utext="'[ 湿度 : '+${#numbers.formatInteger(pollutant.value,0)}+' % ]'"></span>
+                                    </span>
+                                </span>
+                        </marquee>
+                        <p class="airlevel level-3" th:if="${devicePollu.devicePO.status}=='离线'" th:text="#{STATUS_OFF}">${device.getStatus() }</p>
+                        <p class="airlevel level-1" th:if="${devicePollu.devicePO.status}=='在线'" th:text="#{STATUS_ON}">${device.getStatus() }</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+    function changeLanguage(){
+        window.location.href="/SEIN/changeSessionLanguage?page=list/devices";
+    }
+    function searchPlace(){
+        var cityName=$("#placesearch").val();
+        window.location.href="/SEIN/list/search?cityName="+cityName;
+    }
+</script>
+</html>

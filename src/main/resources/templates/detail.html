@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Platform</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/environment.css}" rel="stylesheet" >
+    <link th:href="@{/css/environment_640.css}" media="screen and (max-width:640px)" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+</head>
+<body style="background:#4585d7;overflow: hidden">
+<nav class="navbar navbar-default navbar-fixed-top header" role="navigation"  th:include="common/header::header"></nav>
+
+<div class="detail-main">
+    <div class="detail-left">
+
+        <div class="detail-left_title" >
+            <div class="title_content" th:text="${devicePollu.devicePO.cityName}+'&nbsp;&nbsp;&nbsp;'+${devicePollu.devicePO.pollutantTable}">${cityName}&nbsp;&nbsp;&nbsp;${deviceName_alias }</div>
+        </div>
+        <div class="detail-left_content" >
+            <div class="content_top">
+                <div class="content_top_left">
+                    <span th:text="AQI" th:if="${session.displayConfig.aqi}==1"></span>
+                    <span th:text="AQHI" th:if="${session.displayConfig.aqhi}==1"></span>
+                </div>
+                <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollu.pollutantItemBOList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
+                    <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollu.devicePO.status}=='离线'">${device.getStatus() }</span>
+                    <span id="status_real" style="color:green" th:text="#{STATUS_ON}" th:if="${devicePollu.devicePO.status}=='在线'">${device.getStatus() }</span>
+                </div>
+            </div>
+            <div class="content_middle"><span class="AQI" id="AQI_real" th:text="${devicePollu.devicePO.AQI}"></span></div>
+            <div class="content_foot">
+                    <div style="margin: auto;text-align: center">
+                        <span style="font-size: 21px;margin-left: 10px" th:utext="#{TEMP}"></span><span style="font-size: 21px" th:each="pollutant:${devicePollu.pollutantItemBOList}" th:if="${pollutant.type}=='Temp'" th:utext="${#numbers.formatDecimal(pollutant.value,1,1)}+'℃&nbsp;&nbsp;&nbsp;&nbsp;'" id="Temp_real">温度:℃</span>
+                        <span style="font-size: 21px;" th:utext="#{HUMI}"></span><span style="font-size: 21px;" th:each="pollutant:${devicePollu.pollutantItemBOList}" th:if="${pollutant.type}=='Humi'" th:utext="${#numbers.formatDecimal(pollutant.value,1,1)}+'%'" id="Humi_real">湿度:%</span>
+                    </div>
+                    <table style="margin: auto">
+                        <span th:each="pollutant:${devicePollu.pollutantItemBOList}">
+                            <span th:if="${pollutant.type}==PM25" th:utext="'<tr><td>PM<b><sub>2.5</sub></b></td><td id=PM25_real>'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &micro;g/m<sup>3</sup></b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==PM10" th:utext="'<tr><td>PM<b><sub>10</sub></b></td><td id=PM10_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &micro;g/m<sup>3</sup></b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==PM1" th:utext="'<tr><td>PM<b><sub>1</sub></b></td><td id=PM1_real>'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &micro;g/m<sup>3</sup></b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==CO" th:utext="'<tr><td>CO</td><td id=CO_real >'+${#numbers.formatDecimal(pollutant.value,1,3)}+' &nbsp;ppm</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==CO2" th:utext="'<tr><td>CO<sub>2</sub></td><td id=CO2_real >'+${#numbers.formatDecimal(pollutant.value,1,3)}+' &nbsp;ppm</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==NO" th:utext="'<tr><td>NO</td><td id=NO_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==NO2" th:utext="'<tr><td>NO<sub>2</sub></td><td id=NO2_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==SO" th:utext="'<tr><td>SO</td><td id=SO_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==SO2" th:utext="'<tr><td>SO<sub>2</sub></td><td id=SO2_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==O3" th:utext="'<tr><td>O<sub>3</sub></td><td id=O3_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==CL2" th:utext="'<tr><td>CL<sub>2</sub></td><td id=CL2_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==VOC" th:utext="'<tr><td>VOC</td><td id=VOC_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
+                            <span th:if="${pollutant.type}==Press" th:utext="'<tr><td>压力</td><td id=Press_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+'</b></td></tr>'"></span>
+                        </span>
+                    </table>
+            </div>
+        </div>
+        <a class="showcharts"  href="javascript:showcharts()" th:text="#{CHARTS}">查看图表</a>
+    </div>
+    <div class="detail-right" id="detail_detail_right">
+        <table >
+            <tr>
+                <td th:text="#{POLLUTANTTYPE}">污染物</td>
+                <td th:text="#{INTERVAL}">时间间隔</td>
+                <td th:text="#{STARTTIME}">开始时间</td>
+                <td th:text="#{ENDTIME}">结束时间</td>
+                <td th:text="#{CHARTSTYPE}" style="display: none">图表类型</td>
+                <td th:text="#{DURATION}">时间段</td>
+            </tr>
+            <tr>
+                <td>
+                    <select name="pollutantType" id="pollutantType">
+                        <option value="PM25" th:if="${session.displayConfig.getPm25()}==1">PM<sub>2.5</sub></option>
+                        <option value="PM10" th:if="${session.displayConfig.getPm10()}==1">PM<sub>10</sub></option>
+                        <option value="PM1" th:if="${session.displayConfig.getPm1()}==1">PM<sub>1</sub></option>
+                        <option value="CO" th:if="${session.displayConfig.getCo()}==1">CO</option>
+                        <option value="CO2" th:if="${session.displayConfig.getCo2()}==1">CO₂</option>
+                        <option value="NO" th:if="${session.displayConfig.getNo()}==1">NO</option>
+                        <option value="NO2" th:if="${session.displayConfig.getNo2()}==1">NO₂</option>
+                        <option value="SO" th:if="${session.displayConfig.getSo()}==1">SO</option>
+                        <option value="SO2" th:if="${session.displayConfig.getSo2()}==1">SO₂</option>
+                        <option value="O3" th:if="${session.displayConfig.getO3()}==1">O3</option>
+                        <option value="Cl2" th:if="${session.displayConfig.getCl2()}==1">Cl₂</option>
+                        <option value="VOC" th:if="${session.displayConfig.getVoc()}==1">VOC</option>
+                        <option value="Press" th:if="${session.displayConfig.getPress()}==1">压力</option>
+                        <option value="Temp" th:if="${session.displayConfig.getTemp()}==1" th:text="#{TEMP}">温度</option>
+                        <option value="Humi"th:if="${session.displayConfig.getHumi()}==1" th:text="#{HUMI}">湿度</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="timepicker" id="timepicker" >
+                        <option value="_1h" selected th:if="${session.displayConfig.getH1()}==1" th:text="#{H1}">1小时</option>
+                        <option value="_30min" th:if="${session.displayConfig.getMin30()}==1" th:text="#{MIN30}">30分钟</option>
+                        <option value="_15min" th:if="${session.displayConfig.getMin15()}==1" th:text="#{MIN15}">15分钟</option>
+                        <option value="_10min" th:if="${session.displayConfig.getMin10()}==1" th:text="#{MIN10}">10分钟</option>
+                        <option value="_1min" th:if="${session.displayConfig.getMin1()}==1" th:text="#{MIN1}">1分钟</option>
+                        <option value="_1d" th:if="${session.displayConfig.getD1()}==1" th:text="#{D1}">1天</option>
+                        <option value="_original" th:if="${session.displayConfig.getOriginal()}==1" th:text="#{ORIGIANL}">1天</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" id="startTime" >
+                </td>
+                <td>
+                    <input type="text" id="endTime" >
+                </td>
+                <td style="display: none">
+                    <select name="chartstype" id="chartstype">
+                        <option value="line" th:text="#{LINE}">折线图</option>
+                        <option value="bar" th:text="#{BAR}">柱状图</option>
+                    </select>
+                </td>
+                <td>
+                    <select id="duration" onchange="changeDuration()">
+                        <option value="">请选择</option>
+                        <option th:value="${duration.startTime}+'-'+${duration.endTime}" th:each="duration:${session.durationList}" th:text="${duration.event}"></option>
+                    </select>
+                </td>
+                <td ><a id="detail-submit" href="javascript:getChartsData()" th:text="#{SUBMIT}">提交</a></td>
+            </tr>
+        </table>
+        <div style="width:100%;">
+            <a id="detail-submit" class="detail-submit_mobile" href="javascript:getChartsData()" th:text="#{SUBMIT}">提交</a>
+        </div>
+        <div id="main" class="detail_detail_main"></div>
+    </div>
+</div>
+<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/environment.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.js}"></script>
+<script th:src="@{/js/echarts.min.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.fr.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+    //获取图表实例
+    var myChart = echarts.init(document.getElementById('main'));
+
+    //动态改变图表数据的方法
+    var id=[[${devicePollu.devicePO.id}]];
+    function getChartsData(){
+        var pollutantType=$("#pollutantType").val();
+        var startTime=$("#startTime").val();
+        var endTime=$("#endTime").val();
+        var chartstype=$("#chartstype").val();
+        var interval=$("#timepicker").val();
+        var unit;
+        if(pollutantType=='CO'||pollutantType=='CO2'){
+            unit="ppm";
+        }else if(pollutantType=="Temp"){
+            unit="°C";
+        }else if(pollutantType=="Humi"){
+            unit="%";
+        }else if(pollutantType=='PM10'||pollutantType=='PM25'||pollutantType=='PM1'){
+            unit="μg/m³";
+        }else if(pollutantType=='Press'){
+            unit="";
+        }else{
+            unit="ppb";
+        }
+        myChart.clear();
+        myChart.showLoading();
+        $.post("/SEIN/detail/chart",{"id":id,"pollutantType":pollutantType,"interval":interval,"startTime":startTime,"endTime":endTime},function(result){
+            var result=eval("("+result+")");
+            if(result){
+                var date=[];
+                var data=[];
+                for(var i in result){
+                    date.push(result[i].time);
+                    data.push(result[i].value);
+                }
+                myChart.hideLoading();
+                myChart.setOption({
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: '{b0}<br/>'+pollutantType.split("_")[0]+' : {c0} '+unit
+                    },
+
+                    yAxis: {
+                        name: "Unit("+unit+")",
+                        type: 'value',
+                        boundaryGap: [0, '30%']
+                    },
+                    toolbox: {
+                        feature: {
+                            restore: {},
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: date,
+
+                    },
+                    dataZoom: [{
+                        type: 'inside',
+                        start: 0,
+                        end: 100
+                    }, {
+                        start: 0,
+                        end: 10,
+                        handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                        handleSize: '80%',
+                        handleStyle: {
+                            color: '#fff',
+                            shadowBlur: 3,
+                            shadowColor: 'rgba(0, 0, 0, 0.6)',
+                            shadowOffsetX: 2,
+                            shadowOffsetY: 2
+                        }
+                    }],
+                    series: [
+                        {
+                            name: 'PM25_ug',
+                            type: chartstype,
+                            smooth:true,
+                            symbol: 'none',
+                            sampling: 'average',
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgb(255, 70, 131)'
+                                }
+                            },
+                            areaStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgb(255, 158, 68)'
+                                    }, {
+                                        offset: 1,
+                                        color: 'rgb(255, 70, 131)'
+                                    }])
+                                }
+                            },
+                            data: data
+                        }
+                    ]
+                });
+
+            }else{
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        });
+
+    }
+    getChartsData();
+
+    $(function(){
+        $('.dateControl').datepicker();
+        $('#timepicker').change(function(event) {
+        });
+
+        $('#startTime').datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,//选中之后自动隐藏日期选择框
+            clearBtn: true,//清除按钮
+            todayBtn: true,//今日按钮
+            todayHighlight: true
+        });
+        $('#endTime').datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,//选中之后自动隐藏日期选择框
+            clearBtn: true,//清除按钮
+            todayBtn: true,//今日按钮
+            todayHighlight: true
+        });
+    });
+    function showcharts(){
+        $(".detail-left").css("display","none");
+        $(".detail-right").css("display","block");
+        $(".detail-right").css("width","100%");
+    }
+    function changeLanguage(){
+        var id=[[${devicePollu.devicePO.id}]];
+        window.location.href="/SEIN/changeSessionLanguage?page=detail/devices/"+id;
+    }
+
+    function getTaskTime(strDate) {
+        if(null==strDate || "null"==strDate.trim()){
+            return "";
+        }
+        var dateStr=strDate.trim().split(" ");
+        var strGMT = dateStr[0]+" "+dateStr[1]+" "+dateStr[2]+" "+dateStr[5]+" "+dateStr[3]+" GMT+0800";
+        var date = new Date(Date.parse(strGMT));
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        var h = date.getHours();
+        var minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        return y+"-"+m+"-"+d+" "+h+":"+minute;
+    };
+
+
+    function changeDuration() {
+        var objS = document.getElementById("duration");
+        var grade = objS.options[objS.selectedIndex].value;
+        if(grade==""){
+            $("#startTime").val("");
+            $("#endTime").val("");
+        }else{
+            $("#startTime").val(getTaskTime(grade.split("-")[0]));
+            $("#endTime").val(getTaskTime(grade.split("-")[1]));
+        }
+    }
+
+    var getting = {
+
+        url:'/SEIN/detail/devices/real/'+id,
+
+        dataType:'json',
+
+        success:function(res) {
+            $("#AQI_real").val(res.devicePO.AQI);
+            var realPollutant=res.pollutantItemBOList;
+            for(var i in realPollutant){
+                if(realPollutant[i].type=='time'){
+                    $("#time_real").html(realPollutant[i].value);
+                }
+                if(realPollutant[i].type=='Humi'){
+                    $("#Humi_real").html(realPollutant[i].value+"%");
+                }
+                if(realPollutant[i].type=='Temp'){
+                    $("#Temp_real").html(realPollutant[i].value+"℃&nbsp;&nbsp;&nbsp;&nbsp;");
+                }
+                if(realPollutant[i].type=='PM25'){
+                    $("#PM25_real").html(realPollutant[i].value+" &micro;g/m<sup>3</sup></b>");
+                }
+                if(realPollutant[i].type=='PM10'){
+                    $("#PM10_real").html(realPollutant[i].value+" &micro;g/m<sup>3</sup></b>");
+                }
+                if(realPollutant[i].type=='PM1'){
+                    $("#PM1_real").html(realPollutant[i].value+" &micro;g/m<sup>3</sup></b>");
+                }
+                if(realPollutant[i].type=='CO'){
+                    $("#CO_real").html(realPollutant[i].value+" &nbsp;ppm</b>");
+                }
+                if(realPollutant[i].type=='CO2'){
+                    $("#CO2_real").html(realPollutant[i].value+" &nbsp;ppm</b>");
+                }
+                if(realPollutant[i].type=='NO'){
+                    $("#NO_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='NO2'){
+                    $("#NO2_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='SO'){
+                    $("#SO_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='SO2'){
+                    $("#SO2_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='O3'){
+                    $("#O3_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='CL2'){
+                    $("#CL2_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='VOC'){
+                    $("#VOC_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
+                }
+                if(realPollutant[i].type=='Press'){
+                    $("#Press_real").html(realPollutant[i].value);
+                }
+            }
+            //console.log(res);
+
+        }
+
+    };
+
+    //关键在这里，Ajax定时访问服务端，不断获取数据 ，这里是1秒请求一次。
+
+    window.setInterval(function(){$.ajax(getting)},10000);
+
+
+</script>
+
+</body>
+</html>

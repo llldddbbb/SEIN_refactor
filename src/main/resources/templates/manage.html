@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Platform</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/images/favicon.ico}">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/environment.css}" rel="stylesheet" >
+    <link th:href="@{/css/environment_640.css}" media="screen and (max-width:640px)" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top header" role="navigation"  th:include="common/header::header"></nav>
+<div class="content">
+    <div class="content-main">
+        <div >
+            <div class="detail-right" style="float: none">
+
+                <table style="margin: 0 0 15px 0">
+                    <tr>
+                        <td th:text="#{STARTTIME}">开始时间</td>
+                        <td th:text="#{ENDTIME}">结束时间</td>
+                        <td >时间段名称</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="startTime" >
+                        </td>
+                        <td>
+                            <input type="text" id="endTime" >
+                        </td>
+                        <td>
+                            <input type="text" id="event" >
+                        </td>
+                        <td ><a id="detail-submit" href="javascript:addDuration()" >添加</a></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        <div class="citylist">
+                <div class="cities" th:each="device,iterStat:${deviceList}">
+                    <span>
+                    <img th:src="@{'/images/'+${device.picture}}" />
+                        <h3 th:text="${device.cityName}">${city.cityName }</h3>
+                        <div class="city-bottom" id="city-bottom_mgmt">
+                        <form method="post" action="/SEIN/manage/updateDevice" enctype="multipart/form-data">
+                            <div class="city-latlng" >
+                                <label style="margin-right:5px;" th:text="#{SITE}">地点</label><input type="text"  name="cityName" th:value="${device.cityName}" required="required"/>
+                                <label style="margin-right:5px;" th:text="#{LONGITUDE}">经度</label><input type="text"  name="longitude" th:value="${device.longitude}" required="required"/>
+                                <label style="margin:0 5px;" th:text="#{LATITUDE}">纬度</label><input type="text"  name="latitude" th:value="${device.latitude}" required="required"/>
+                                <input th:id="'hiddenFile'+${iterStat.index }" type='file' name="file" style="display: none;"/>
+                                <input type='hidden' name="id" th:value="${device.id }"/>
+                                <input type="button"  th:value="#{PICTURE}"  th:onclick="'javascript:$(\'#hiddenFile'+${iterStat.index }+'\').click()'"/>
+                                <input type="submit"  th:value="#{MODIFY}" />
+                            </div>
+                        </form>
+                        </div>
+                    </span>
+                </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery-1.9.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/environment.js}"></script>
+<script th:src="@{/js/bootstrap-datepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.js}"></script>
+<script th:src="@{/js/bootstrap-datetimepicker.fr.js}"></script>
+<script>
+    function changeLanguage(){
+        window.location.href="/SEIN/changeSessionLanguage?page=manage/devices";
+    }
+    $(function(){
+        $('.dateControl').datepicker();
+        $('#timepicker').change(function(event) {
+        });
+
+        $('#startTime').datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,//选中之后自动隐藏日期选择框
+            clearBtn: true,//清除按钮
+            todayBtn: true,//今日按钮
+            todayHighlight: true
+        });
+        $('#endTime').datetimepicker({
+            language: 'zh-CN',
+            autoclose: true,//选中之后自动隐藏日期选择框
+            clearBtn: true,//清除按钮
+            todayBtn: true,//今日按钮
+            todayHighlight: true
+        });
+    });
+    function addDuration(){
+        var startTime=$("#startTime").val();
+        var endTime=$("#endTime").val();
+        var event=$("#event").val();
+        if(startTime==null||startTime==''){
+            alert("请输入起始时间!");
+            return;
+        }
+        if(event==null||event==''){
+            alert("请输入时间段名称!");
+            return;
+        }
+        $.post("/SEIN/manage/addDuration",{
+            startTime:startTime,
+            endTime:endTime,
+            event:event
+        },function (result) {
+            var result=eval("("+result+")");
+            if(result.success){
+                alert("添加时间段成功，请重新登录!");
+                window.location.href="/SEIN/account/logout";
+            }else{
+                alert("添加时间段失败!");
+            }
+        });
+
+    }
+</script>
+</body>
+</html>
