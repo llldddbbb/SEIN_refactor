@@ -113,7 +113,7 @@
                 <td>
                     <select id="duration" onchange="changeDuration()">
                         <option value="">请选择</option>
-                        <option th:value="${duration.startTime}+'-'+${duration.endTime}" th:each="duration:${session.durationList}" th:text="${duration.event}"></option>
+                        <option th:value="${duration.startTime}+'-'+${duration.endTime}" th:each="duration:${durationList}" th:text="${duration.durationName}"></option>
                     </select>
                 </td>
                 <td ><a id="detail-submit" href="javascript:getChartsData()" th:text="#{SUBMIT}">提交</a></td>
