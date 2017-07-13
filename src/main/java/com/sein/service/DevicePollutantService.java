@@ -10,6 +10,7 @@ import com.sein.pojo.po.Pollutant;
 import com.sein.service.utils.DevicePollutantUtil;
 import com.sein.service.utils.PollutantUtil;
 import com.sein.service.utils.StringUtil;
+import com.sein.utils.AQIUtil;
 import com.sein.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,10 +73,46 @@ public class DevicePollutantService {
             //封装devicePollutant参数并添加
             devicePollutant.setDevice(device);
             devicePollutant.setPollutantItemList(pollutantItemList);
+            //设置状态
             DevicePollutantUtil.setStatus(devicePollutant,pollutant.getTime());
             devicePollutantList.add(devicePollutant);
         }
         return devicePollutantList;
+    }
+
+    public DevicePollutant getDevicePollutantById(DisplayConfig displayConfig,Integer id) {
+        DevicePollutant devicePollutant=new DevicePollutant();
+
+        Device device=deviceDAO.selectByPrimaryKey(id);
+
+        //获取最新后缀参数拼接表格参数
+        HashMap<String,Object> param=new HashMap<>();
+        String tablePostfix= PollutantUtil.getNewestPostfix(displayConfig);
+        param.put("pollutantTable",device.getPollutantTable()+tablePostfix);
+
+        //查询最新一条浓度数据根据数据获取ItemList
+        Pollutant pollutant=pollutantDAO.getPollutant(param);
+        //如果为空，则设置一个时间，避免异常
+        if(pollutant==null){
+            pollutant=new Pollutant();
+            pollutant.setTime(DateUtil.getCurrentDateStr());
+        }
+        List<PollutantItem> pollutantItemList=PollutantUtil.getPollutantItemList(displayConfig,pollutant);
+
+        //计算并获取AQI
+        Double AQI= null;
+        try {
+            AQI = AQIUtil.getAQI(pollutantItemList);
+        } catch (Exception e) {
+            AQI=0.0;
+        }
+        //封装devicePollutant参数并添加
+        devicePollutant.setAQI((int)Math.floor(AQI)+"");
+        devicePollutant.setPollutantItemList(pollutantItemList);
+        //设置状态
+        DevicePollutantUtil.setStatus(devicePollutant,pollutant.getTime());
+        devicePollutant.setDevice(device);
+        return devicePollutant;
     }
 
 }

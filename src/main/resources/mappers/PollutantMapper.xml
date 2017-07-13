@@ -149,6 +149,7 @@
                 and DateTime &lt;= '${endTime}'
             </if>
             and DateTime != null
+            and DateTime != '0000-00-00 00:00:00'
         </where>
     </select>
 

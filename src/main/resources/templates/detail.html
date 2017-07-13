@@ -17,7 +17,7 @@
     <div class="detail-left">
 
         <div class="detail-left_title" >
-            <div class="title_content" th:text="${devicePollu.devicePO.cityName}+'&nbsp;&nbsp;&nbsp;'+${devicePollu.devicePO.pollutantTable}">${cityName}&nbsp;&nbsp;&nbsp;${deviceName_alias }</div>
+            <div class="title_content" th:text="${devicePollutant.device.cityName}+'&nbsp;&nbsp;&nbsp;'+${devicePollutant.device.pollutantTable}">${cityName}&nbsp;&nbsp;&nbsp;${deviceName_alias }</div>
         </div>
         <div class="detail-left_content" >
             <div class="content_top">
@@ -25,19 +25,19 @@
                     <span th:text="AQI" th:if="${session.displayConfig.aqi}==1"></span>
                     <span th:text="AQHI" th:if="${session.displayConfig.aqhi}==1"></span>
                 </div>
-                <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollu.pollutantItemBOList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
-                    <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollu.devicePO.status}=='离线'">${device.getStatus() }</span>
-                    <span id="status_real" style="color:green" th:text="#{STATUS_ON}" th:if="${devicePollu.devicePO.status}=='在线'">${device.getStatus() }</span>
+                <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollutant.pollutantItemList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
+                    <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollutant.status}==0">${device.getStatus() }</span>
+                    <span id="status_real" style="color:#7BD865" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==1">${device.getStatus() }</span>
                 </div>
             </div>
-            <div class="content_middle"><span class="AQI" id="AQI_real" th:text="${devicePollu.devicePO.AQI}"></span></div>
+            <div class="content_middle"><span class="AQI" id="AQI_real" th:text="${devicePollutant.AQI}"></span></div>
             <div class="content_foot">
                     <div style="margin: auto;text-align: center">
-                        <span style="font-size: 21px;margin-left: 10px" th:utext="#{TEMP}"></span><span style="font-size: 21px" th:each="pollutant:${devicePollu.pollutantItemBOList}" th:if="${pollutant.type}=='Temp'" th:utext="${#numbers.formatDecimal(pollutant.value,1,1)}+'℃&nbsp;&nbsp;&nbsp;&nbsp;'" id="Temp_real">温度:℃</span>
-                        <span style="font-size: 21px;" th:utext="#{HUMI}"></span><span style="font-size: 21px;" th:each="pollutant:${devicePollu.pollutantItemBOList}" th:if="${pollutant.type}=='Humi'" th:utext="${#numbers.formatDecimal(pollutant.value,1,1)}+'%'" id="Humi_real">湿度:%</span>
+                        <span style="font-size: 21px;margin-left: 10px" th:utext="#{TEMP}"></span><span style="font-size: 21px" th:each="pollutant:${devicePollutant.pollutantItemList}" th:if="${pollutant.type}=='Temp'" th:utext="${#numbers.formatDecimal(pollutant.value,1,1)}+'℃&nbsp;&nbsp;&nbsp;&nbsp;'" id="Temp_real">温度:℃</span>
+                        <span style="font-size: 21px;" th:utext="#{HUMI}"></span><span style="font-size: 21px;" th:each="pollutant:${devicePollutant.pollutantItemList}" th:if="${pollutant.type}=='Humi'" th:utext="${#numbers.formatDecimal(pollutant.value,1,1)}+'%'" id="Humi_real">湿度:%</span>
                     </div>
                     <table style="margin: auto">
-                        <span th:each="pollutant:${devicePollu.pollutantItemBOList}">
+                        <span th:each="pollutant:${devicePollutant.pollutantItemList}">
                             <span th:if="${pollutant.type}==PM25" th:utext="'<tr><td>PM<b><sub>2.5</sub></b></td><td id=PM25_real>'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &micro;g/m<sup>3</sup></b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==PM10" th:utext="'<tr><td>PM<b><sub>10</sub></b></td><td id=PM10_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &micro;g/m<sup>3</sup></b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==PM1" th:utext="'<tr><td>PM<b><sub>1</sub></b></td><td id=PM1_real>'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &micro;g/m<sup>3</sup></b></td></tr>'"></span>
@@ -138,7 +138,7 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     //动态改变图表数据的方法
-    var id=[[${devicePollu.devicePO.id}]];
+    var id=[[${devicePollutant.device.id}]];
     function getChartsData(){
         var pollutantType=$("#pollutantType").val();
         var startTime=$("#startTime").val();
@@ -274,7 +274,7 @@
         $(".detail-right").css("width","100%");
     }
     function changeLanguage(){
-        var id=[[${devicePollu.devicePO.id}]];
+        var id=[[${devicePollutant.device.id}]];
         window.location.href="/SEIN/changeSessionLanguage?page=detail/devices/"+id;
     }
 
@@ -316,8 +316,8 @@
         dataType:'json',
 
         success:function(res) {
-            $("#AQI_real").val(res.devicePO.AQI);
-            var realPollutant=res.pollutantItemBOList;
+            $("#AQI_real").val(res.device.AQI);
+            var realPollutant=res.pollutantItemList;
             for(var i in realPollutant){
                 if(realPollutant[i].type=='time'){
                     $("#time_real").html(realPollutant[i].value);
