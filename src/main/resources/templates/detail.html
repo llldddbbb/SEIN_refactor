@@ -27,7 +27,7 @@
                 </div>
                 <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollutant.pollutantItemList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
                     <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollutant.status}==0">${device.getStatus() }</span>
-                    <span id="status_real" style="color:#7BD865" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==1">${device.getStatus() }</span>
+                    <span id="status_real" style="color:#6EC038" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==1">${device.getStatus() }</span>
                 </div>
             </div>
             <div class="content_middle"><span class="AQI" id="AQI_real" th:text="${devicePollutant.AQI}"></span></div>
@@ -113,7 +113,7 @@
                 <td>
                     <select id="duration" onchange="changeDuration()">
                         <option value="">请选择</option>
-                        <option th:value="${duration.startTime}+'-'+${duration.endTime}" th:each="duration:${durationList}" th:text="${duration.durationName}"></option>
+                        <option th:value="${duration.startTime}+'-'+${duration.endTime}" th:each="duration:${durationList}" th:text="${duration.event}"></option>
                     </select>
                 </td>
                 <td ><a id="detail-submit" href="javascript:getChartsData()" th:text="#{SUBMIT}">提交</a></td>
@@ -162,7 +162,6 @@
         myChart.clear();
         myChart.showLoading();
         $.post("/SEIN/detail/chart",{"id":id,"pollutantType":pollutantType,"interval":interval,"startTime":startTime,"endTime":endTime},function(result){
-            var result=eval("("+result+")");
             if(result){
                 var date=[];
                 var data=[];
@@ -374,7 +373,7 @@
 
     };
 
-    //关键在这里，Ajax定时访问服务端，不断获取数据 ，这里是1秒请求一次。
+    //Ajax定时访问服务端，不断获取数据 ，这里是10秒请求一次。
 
     window.setInterval(function(){$.ajax(getting)},10000);
 

@@ -16,8 +16,7 @@ public class Duration {
     @Column(name = "endTime")
     private Date endTime;
 
-    @Column(name = "durationName")
-    private String durationName;
+    private String event;
 
     @Column(name = "accountId")
     private Integer accountId;
@@ -54,11 +53,11 @@ public class Duration {
         this.accountId = accountId;
     }
 
-    public String getDurationName() {
-        return durationName;
+    public String getEvent() {
+        return event;
     }
 
-    public void setDurationName(String durationName) {
-        this.durationName = durationName;
+    public void setEvent(String event) {
+        this.event = event;
     }
 }

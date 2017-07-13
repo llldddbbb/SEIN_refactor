@@ -3,6 +3,7 @@ package com.sein.service;
 import com.sein.dao.DeviceDAO;
 import com.sein.dao.PollutantDAO;
 import com.sein.pojo.dto.DevicePollutant;
+import com.sein.pojo.dto.PollutantChartItem;
 import com.sein.pojo.dto.PollutantItem;
 import com.sein.pojo.po.Device;
 import com.sein.pojo.po.DisplayConfig;
@@ -13,6 +14,7 @@ import com.sein.service.utils.StringUtil;
 import com.sein.utils.AQIUtil;
 import com.sein.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
@@ -33,6 +35,9 @@ public class DevicePollutantService {
 
     @Autowired
     private PollutantDAO pollutantDAO;
+
+    @Value("${POLLUTANT_TYPE_BASE}")
+    private String POLLUTANT_TYPE_BASE;
 
     /**
      * 获取设备列表以及相应的最新污染物
@@ -80,6 +85,12 @@ public class DevicePollutantService {
         return devicePollutantList;
     }
 
+    /**
+     * 详情页，根据id获取设备及对应浓度
+     * @param displayConfig
+     * @param id
+     * @return
+     */
     public DevicePollutant getDevicePollutantById(DisplayConfig displayConfig,Integer id) {
         DevicePollutant devicePollutant=new DevicePollutant();
 
@@ -113,6 +124,31 @@ public class DevicePollutantService {
         DevicePollutantUtil.setStatus(devicePollutant,pollutant.getTime());
         devicePollutant.setDevice(device);
         return devicePollutant;
+    }
+
+    /**
+     * 详情页的折线图部分，获取折线图数据
+     * @param id
+     * @param pollutantType
+     * @param startTime
+     * @param endTime
+     * @param interval
+     * @return
+     */
+    public List<PollutantChartItem> listPollutantChart( Integer id,String pollutantType,String startTime,String endTime,String interval) {
+        //封装参数
+        HashMap<String,Object> pollutantParam=new HashMap<>();
+        Device device = deviceDAO.selectByPrimaryKey(id);
+        pollutantParam.put("pollutantTable",device.getPollutantTable()+interval);
+        //添加DateTime
+        pollutantParam.put("pollutantType",this.POLLUTANT_TYPE_BASE+pollutantType);
+        pollutantParam.put("startTime",startTime);
+        pollutantParam.put("endTime",endTime);
+        //查询满足参数的浓度列表
+        List<Pollutant> pollutantList=pollutantDAO.listPollutant(pollutantParam);
+
+        List<PollutantChartItem> pollutantChartList = PollutantUtil.getPollutantChartList(pollutantType, pollutantList);
+        return pollutantChartList;
     }
 
 }

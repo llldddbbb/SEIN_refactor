@@ -25,9 +25,6 @@
         <result column="Latitude" property="latitude" jdbcType="DOUBLE"/>
         <result column="Latitude" property="latitude" jdbcType="DOUBLE"/>
         <result column="Press" property="press" jdbcType="DOUBLE"/>
-        <result column="Temp_sr" property="Temp_sr" jdbcType="DOUBLE"/>
-        <result column="Humi_sr" property="Humi_sr" jdbcType="DOUBLE"/>
-        <result column="Press_sr" property="Press_sr" jdbcType="DOUBLE"/>
     </resultMap>
 
     <select id="listPollutant" resultMap="pollutantResultMap" parameterType="Map" statementType="STATEMENT">
@@ -84,9 +81,8 @@
             <if test="endTime!=null and endTime!=''">
                 and `DateTime` &lt;= '${endTime}'
             </if>
-            <if test="zero_p!=null">
-                and Zero_P =0
-            </if>
+            and DateTime is not null
+            and DateTime != '0000-00-00 00:00:00'
         </where>
         order by DateTime ASC
         <if test="start!=null and pageSize!=null">
@@ -148,18 +144,13 @@
             <if test="endTime!=null and endTime!=''">
                 and DateTime &lt;= '${endTime}'
             </if>
-            and DateTime != null
+            and DateTime is not null
             and DateTime != '0000-00-00 00:00:00'
         </where>
     </select>
 
     <select id="getPollutant" resultMap="pollutantResultMap" parameterType="Map" statementType="STATEMENT">
-        select * from ${pollutantTable}
-        <where>
-            <if test="zero_p!=null">
-                and Zero_P =0
-            </if>
-        </where>
+        select * from ${pollutantTable} WHERE  DateTime is not null and DateTime != '0000-00-00 00:00:00'
         order by DateTime desc limit 1
     </select>
 

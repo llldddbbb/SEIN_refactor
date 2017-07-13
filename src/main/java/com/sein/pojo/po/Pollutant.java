@@ -41,33 +41,6 @@ public class Pollutant {
 
     private Double pm1;
 
-    private Double Humi_sr;
-    private Double Temp_sr;
-    private Double Press_sr;
-
-    public Double getHumi_sr() {
-        return Humi_sr;
-    }
-
-    public void setHumi_sr(Double humi_sr) {
-        Humi_sr = humi_sr;
-    }
-
-    public Double getTemp_sr() {
-        return Temp_sr;
-    }
-
-    public void setTemp_sr(Double temp_sr) {
-        Temp_sr = temp_sr;
-    }
-
-    public Double getPress_sr() {
-        return Press_sr;
-    }
-
-    public void setPress_sr(Double press_sr) {
-        Press_sr = press_sr;
-    }
 
     public Double getPm1() {
         return pm1;
