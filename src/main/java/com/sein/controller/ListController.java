@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by ldb on 2017/7/12.
+ * 列表页控制类
  */
 @Controller
 @RequestMapping("/list")
@@ -25,7 +26,15 @@ public class ListController {
     public String listDevices(HttpSession session,Model model){
         //获取配置表
         DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
-        List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig);
+        List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
+        model.addAttribute("devicePollutantList",devicePollutantList);
+        return "list";
+    }
+
+    @RequestMapping("/search")
+    public String search(HttpSession session,String cityName,Model model){
+        DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
+        List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,cityName);
         model.addAttribute("devicePollutantList",devicePollutantList);
         return "list";
     }

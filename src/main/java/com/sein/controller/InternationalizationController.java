@@ -12,6 +12,7 @@ import java.util.Locale;
 
 /**
  * Created by ldb on 2017/4/2.
+ * 转换语言的类
  */
 @Controller
 public class InternationalizationController {

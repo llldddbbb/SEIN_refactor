@@ -9,9 +9,12 @@ import com.sein.pojo.po.DisplayConfig;
 import com.sein.pojo.po.Pollutant;
 import com.sein.service.utils.DevicePollutantUtil;
 import com.sein.service.utils.PollutantUtil;
+import com.sein.service.utils.StringUtil;
 import com.sein.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,13 +39,18 @@ public class DevicePollutantService {
      * @param displayConfig
      * @return
      */
-    public List<DevicePollutant> listDevicePollutant(DisplayConfig displayConfig) {
+    public List<DevicePollutant> listDevicePollutant(DisplayConfig displayConfig,String cityName) {
         List<DevicePollutant> devicePollutantList=new ArrayList<>();
 
+        Example example=new Example(Device.class);
+
+        //cityName进行模糊搜索
+        if(!StringUtils.isEmpty(cityName)){
+            example.createCriteria().andLike("cityName", StringUtil.formatSQLLikeStr(cityName));
+        }
         //查询设备列表
-        Device selectParam = new Device();
-        selectParam.setAccountId(displayConfig.getId());
-        List<Device> deviceList = deviceDAO.select(selectParam);
+        example.createCriteria().andEqualTo("accountId",displayConfig.getId());
+        List<Device> deviceList = deviceDAO.selectByExample(example);
 
         for(Device device:deviceList){
             DevicePollutant devicePollutant=new DevicePollutant();
