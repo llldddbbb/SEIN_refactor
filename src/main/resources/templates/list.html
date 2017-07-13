@@ -24,14 +24,14 @@
             <a id="placesearchbtn" href="javascript:searchPlace()"></a>
         </div>
         <div class="citylist">
-            <div class="cities" style="margin-right:10px!important;" th:each="devicePollu:${devicePolluList}">
-                <a th:href="@{'/detail/devices/'+${devicePollu.device.id}}">
-                    <img th:src="@{'/images/'+${devicePollu.device.picture}}"/>
-                    <h3 th:text="${devicePollu.device.cityName}"></h3>
+            <div class="cities" style="margin-right:10px!important;" th:each="devicePollutant:${devicePollutantList}">
+                <a th:href="@{'/detail/devices/'+${devicePollutant.device.id}}">
+                    <img th:src="@{'/images/'+${devicePollutant.device.picture}}"/>
+                    <h3 th:text="${devicePollutant.device.cityName}"></h3>
                     <div class="city-bottom">
                         <marquee drection="left" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="scroll">
 								<span>
-                                    <span th:each="pollutant:${devicePollu.pollutantItemList}">
+                                    <span th:each="pollutant:${devicePollutant.pollutantItemList}">
                                         <span th:if="${pollutant.type}==PM25"
                                               th:utext="'[ PM<sub>2.5</sub> '+${#numbers.formatInteger(pollutant.value,0)}+' &micro;g/m<sup>3</sup> ]'"></span>
                                         <span th:if="${pollutant.type}==PM10"
@@ -63,8 +63,8 @@
                                     </span>
                                 </span>
                         </marquee>
-                        <p class="airlevel level-3" th:if="${devicePollu.device.status}=='离线'" th:text="#{STATUS_OFF}">${device.getStatus() }</p>
-                        <p class="airlevel level-1" th:if="${devicePollu.device.status}=='在线'" th:text="#{STATUS_ON}">${device.getStatus() }</p>
+                        <p class="airlevel level-3" th:if="${devicePollutant.status}==0" th:text="#{STATUS_OFF}"></p>
+                        <p class="airlevel level-1" th:if="${devicePollutant.status}==1" th:text="#{STATUS_ON}"></p>
                     </div>
                 </a>
             </div>

@@ -12,8 +12,8 @@
 
     <!-- 生产环境 -->
     <springProfile name="pro">
-        <logger name="org.springframework.web" level="ERROR"/>
-        <logger name="com.sein" level="ERROR" />
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="com.sein" level="DEBUG" />
         <property name="log.path" value="D:\\sein\\sein.log" />
     </springProfile>
 

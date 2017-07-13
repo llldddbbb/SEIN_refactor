@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 对应dao接口 -->
+<mapper namespace="com.sein.dao.PollutantDAO">
+
+    <resultMap id="pollutantResultMap" type="com.sein.pojo.po.Pollutant">
+        <result column="DateTime" property="time" jdbcType="TIMESTAMP"/>
+        <result column="PM25" property="pm25" jdbcType="DOUBLE"/>
+        <result column="PM10" property="pm10" jdbcType="DOUBLE"/>
+        <result column="PM1" property="pm1" jdbcType="DOUBLE"/>
+        <result column="CO" property="co" jdbcType="DOUBLE"/>
+        <result column="CO2" property="co2" jdbcType="DOUBLE"/>
+        <result column="SO" property="so" jdbcType="DOUBLE"/>
+        <result column="SO2" property="so2" jdbcType="DOUBLE"/>
+        <result column="NO" property="no" jdbcType="DOUBLE"/>
+        <result column="NO2" property="no2" jdbcType="DOUBLE"/>
+        <result column="O3" property="o3" jdbcType="DOUBLE"/>
+        <result column="CL2" property="cl2" jdbcType="DOUBLE"/>
+        <result column="VOC" property="voc" jdbcType="DOUBLE"/>
+        <result column="Temp" property="temp" jdbcType="DOUBLE"/>
+        <result column="Humi" property="humi" jdbcType="DOUBLE"/>
+        <result column="Longitude" property="longitude" jdbcType="DOUBLE"/>
+        <result column="Latitude" property="latitude" jdbcType="DOUBLE"/>
+        <result column="Latitude" property="latitude" jdbcType="DOUBLE"/>
+        <result column="Press" property="press" jdbcType="DOUBLE"/>
+        <result column="Temp_sr" property="Temp_sr" jdbcType="DOUBLE"/>
+        <result column="Humi_sr" property="Humi_sr" jdbcType="DOUBLE"/>
+        <result column="Press_sr" property="Press_sr" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <select id="listPollutant" resultMap="pollutantResultMap" parameterType="Map" statementType="STATEMENT">
+        select ${pollutantType} from ${pollutantTable}
+        <where>
+            <if test="PM25!=null and PM25!=''">
+                and `PM25`&gt;=${PM25}
+            </if>
+            <if test="PM10!=null and PM10!=''">
+                and `PM10`&gt;=${PM10}
+            </if>
+            <if test="PM1!=null and PM1!=''">
+                and `PM1`&gt;=${PM1}
+            </if>
+            <if test="CO!=null and CO!=''">
+                and `CO`&gt;=${CO}
+            </if>
+            <if test="CO2!=null and CO2!=''">
+                and `CO2`&gt;=${CO2}
+            </if>
+            <if test="NO!=null and NO!=''">
+                and `NO`&gt;=${NO}
+            </if>
+            <if test="NO2!=null and NO2!=''">
+                and `NO2`&gt;=${NO2}
+            </if>
+            <if test="SO!=null and SO!=''">
+                and `SO`&gt;=${SO}
+            </if>
+            <if test="SO2!=null and SO2!=''">
+                and `SO2`&gt;=${SO2}
+            </if>
+            <if test="O3!=null and O3!=''">
+                and `O3`&gt;=${O3}
+            </if>
+            <if test="CL2!=null and CL2!=''">
+                and `CL2`&gt;=${CL2}
+            </if>
+            <if test="VOC!=null and VOC!=''">
+                and `VOC`&gt;=${VOC}
+            </if>
+            <if test="Temp!=null and Temp!=''">
+                and `Temp`&gt;=${Temp}
+            </if>
+            <if test="Humi!=null and Humi!=''">
+                and `Humi`&gt;=${Humi}
+            </if>
+            <if test="Press!=null and Press!=''">
+                and `Press`&gt;=${Press}
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                and `DateTime` &gt;= '${startTime}'
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                and `DateTime` &lt;= '${endTime}'
+            </if>
+            <if test="zero_p!=null">
+                and Zero_P =0
+            </if>
+        </where>
+        order by DateTime ASC
+        <if test="start!=null and pageSize!=null">
+            limit ${start},${pageSize}
+        </if>
+    </select>
+
+    <select id="getPollutantCount" parameterType="Map" resultType="Integer">
+        select count(*) from ${pollutantTable}
+        <where>
+            <if test="PM25!=null and PM25!=''">
+                and `PM25`&gt;=${PM25}
+            </if>
+            <if test="PM10!=null and PM10!=''">
+                and `PM10`&gt;=${PM10}
+            </if>
+            <if test="PM1!=null and PM1!=''">
+                and `PM1`&gt;=${PM1}
+            </if>
+            <if test="CO!=null and CO!=''">
+                and `CO`&gt;=${CO}
+            </if>
+            <if test="CO2!=null and CO2!=''">
+                and `CO2`&gt;=${CO2}
+            </if>
+            <if test="NO!=null and NO!=''">
+                and `NO`&gt;=${NO}
+            </if>
+            <if test="NO2!=null and NO2!=''">
+                and `NO2`&gt;=${NO2}
+            </if>
+            <if test="SO!=null and SO!=''">
+                and `SO`&gt;=${SO}
+            </if>
+            <if test="SO2!=null and SO2!=''">
+                and `SO2`&gt;=${SO2}
+            </if>
+            <if test="O3!=null and O3!=''">
+                and `O3`&gt;=${O3}
+            </if>
+            <if test="CL2!=null and CL2!=''">
+                and `CL2`&gt;=${CL2}
+            </if>
+            <if test="VOC!=null and VOC!=''">
+                and `VOC`&gt;=${VOC}
+            </if>
+            <if test="Temp!=null and Temp!=''">
+                and `Temp`&gt;=${Temp}
+            </if>
+            <if test="Humi!=null and Humi!=''">
+                and `Humi`&gt;=${Humi}
+            </if>
+            <if test="Press!=null and Press!=''">
+                and `Press`&gt;=${Press}
+            </if>
+            <if test="startTime!=null and startTime!=''">
+                and DateTime &gt;= '${startTime}'
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                and DateTime &lt;= '${endTime}'
+            </if>
+            and DateTime != null
+        </where>
+    </select>
+
+    <select id="getPollutant" resultMap="pollutantResultMap" parameterType="Map" statementType="STATEMENT">
+        select * from ${pollutantTable}
+        <where>
+            <if test="zero_p!=null">
+                and Zero_P =0
+            </if>
+        </where>
+        order by DateTime desc limit 1
+    </select>
+
+</mapper>

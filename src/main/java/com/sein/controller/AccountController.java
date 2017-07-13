@@ -44,6 +44,13 @@ public class AccountController {
         }
         return result;
     }
+    
+    @RequestMapping("/logout")
+    public String logout(HttpSession session){
+        //清除session
+        session.invalidate();
+        return "login";
+    }
 
     @PostMapping("/add")
     @ResponseBody
