@@ -62,12 +62,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="table-select" style="display:none;">
-                        <div class="table-select2" th:text="#{LINENUM}">每页行数</div>
-                        <div style="margin-top:5px;">
-                            <input type="number" id="lineNum" name="lineNum"  style="width:55px;height:30px;" value="30">
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
@@ -242,7 +237,6 @@
     function loadPollutantTable(page){
         var id=$("#place").val();
         var interval= $('#timepicker').val();
-        var lineNum=$("#lineNum").val();
         var unit=$('input[name="standard"]:checked ').val();
         var pollutantTypeAndAlermArr =[];
         $('input[name="airQulityType"]:checked').each(function(){
@@ -289,14 +283,12 @@
         var startTime=$("#startTime").val();
         var endTime=$("#endTime").val();
 
-        $("#pollutantTable tr").empty("");
         $.ajax({
             url:"/SEIN/table/pollutantTable",
             type:"GET",
             data:{
                 id:id,
                 interval:interval,
-                lineNum:lineNum,
                 page:page,
                 startTime:startTime,
                 endTime:endTime,
@@ -304,16 +296,8 @@
                 unit,unit
             },
             success:function (result) {
-                var result=eval("("+result+")");
-                for(var i in result){
-                    if(i=="pageNation"){
-                        $("#pageNation").html(result[i]);
-                    }else if(i=="tableHeader"){
-                        $("#pollutantTable").html(result[i]);
-                    }else{
-                        $(result[i]).appendTo($("#pollutantTable"));
-                    }
-                }
+                $("#pageNation").html(result['pageNation']);
+                $("#pollutantTable").html(result['tableHeader']+result['tableBody']);
             }
         });
     }

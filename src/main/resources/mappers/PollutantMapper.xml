@@ -81,17 +81,22 @@
             <if test="endTime!=null and endTime!=''">
                 and `DateTime` &lt;= '${endTime}'
             </if>
-            and DateTime is not null
-            and DateTime != '0000-00-00 00:00:00'
         </where>
-        order by DateTime ASC
-        <if test="start!=null and pageSize!=null">
-            limit ${start},${pageSize}
-        </if>
+
+        <choose>
+            <when test="start!=null and pageSize!=null">
+                order by DateTime DESC limit ${start},${pageSize}
+            </when>
+            <otherwise>
+                order by DateTime
+            </otherwise>
+        </choose>
+
+
     </select>
 
     <select id="getPollutantCount" parameterType="Map" resultType="Integer">
-        select count(*) from ${pollutantTable}
+        select count(1) from ${pollutantTable}
         <where>
             <if test="PM25!=null and PM25!=''">
                 and `PM25`&gt;=${PM25}
@@ -144,14 +149,11 @@
             <if test="endTime!=null and endTime!=''">
                 and DateTime &lt;= '${endTime}'
             </if>
-            and DateTime is not null
-            and DateTime != '0000-00-00 00:00:00'
         </where>
     </select>
 
     <select id="getPollutant" resultMap="pollutantResultMap" parameterType="Map" statementType="STATEMENT">
-        select * from ${pollutantTable} WHERE  DateTime is not null and DateTime != '0000-00-00 00:00:00'
-        order by DateTime desc limit 1
+        select * from ${pollutantTable} order by DateTime desc limit 1
     </select>
 
 </mapper>

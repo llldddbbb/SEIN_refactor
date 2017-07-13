@@ -3,9 +3,7 @@ package com.sein.controller;
 import com.sein.pojo.dto.DevicePollutant;
 import com.sein.pojo.dto.PollutantChartItem;
 import com.sein.pojo.po.DisplayConfig;
-import com.sein.pojo.po.Duration;
 import com.sein.service.DevicePollutantService;
-import com.sein.service.DurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,18 +26,12 @@ public class DetailController {
     @Autowired
     private DevicePollutantService devicePollutantService;
 
-    @Autowired
-    private DurationService durationService;
-
 
     @RequestMapping("/devices/{id}")
     public String getDevices(@PathVariable("id") Integer id, HttpSession session, Model model) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         DevicePollutant devicePollutant = devicePollutantService.getDevicePollutantById(displayConfig, id);
-        //获取时间段
-        List<Duration> durationList = durationService.listDuration(displayConfig.getId());
         model.addAttribute("devicePollutant", devicePollutant);
-        model.addAttribute("durationList", durationList);
         return "detail";
     }
 
@@ -55,7 +47,7 @@ public class DetailController {
     @ResponseBody
     public List<PollutantChartItem> getChart(Integer id, @RequestParam(required = false) String pollutantType,
                            @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime,
-                           @RequestParam(required = false) String interval, HttpSession session) {
+                           @RequestParam(required = false) String interval) {
         if (pollutantType == null) {
             pollutantType = "PM25";
         }

@@ -44,7 +44,7 @@ public class PollutantUtil {
 
 
     /**
-     * 封装PollutantItemList
+     * 获取单个设备单条浓度
      *
      * @param displayConfig
      * @param pollutant
@@ -224,7 +224,12 @@ public class PollutantUtil {
 
     }
 
-
+    /**
+     * 获取单个折线图单种类型数据
+     * @param pollutantType
+     * @param pollutantList
+     * @return
+     */
     public static List<PollutantChartItem> getPollutantChartList(String pollutantType,List<Pollutant> pollutantList) {
         List<PollutantChartItem> itemList = new ArrayList<>();
 
@@ -284,4 +289,37 @@ public class PollutantUtil {
         }
         return itemList;
     }
+
+
+    /**
+     * 进行单位转换
+     * @param pollutantList
+     */
+    public static void transformUnit(List<Pollutant> pollutantList){
+        for(Pollutant pollutant:pollutantList){
+            if(pollutant.getTemp()==null){
+                continue;
+            }
+            double temp=pollutant.getTemp();
+            if(pollutant.getNo()!=null){
+                pollutant.setNo(DecimalUtil.formatDecimal(pollutant.getNo()*(12.187)*30/(273.15+temp),"#.##"));
+            }
+            if(pollutant.getNo2()!=null){
+                pollutant.setNo2(DecimalUtil.formatDecimal(pollutant.getNo2()*(12.187)*46/(273.15+temp),"#.##"));
+            }
+            if(pollutant.getO3()!=null){
+                pollutant.setO3(DecimalUtil.formatDecimal(pollutant.getO3()*(12.187)*48/(273.15+temp),"#.##"));
+            }
+            if(pollutant.getCo()!=null){
+                pollutant.setCo(DecimalUtil.formatDecimal(pollutant.getCo()*(1000)*(12.187)*28/(273.15+temp),"#.##"));
+            }
+            if(pollutant.getCo2()!=null){
+                pollutant.setCo2(DecimalUtil.formatDecimal(pollutant.getCo2()*(1000)*(12.187)*44/(273.15+temp),"#.##"));
+            }
+            if(pollutant.getSo2()!=null){
+                pollutant.setSo2(DecimalUtil.formatDecimal(pollutant.getSo2()*(12.187)*64/(273.15+temp),"#.##"));
+            }
+        }
+    }
+
 }

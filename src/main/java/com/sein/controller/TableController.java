@@ -1,14 +1,15 @@
 package com.sein.controller;
 
-import com.sein.pojo.dto.DevicePollutantChart;
+import com.sein.pojo.dto.PollutantTable;
 import com.sein.pojo.po.Device;
 import com.sein.pojo.po.DisplayConfig;
-import com.sein.service.DevicePollutantService;
 import com.sein.service.DeviceService;
+import com.sein.service.PollutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
@@ -18,29 +19,32 @@ import java.util.List;
  * Created by ldb on 2017/7/13.
  */
 @Controller
-@RequestMapping("/compare")
-public class CompareController {
+@RequestMapping("/table")
+public class TableController {
 
     @Autowired
     private DeviceService deviceService;
 
     @Autowired
-    private DevicePollutantService devicePollutantService;
-
+    private PollutantService pollutantService;
 
     @RequestMapping("/devices")
-    public String compare(HttpSession session,Model model){
+    public String table(HttpSession session, Model model){
         DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
         List<Device> deviceList=deviceService.listDevice(displayConfig.getId());
         model.addAttribute("deviceList",deviceList);
-        return "compare";
+        return "table";
     }
 
-    @RequestMapping("/pollutantCharts")
+    @RequestMapping("/pollutantTable")
     @ResponseBody
-    public List<DevicePollutantChart> pollutantCharts(String pollutantType,String interval,String startTime,String endTime,HttpSession session){
+    public PollutantTable pollutantTable(HttpSession session,Integer id, String interval,@RequestParam(required = false) String page,
+                                 @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime,
+                                 @RequestParam(required = false) String pollutantTypeAndAlerm,@RequestParam(required = false) String unit){
         DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
-        List<DevicePollutantChart> devicePollutantChartList=devicePollutantService.listDevicePollutantChart(displayConfig.getId(),pollutantType,interval,startTime,endTime);
-        return devicePollutantChartList;
+        PollutantTable pollutantTable=pollutantService.getPollutantTable(id,interval,page,startTime,endTime,unit,pollutantTypeAndAlerm,displayConfig);
+        return pollutantTable;
     }
+
+
 }

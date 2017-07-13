@@ -3,8 +3,10 @@ package com.sein.controller;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
 import com.sein.pojo.po.DisplayConfig;
+import com.sein.pojo.po.Duration;
 import com.sein.service.AccountService;
 import com.sein.service.DisplayConfigService;
+import com.sein.service.DurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created by ldb on 2017/7/12.
@@ -30,6 +33,9 @@ public class AccountController {
     @Autowired
     private DisplayConfigService displayConfigService;
 
+    @Autowired
+    private DurationService durationService;
+
     @PostMapping("/login")
     @ResponseBody
     public Result login(Account account, HttpSession session) {
@@ -41,6 +47,10 @@ public class AccountController {
             //将配置信息存入session中
             DisplayConfig displayConfig = displayConfigService.getDisplayConfig(currentAccount.getId());
             session.setAttribute("displayConfig", displayConfig);
+
+            //获取时间段
+            List<Duration> durationList = durationService.listDuration(displayConfig.getId());
+            session.setAttribute("durationList", durationList);
         }
         return result;
     }
