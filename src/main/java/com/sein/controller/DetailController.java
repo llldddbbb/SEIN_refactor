@@ -56,7 +56,6 @@ public class DetailController {
     public List<PollutantChartItem> getChart(Integer id, @RequestParam(required = false) String pollutantType,
                            @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime,
                            @RequestParam(required = false) String interval, HttpSession session) {
-        DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         if (pollutantType == null) {
             pollutantType = "PM25";
         }

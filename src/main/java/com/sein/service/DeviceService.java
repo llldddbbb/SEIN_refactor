@@ -26,7 +26,7 @@ public class DeviceService {
      * @param accountId
      * @return
      */
-    public List<Device> getDeviceList(int accountId) {
+    public List<Device> listDevice(int accountId) {
         Device selectParam = new Device();
         selectParam.setAccountId(accountId);
         return deviceDAO.select(selectParam);

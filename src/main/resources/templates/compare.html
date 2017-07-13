@@ -148,18 +148,13 @@
 
                     for(var j in result){
                         var data=[];
-                        var date_compa=[];
-                        cityName.push(result[j].devicePO.cityName);
-                        for(var i in result[j].pollutantChartVOList){
-                            date_compa.push(result[j].pollutantChartVOList[i].time);
-                            data.push(result[j].pollutantChartVOList[i].value);
+                        cityName.push(result[j].device.cityName);
+                        for(var i in result[j].pollutantChartItemList){
+                            time.push(result[j].pollutantChartItemList[i].time);
+                            data.push(result[j].pollutantChartItemList[i].value);
                         }
-                        if(date_compa.length>time.length){
-                            time=date_compa;
-                        }
-
                         var city={
-                            name:result[j].devicePO.cityName,
+                            name:result[j].device.cityName,
                             type:'line',
                             smooth:true,
                             symbol: 'none',

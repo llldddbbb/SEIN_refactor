@@ -227,6 +227,7 @@ public class PollutantUtil {
 
     public static List<PollutantChartItem> getPollutantChartList(String pollutantType,List<Pollutant> pollutantList) {
         List<PollutantChartItem> itemList = new ArrayList<>();
+
         //遍历浓度表，封装成前台折线图需要的time-value列表
         for (Pollutant pollutant : pollutantList) {
             PollutantChartItem item = new PollutantChartItem();
