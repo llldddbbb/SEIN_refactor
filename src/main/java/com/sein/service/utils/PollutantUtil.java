@@ -51,6 +51,7 @@ public class PollutantUtil {
      * @return
      */
     public static List<PollutantItem> getPollutantItemList(DisplayConfig displayConfig, Pollutant pollutant) {
+
         List<PollutantItem> itemList = new ArrayList<>();
         //添加时间
         itemList.add(new PollutantItem("time", DateUtil.formatStrToStr(pollutant.getTime(), "yyyy-MM-dd HH:mm:ss")));
@@ -235,6 +236,9 @@ public class PollutantUtil {
 
         //遍历浓度表，封装成前台折线图需要的time-value列表
         for (Pollutant pollutant : pollutantList) {
+            if(pollutant==null){
+                continue;
+            }
             PollutantChartItem item = new PollutantChartItem();
             //封装time
             item.setTime(DateUtil.formatStrToStr(pollutant.getTime(), "MM-dd HH:mm:ss"));
@@ -297,6 +301,9 @@ public class PollutantUtil {
      */
     public static void transformUnit(List<Pollutant> pollutantList){
         for(Pollutant pollutant:pollutantList){
+            if(pollutant==null){
+                continue;
+            }
             if(pollutant.getTemp()==null){
                 continue;
             }

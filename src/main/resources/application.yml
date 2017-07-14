@@ -39,3 +39,7 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+#lockback配置
+logging:
+  file: D://sein/sein.log
+

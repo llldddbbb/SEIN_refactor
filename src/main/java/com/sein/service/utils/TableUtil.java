@@ -130,6 +130,9 @@ public class TableUtil {
         String[] pollutantTypeStrArr = pollutantType.split(",");
         for (int i = 0; i < pollutantList.size(); i++) {
             Pollutant pollutant = pollutantList.get(i);
+            if(pollutant==null){
+                continue;
+            }
             tableBody.append("<tr>");
             for (String pollutantTypeStr : pollutantTypeStrArr) {
                 switch (pollutantTypeStr) {

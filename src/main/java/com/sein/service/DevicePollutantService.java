@@ -139,7 +139,6 @@ public class DevicePollutantService {
             pollutant.setTime(DateUtil.getCurrentDateStr());
         }
         List<PollutantItem> pollutantItemList = PollutantUtil.getPollutantItemList(displayConfig, pollutant);
-
         //计算并获取AQI
         Double AQI = null;
         try {
