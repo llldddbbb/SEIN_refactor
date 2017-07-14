@@ -1,5 +1,6 @@
 package com.sein.controller;
 
+import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
 import com.sein.pojo.po.DisplayConfig;
@@ -7,6 +8,9 @@ import com.sein.pojo.po.Duration;
 import com.sein.service.AccountService;
 import com.sein.service.DisplayConfigService;
 import com.sein.service.DurationService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,29 +40,34 @@ public class AccountController {
     @Autowired
     private DurationService durationService;
 
+
     @PostMapping("/login")
     @ResponseBody
     public Result login(Account account, HttpSession session) {
-        Result result = accountService.checkLogin(account);
-        if (result.isSuccess()) {
-            //将当前用户存入session中
-            Account currentAccount = (Account) result.getData();
-            session.setAttribute("currentAccount", currentAccount);
+        Subject subject= SecurityUtils.getSubject();
+        UsernamePasswordToken token=new UsernamePasswordToken(account.getUserName(), account.getPassword());
+        try{
+            subject.login(token);//登录验证
+            Account currentAccount=(Account) SecurityUtils.getSubject().getSession().getAttribute("currentAccount");
             //将配置信息存入session中
             DisplayConfig displayConfig = displayConfigService.getDisplayConfig(currentAccount.getId());
-            session.setAttribute("displayConfig", displayConfig);
-
+            SecurityUtils.getSubject().getSession().setAttribute("displayConfig", displayConfig);
             //获取时间段
             List<Duration> durationList = durationService.listDuration(displayConfig.getId());
-            session.setAttribute("durationList", durationList);
+            SecurityUtils.getSubject().getSession().setAttribute("durationList", durationList);
+            return Result.isOK();
+        }catch(Exception e){
+            //登录失败
+            return Result.isNotOK(ResultEnum.LOGIN_ERROR.getInfo());
         }
-        return result;
     }
-    
+
     @RequestMapping("/logout")
-    public String logout(HttpSession session){
-        //清除session
-        session.invalidate();
+    public String logout(){
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
+        }
         return "login";
     }
 

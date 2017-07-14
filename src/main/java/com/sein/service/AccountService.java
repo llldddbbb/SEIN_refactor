@@ -6,6 +6,7 @@ import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -31,6 +32,23 @@ public class AccountService {
         } else {
             return Result.isNotOK(ResultEnum.LOGIN_ERROR.getInfo());
         }
+    }
+
+    /**
+     * 根据用户名查找Account
+     * @param userName
+     * @return
+     */
+    public Account getAccountByUserName(String userName){
+        Example example=new Example(Account.class);
+        example.createCriteria().andEqualTo("userName",userName);
+        List<Account> accountList = accountDAO.selectByExample(example);
+        if(accountList!=null&&accountList.size()>0){
+            return accountList.get(0);
+        }else{
+            return new Account();
+        }
+
     }
 
     /**
