@@ -1,4 +1,4 @@
-package com.sein.config;
+package com.sein.shiro;
 
 import com.sein.pojo.po.Account;
 import com.sein.service.AccountService;

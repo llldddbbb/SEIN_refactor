@@ -1,5 +1,6 @@
 package com.sein.config;
 
+import com.sein.shiro.ShiroRealm;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
