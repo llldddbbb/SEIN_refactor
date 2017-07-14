@@ -17,9 +17,6 @@ public class DeviceService {
     @Autowired
     private DeviceDAO deviceDAO;
 
-    @Autowired
-    private PollutantDAO pollutantDAO;
-
     /**
      * 获取设备列表
      *
@@ -30,6 +27,15 @@ public class DeviceService {
         Device selectParam = new Device();
         selectParam.setAccountId(accountId);
         return deviceDAO.select(selectParam);
+    }
+
+    /**
+     * 根据ID获取单个设备
+     * @param id
+     * @return
+     */
+    public Device getDevice(int id){
+        return deviceDAO.selectByPrimaryKey(id);
     }
 }
 

@@ -84,13 +84,17 @@
         </where>
 
         <choose>
-            <when test="start!=null and pageSize!=null">
-                order by DateTime DESC limit ${start},${pageSize}
+            <when test="desc!=null">
+                order by DateTime DESC
             </when>
             <otherwise>
                 order by DateTime
             </otherwise>
         </choose>
+
+        <if test="start!=null and pageSize!=null">
+             limit ${start},${pageSize}
+        </if>
 
 
     </select>

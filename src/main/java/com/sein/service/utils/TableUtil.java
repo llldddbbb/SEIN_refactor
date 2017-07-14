@@ -103,13 +103,13 @@ public class TableUtil {
                     tableHeader.append("<th>温度(℃)</th>");
                     break;
                 case "Longitude":
-                    tableHeader.append("<th>&nbsp;&nbsp;&nbsp;经度&nbsp;&nbsp;&nbsp;</th>");
+                    tableHeader.append("<th>&nbsp;&nbsp经度&nbsp;&nbsp</th>");
                     break;
                 case "Latitude":
-                    tableHeader.append("<th>&nbsp;&nbsp;&nbsp;纬度&nbsp;&nbsp;&nbsp;</th>");
+                    tableHeader.append("<th>&nbsp;&nbsp纬度&nbsp;&nbsp</th>");
                     break;
                 case "Press":
-                    tableHeader.append("<th>&nbsp;&nbsp;压力&nbsp;&nbsp;</th>");
+                    tableHeader.append("<th>压力(Pa)</th>");
                     break;
             }
         }

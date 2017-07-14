@@ -5,11 +5,13 @@ import com.sein.dao.PollutantDAO;
 import com.sein.pojo.dto.PageBean;
 import com.sein.pojo.dto.PollutantTable;
 import com.sein.pojo.po.Device;
-import com.sein.pojo.po.DisplayConfig;
 import com.sein.pojo.po.Pollutant;
+import com.sein.service.utils.ExcelUtil;
 import com.sein.service.utils.PageUtil;
 import com.sein.service.utils.PollutantUtil;
 import com.sein.service.utils.TableUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -45,10 +47,9 @@ public class PollutantService {
      * @param endTime
      * @param unit
      * @param pollutantTypeAndAlerm
-     * @param displayConfig
      * @return
      */
-    public PollutantTable getPollutantTable(Integer id, String interval, String page, String startTime, String endTime, String unit, String pollutantTypeAndAlerm, DisplayConfig displayConfig) {
+    public PollutantTable getPollutantTable(Integer id, String interval, String page, String startTime, String endTime, String unit, String pollutantTypeAndAlerm) {
         PollutantTable pollutantTable=new PollutantTable();
 
         //封装参数
@@ -67,6 +68,9 @@ public class PollutantService {
         //封装表名
         Device device=deviceDAO.selectByPrimaryKey(id);
         param.put("pollutantTable",device.getPollutantTable()+interval);
+
+        //倒序显示
+        param.put("desc",true);
 
         //根据参数获取浓度列表
         List<Pollutant> pollutantList=pollutantDAO.listPollutant(param);
@@ -91,6 +95,49 @@ public class PollutantService {
         pollutantTable.setTableHeader(tableHeader);
         pollutantTable.setTableBody(tableBody);
         return pollutantTable;
+    }
+
+    /**
+     * 获取Excel表格
+     * @param id
+     * @param interval
+     * @param startTime
+     * @param endTime
+     * @param unit
+     * @param pollutantTypeAndAlerm
+     * @return
+     */
+    public Workbook getPollutantExcel(Integer id, String interval, String startTime, String endTime, String unit, String pollutantTypeAndAlerm) {
+        Workbook wb=new HSSFWorkbook();
+        //封装参数
+        HashMap<String,Object> param=new HashMap<>();
+        param.put("startTime",startTime);
+        param.put("endTime",endTime);
+        //封装pollutantType和Alerm参数
+        this.setPollutantTypeAndAlermParam(pollutantTypeAndAlerm,param);
+        //封装表名
+        Device device=deviceDAO.selectByPrimaryKey(id);
+        param.put("pollutantTable",device.getPollutantTable()+interval);
+
+        //倒序显示
+        param.put("desc",true);
+
+        //根据参数获取浓度列表
+        List<Pollutant> pollutantList=pollutantDAO.listPollutant(param);
+
+        //进行单位换算
+        if("umgm".equals(unit)){
+            PollutantUtil.transformUnit(pollutantList);
+        }
+
+        //获取表格头部
+        List<String> excelHeader= ExcelUtil.getExcelHeader((String) param.get("pollutantType"),unit);
+
+        //填充表格内容
+        ExcelUtil.fullExcelData(pollutantList,excelHeader,wb);
+
+        return wb;
+
     }
 
 
@@ -122,4 +169,6 @@ public class PollutantService {
         param.put("pollutantType",pollutantType);
         return param;
     }
+
+
 }
