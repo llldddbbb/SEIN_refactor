@@ -36,7 +36,7 @@ public class ShiroRealm extends AuthorizingRealm {
         if(account!=null){
             SecurityUtils.getSubject().getSession().setAttribute("currentAccount", account);
             //设置session超时时间2h。
-            SecurityUtils.getSubject().getSession().setTimeout(7200000);
+            SecurityUtils.getSubject().getSession().setTimeout(-1000l);
             AuthenticationInfo authcInfo=new SimpleAuthenticationInfo(account.getUserName(),account.getPassword(),"xx");
             return authcInfo;
         }else{
