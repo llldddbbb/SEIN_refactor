@@ -12,16 +12,16 @@ import com.sein.service.utils.StringUtil;
 import com.sein.service.utils.TransformGPSUtil;
 import com.sein.utils.AQIUtil;
 import com.sein.utils.DateUtil;
+import com.sein.utils.JacksonUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Created by ldb on 2017/7/13.
@@ -29,6 +29,8 @@ import java.util.TreeSet;
  */
 @Service
 public class DevicePollutantService {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private DeviceDAO deviceDAO;
@@ -87,17 +89,18 @@ public class DevicePollutantService {
 
     /**
      * 封装Map需要的信息
+     *
      * @param devicePollutantList
      * @return
      */
-    public void setDevicePollutantMap(List<DevicePollutant> devicePollutantList,DisplayConfig displayConfig){
+    public void setDevicePollutantMap(List<DevicePollutant> devicePollutantList, DisplayConfig displayConfig) {
         for (DevicePollutant devicePollutant : devicePollutantList) {
-            Device device=devicePollutant.getDevice();
+            Device device = devicePollutant.getDevice();
 
             //转换GPS并添加
-            TransformGPSResult result= TransformGPSUtil.transformBD(device.getLongitude(),device.getLatitude());
+            TransformGPSResult result = TransformGPSUtil.transformBD(device.getLongitude(), device.getLatitude());
             GPS gps = result.getResult().get(0);
-            if(gps!=null){
+            if (gps != null) {
                 device.setLongitude(gps.getX());
                 device.setLatitude(gps.getY());
             }
@@ -177,12 +180,13 @@ public class DevicePollutantService {
         //查询满足参数的浓度列表
         List<Pollutant> pollutantList = pollutantDAO.listPollutant(pollutantParam);
 
-        List<PollutantChartItem> pollutantChartList = PollutantUtil.getPollutantChartList(pollutantType, pollutantList);
+        List<PollutantChartItem> pollutantChartList = PollutantUtil.getPollutantChartList(pollutantType, pollutantList, null);
         return pollutantChartList;
     }
 
     /**
      * compare页折线图部分，获取折线图数据
+     *
      * @param accountId
      * @param pollutantType
      * @param interval
@@ -215,43 +219,34 @@ public class DevicePollutantService {
             param.put("pollutantTable", device.getPollutantTable() + interval);
             List<Pollutant> pollutantList = pollutantDAO.listPollutant(param);
             //获取单个浓度折线图
-            List<PollutantChartItem> pollutantChartList = PollutantUtil.getPollutantChartList(pollutantType, pollutantList);
-
-            //将所有时间添加进SET里
-            for (PollutantChartItem pollutantChartItem : pollutantChartList) {
-                xaisMaxSet.add(pollutantChartItem.getTime());
-            }
-
+            List<PollutantChartItem> pollutantChartList = PollutantUtil.getPollutantChartList(pollutantType, pollutantList, xaisMaxSet);
             //封装参数
             devicePollutantChart.setDevice(device);
             devicePollutantChart.setPollutantChartItemList(pollutantChartList);
             devicePollutantChartList.add(devicePollutantChart);
         }
 
-        //用来遍历判断是否存在time的List
-        List<String> xaisMaxList=new ArrayList<>();
-        xaisMaxList.addAll(xaisMaxSet);
-
         //填充横坐标，目的是为了让多段浓度数据的横坐标一致
         for (DevicePollutantChart dpc : devicePollutantChartList) {
             List<PollutantChartItem> PollutantChartItemList = dpc.getPollutantChartItemList();
-
             //封装timeList
             List<String> timeList = new ArrayList<>();
             for (PollutantChartItem item : PollutantChartItemList) {
                 timeList.add(item.getTime());
             }
             //遍历最大横坐标
-            for (int i = 0; i < xaisMaxSet.size(); i++) {
-                //判断timeList的一个时间是否存在最大横坐标中
-                if (!timeList.contains(xaisMaxList.get(i))) {
+            int index = 0;
+            for (String s : xaisMaxSet) {
+                if (!timeList.contains(s)) {
                     //如果不存在则将时间设置进去
                     PollutantChartItem pcItem = new PollutantChartItem();
-                    pcItem.setTime(xaisMaxList.get(i));
+                    pcItem.setTime(s);
                     //在i处添加一个横坐标
-                    PollutantChartItemList.add(i, pcItem);
+                    PollutantChartItemList.add(index, pcItem);
                 }
+                index++;
             }
+
         }
         return devicePollutantChartList;
     }

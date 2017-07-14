@@ -6,9 +6,11 @@ import com.sein.pojo.po.DisplayConfig;
 import com.sein.pojo.po.Pollutant;
 import com.sein.utils.DateUtil;
 import com.sein.utils.DecimalUtil;
+import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by ldb on 2017/7/13.
@@ -231,17 +233,26 @@ public class PollutantUtil {
      * @param pollutantList
      * @return
      */
-    public static List<PollutantChartItem> getPollutantChartList(String pollutantType,List<Pollutant> pollutantList) {
+    public static List<PollutantChartItem> getPollutantChartList(String pollutantType,List<Pollutant> pollutantList,TreeSet<String> xaisMaxSet) {
         List<PollutantChartItem> itemList = new ArrayList<>();
 
         //遍历浓度表，封装成前台折线图需要的time-value列表
         for (Pollutant pollutant : pollutantList) {
+            //如果时间为空则
             if(pollutant==null){
                 continue;
             }
+            if(StringUtils.isEmpty(pollutant.getTime())){
+                continue;
+            }
             PollutantChartItem item = new PollutantChartItem();
+
             //封装time
-            item.setTime(DateUtil.formatStrToStr(pollutant.getTime(), "MM-dd HH:mm:ss"));
+            item.setTime(DateUtil.formatStrToStr(pollutant.getTime(), "yyyy-MM-dd HH:mm:ss"));
+            //将所有毫秒时间添加进SET里,去重
+            if(xaisMaxSet!=null){
+                xaisMaxSet.add(item.getTime());
+            }
             switch (pollutantType) {
                 case "PM25":
                     item.setValue(pollutant.getPm25() == null ? null : pollutant.getPm25() < 0 ? null : DecimalUtil.formatDecimal(pollutant.getPm25(),"#.#"));
@@ -301,9 +312,6 @@ public class PollutantUtil {
      */
     public static void transformUnit(List<Pollutant> pollutantList){
         for(Pollutant pollutant:pollutantList){
-            if(pollutant==null){
-                continue;
-            }
             if(pollutant.getTemp()==null){
                 continue;
             }

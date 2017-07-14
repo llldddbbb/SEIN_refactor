@@ -76,8 +76,13 @@ public class DateUtil {
      * @return
      * @throws Exception
      */
-    public static Date formatStrToDate(String date,String type) throws Exception{
+    public static Date formatStrToDate(String date,String type){
         SimpleDateFormat format = new SimpleDateFormat(type);
-        return format.parse(date);
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
