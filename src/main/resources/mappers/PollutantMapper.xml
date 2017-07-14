@@ -160,4 +160,12 @@
         select * from ${pollutantTable} order by DateTime desc limit 1
     </select>
 
+    <select id="getDeviceGPS" resultMap="pollutantResultMap" parameterType="String" statementType="STATEMENT">
+        SELECT * FROM ${pollutantTable} WHERE Longitude>0  ORDER BY DATETIME DESC LIMIT 1
+    </select>
+
+    <select id="isExistGPSColumn" resultType="Integer" parameterType="String" >
+        SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='sein' AND table_name = #{pollutantTable} AND column_name = 'Latitude'
+    </select>
+
 </mapper>

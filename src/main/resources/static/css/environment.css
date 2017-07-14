@@ -621,7 +621,7 @@ html {
 }
 
 .places {
-	min-height: 80%;
+	height: 83%;
 	border: 1px solid;
 	margin-top: 20px;
 	margin-left: 20px;
@@ -630,6 +630,7 @@ html {
 	padding: 10px;
 	color: #fff;
 	font-size: 15px;
+	overflow: auto;
 }
 
 .places li {

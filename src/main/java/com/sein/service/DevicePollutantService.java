@@ -90,9 +90,10 @@ public class DevicePollutantService {
      * @param devicePollutantList
      * @return
      */
-    public void genDevicePollutantMap(List<DevicePollutant> devicePollutantList){
+    public void setDevicePollutantMap(List<DevicePollutant> devicePollutantList,DisplayConfig displayConfig){
         for (DevicePollutant devicePollutant : devicePollutantList) {
             Device device=devicePollutant.getDevice();
+
             //转换GPS并添加
             TransformGPSResult result= TransformGPSUtil.transformBD(device.getLongitude(),device.getLatitude());
             GPS gps = result.getResult().get(0);
@@ -181,6 +182,15 @@ public class DevicePollutantService {
         return pollutantChartList;
     }
 
+    /**
+     * compare页折线图部分，获取折线图数据
+     * @param accountId
+     * @param pollutantType
+     * @param interval
+     * @param startTime
+     * @param endTime
+     * @return
+     */
     public List<DevicePollutantChart> listDevicePollutantChart(Integer accountId, String pollutantType, String interval, String startTime, String endTime) {
         List<DevicePollutantChart> devicePollutantChartList = new ArrayList<>();
 

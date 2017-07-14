@@ -47,7 +47,7 @@ public class MapController {
         //获取基本列表
         List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
         //封装所需要的map信息
-        devicePollutantService.genDevicePollutantMap(devicePollutantList);
+        devicePollutantService.setDevicePollutantMap(devicePollutantList,displayConfig);
         return devicePollutantList;
     }
 }

@@ -92,7 +92,7 @@
                     map.addOverlay(marker);
                     if(val.device.cityName==highlightCityName){
                         marker.setAnimation(BMAP_ANIMATION_BOUNCE);
-                        map.centerAndZoom(new BMap.Point(result[0].device.longitude, result[0].device.latitude), 11);
+                        map.centerAndZoom(new BMap.Point(val.device.longitude, val.device.latitude), 13);
                     }
                     var content="<div class='mapInfo_content'><div class='mapInfo_content_left' ><span style='font-size: 14px;' id='AQITITLE'>空气质量指数<br></span><span>";
                     if(displayConfig.aqi==1){

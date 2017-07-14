@@ -1,6 +1,7 @@
 package com.sein.dao;
 
 import com.sein.pojo.po.Pollutant;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,5 +31,19 @@ public interface PollutantDAO {
      * @return
      */
     Integer getPollutantCount(HashMap<String,Object> param);
+
+    /**
+     * 获取设备GPS信息
+     * @param pollutantTable
+     * @return
+     */
+    Pollutant getDeviceGPS(@Param("pollutantTable") String pollutantTable);
+
+    /**
+     * 查询是否有GPS列
+     * @param pollutantTable
+     * @return
+     */
+    Integer isExistGPSColumn(@Param("pollutantTable") String pollutantTable);
 
 }
