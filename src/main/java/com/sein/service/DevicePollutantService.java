@@ -2,16 +2,14 @@ package com.sein.service;
 
 import com.sein.dao.DeviceDAO;
 import com.sein.dao.PollutantDAO;
-import com.sein.pojo.dto.DevicePollutant;
-import com.sein.pojo.dto.DevicePollutantChart;
-import com.sein.pojo.dto.PollutantChartItem;
-import com.sein.pojo.dto.PollutantItem;
+import com.sein.pojo.dto.*;
 import com.sein.pojo.po.Device;
 import com.sein.pojo.po.DisplayConfig;
 import com.sein.pojo.po.Pollutant;
 import com.sein.service.utils.DevicePollutantUtil;
 import com.sein.service.utils.PollutantUtil;
 import com.sein.service.utils.StringUtil;
+import com.sein.service.utils.TransformGPSUtil;
 import com.sein.utils.AQIUtil;
 import com.sein.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by ldb on 2017/7/13.
@@ -82,6 +83,34 @@ public class DevicePollutantService {
             devicePollutantList.add(devicePollutant);
         }
         return devicePollutantList;
+    }
+
+    /**
+     * 封装Map需要的信息
+     * @param devicePollutantList
+     * @return
+     */
+    public void genDevicePollutantMap(List<DevicePollutant> devicePollutantList){
+        for (DevicePollutant devicePollutant : devicePollutantList) {
+            Device device=devicePollutant.getDevice();
+            //转换GPS并添加
+            TransformGPSResult result= TransformGPSUtil.transformBD(device.getLongitude(),device.getLatitude());
+            GPS gps = result.getResult().get(0);
+            if(gps!=null){
+                device.setLongitude(gps.getX());
+                device.setLatitude(gps.getY());
+            }
+            //计算并设置AQI
+            Double AQI = null;
+            try {
+                AQI = AQIUtil.getAQI(devicePollutant.getPollutantItemList());
+            } catch (Exception e) {
+                AQI = 0.0;
+            }
+            devicePollutant.setAQI((int) Math.floor(AQI) + "");
+            devicePollutant.setDevice(device);
+        }
+
     }
 
     /**

@@ -768,6 +768,7 @@ html {
 	width: 320px;
 	height: 88px;
 	border-radius: 7px 7px 0 0 !important;
+	background-color: #cbdfef;
 }
 
 .mapInfo_content .mapInfo_content_middle {
@@ -777,7 +778,6 @@ html {
 	text-align: center;
 	font-size: 60px;
 	color: #6DC035;
-	background-color: #cbdfef;
 	line-height: 88px;
 }
 
@@ -788,7 +788,6 @@ html {
 	color: #5a8eb1;
 	line-height: 38px;
 	text-align: center;
-	background-color: #cbdfef;
 }
 
 .mapInfo_content_left span {
@@ -802,7 +801,6 @@ html {
 	color: #5a8eb1;
 	line-height: 38px;
 	text-align: center;
-	background-color: #cbdfef;
 	border-radius: 0 7px 0 0;
 }
 

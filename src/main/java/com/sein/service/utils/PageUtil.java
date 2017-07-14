@@ -3,7 +3,13 @@ package com.sein.service.utils;
 
 public class PageUtil {
 
-	
+	/**
+	 * 生成分页代码
+	 * @param totalNum
+	 * @param currentPage
+	 * @param pageSize
+	 * @return
+	 */
 	public static String genPageNation(long totalNum, int currentPage, int pageSize){
 		long totalPage=totalNum%pageSize==0?totalNum/pageSize:totalNum/pageSize+1;
 		if(totalPage==0){

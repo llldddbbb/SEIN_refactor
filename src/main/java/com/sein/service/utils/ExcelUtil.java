@@ -118,6 +118,12 @@ public class ExcelUtil {
         return excelHeader;
     }
 
+    /**
+     * 填充excel数据
+     * @param pollutantList
+     * @param excelHeader
+     * @param wb
+     */
     public static void fullExcelData(List<Pollutant> pollutantList,List<String> excelHeader,Workbook wb){
         Sheet sheet = wb.createSheet("data");
 

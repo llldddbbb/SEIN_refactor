@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Locale;
 
 /**
@@ -33,7 +32,7 @@ public class InternationalizationController {
 
     @RequestMapping("/changeMessageInfoLanguage")
     @ResponseBody
-    public Result changeMessageInfoLanguage(HttpServletResponse response) throws Exception {
+    public Result changeMessageInfoLanguage() throws Exception {
         if ("en".equals(lang)) {
             return Result.isOK();
         } else {

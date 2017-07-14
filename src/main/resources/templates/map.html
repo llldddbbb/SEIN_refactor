@@ -82,72 +82,71 @@
         map.clearOverlays();
         //异步加载地图数据
         $.post(url,{},function(result){
-            var result=eval("("+result+")");
-            map.centerAndZoom(new BMap.Point(result[0].devicePO.longitude, result[0].devicePO.latitude), 11);  // 初始化地图,设置中心点坐标和地图级别
+            map.centerAndZoom(new BMap.Point(result[0].device.longitude, result[0].device.latitude), 13);  // 初始化地图,设置中心点坐标和地图级别
             if(result){
                 $.each(result, function(i,val){
                     var marker;
                     var point;
-                    point = new BMap.Point(val.devicePO.longitude,val.devicePO.latitude);
+                    point = new BMap.Point(val.device.longitude,val.device.latitude);
                     marker = new BMap.Marker(point);
                     map.addOverlay(marker);
-                    if(val.devicePO.cityName==highlightCityName){
+                    if(val.device.cityName==highlightCityName){
                         marker.setAnimation(BMAP_ANIMATION_BOUNCE);
-                        map.centerAndZoom(new BMap.Point(result[0].devicePO.longitude, result[0].devicePO.latitude), 11);
+                        map.centerAndZoom(new BMap.Point(result[0].device.longitude, result[0].device.latitude), 11);
                     }
                     var content="<div class='mapInfo_content'><div class='mapInfo_content_left' ><span style='font-size: 14px;' id='AQITITLE'>空气质量指数<br></span><span>";
                     if(displayConfig.aqi==1){
-                        content=content+"AQI</span></div><div class='mapInfo_content_middle'>"+val.devicePO.aqi+"</div><div class='mapInfo_content_right'>";
+                        content=content+"AQI</span></div><div class='mapInfo_content_middle'>"+val.aqi+"</div><div class='mapInfo_content_right'>";
                     }
                     if(displayConfig.aqhi==1){
-                        content=content+"AQHI</span></div><div class='mapInfo_content_middle'>"+val.devicePO.aqhi+"</div><div class='mapInfo_content_right'>";
+                        content=content+"AQHI</span></div><div class='mapInfo_content_middle'>"+val.aqhi+"</div><div class='mapInfo_content_right'>";
                     }
-                    for(var j in val.pollutantItemBOList){
-                        if(val.pollutantItemBOList[j].type=="Temp"){
-                            content=content+"<span><span id='TEMP'>温度</span>:"+val.pollutantItemBOList[j].value+"℃<br/>";
+                    for(var j in val.pollutantItemList){
+                        if(val.pollutantItemList[j].type=="Temp"){
+                            content=content+"<span><span id='TEMP'>温度</span>:"+val.pollutantItemList[j].value+"℃<br/>";
                         }
-                        if(val.pollutantItemBOList[j].type=="Humi"){
-                            content=content+"<span id='HUMI'>湿度</span>:"+val.pollutantItemBOList[j].value+"%</span></div></div>";
+                        if(val.pollutantItemList[j].type=="Humi"){
+                            content=content+"<span id='HUMI'>湿度</span>:"+val.pollutantItemList[j].value+"%</span></div></div>";
                         }
                     }
                     content=content+"<table class='map-view'>";
                     var time="";
-                    for(var k in val.pollutantItemBOList){
-                        if(val.pollutantItemBOList[k].type=="time"){
-                            time=val.pollutantItemBOList[k].value;
-                        }else if(val.pollutantItemBOList[k].type=="PM25"){
-                            content=content+"<tr><td >PM<sub>2.5</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="PM10"){
-                            content=content+"<tr><td >PM<sub>10</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="PM1"){
-                            content=content+"<tr><td >PM<sub>1</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="CO"){
-                            content=content+"<tr><td >CO</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppm</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="CO2"){
-                            content=content+"<tr><td >CO<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppm</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="NO"){
-                            content=content+"<tr><td >NO</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="NO2"){
-                            content=content+"<tr><td >NO<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="SO"){
-                            content=content+"<tr><td >SO</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="SO2"){
-                            content=content+"<tr><td >SO<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="O3"){
-                            content=content+"<tr><td >O<sub>3</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="CL2"){
-                            content=content+"<tr><td >CL<sub>2</sub></td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemBOList[k].type=="VOC"){
-                            content=content+"<tr><td >VOC</td><td>"+val.pollutantItemBOList[k].value+"&nbsp;ppb</td></tr>"
+                    for(var k in val.pollutantItemList){
+                        if(val.pollutantItemList[k].type=="time"){
+                            time=val.pollutantItemList[k].value;
+                        }else if(val.pollutantItemList[k].type=="PM25"){
+                            content=content+"<tr><td >PM<sub>2.5</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
+                        }else if(val.pollutantItemList[k].type=="PM10"){
+                            content=content+"<tr><td >PM<sub>10</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
+                        }else if(val.pollutantItemList[k].type=="PM1"){
+                            content=content+"<tr><td >PM<sub>1</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;&micro;g/m<sup>3</sup></td></tr>"
+                        }else if(val.pollutantItemList[k].type=="CO"){
+                            content=content+"<tr><td >CO</td><td>"+val.pollutantItemList[k].value+"&nbsp;ppm</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="CO2"){
+                            content=content+"<tr><td >CO<sub>2</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppm</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="NO"){
+                            content=content+"<tr><td >NO</td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="NO2"){
+                            content=content+"<tr><td >NO<sub>2</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="SO"){
+                            content=content+"<tr><td >SO</td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="SO2"){
+                            content=content+"<tr><td >SO<sub>2</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="O3"){
+                            content=content+"<tr><td >O<sub>3</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="CL2"){
+                            content=content+"<tr><td >CL<sub>2</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
+                        }else if(val.pollutantItemList[k].type=="VOC"){
+                            content=content+"<tr><td >VOC</td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
                         }
                     }
-                    var content_final=content+"</table><div class='mapInfo_foot'><span id='UPDATETIME'>最后更新时间</span>&nbsp;&nbsp;&nbsp;"+time+"<div>"
+                    var content_final=content+"</table><div class='mapInfo_foot'><span id='UPDATETIME'>最后更新时间</span>&nbsp;&nbsp;&nbsp;"+time+"<div><br style='clear:both;'>"
 
                     marker.addEventListener("mouseover",function(e){
                         var opts = {
                             width : 320,     // 信息窗口宽度
                             height: 420,     // 信息窗口高度
-                            title : "<div class='mapInfo_title'><div class='mapInfo_title_left'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+val.devicePO.cityName+"</div><div class='mapInfo_title_right'>"+val.devicePO.pollutantTable+"</div></div>", // 信息窗口标题
+                            title : "<div class='mapInfo_title'><div class='mapInfo_title_left'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+val.device.cityName+"</div><div class='mapInfo_title_right'>"+val.device.pollutantTable+"</div></div>", // 信息窗口标题
                             enableMessage:true//设置允许信息窗发送短息
                         };
                         var p = e.target;
@@ -158,7 +157,7 @@
                         changeMessageInfoLanguage();
                     });
                     marker.addEventListener("click",function(e){
-                        window.location.href='/SEIN/table/devices/'+val.devicePO.id;
+                        window.location.href='/SEIN/detail/devices/'+val.device.id;
                     });
                 });
             }else{
@@ -175,7 +174,6 @@
         $.ajax({
             url:"/SEIN/changeMessageInfoLanguage",
             success:function (result) {
-                var result=eval("("+result+")");
                 if(result.success){
                     $("#TEMP").each(function(){
                         $(this).html("TEMP");
