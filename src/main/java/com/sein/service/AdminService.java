@@ -22,6 +22,9 @@ public class AdminService {
      * @return
      */
     public Result checkLogin(Admin admin){
+        if(admin.getAdminName()==null||admin.getPassword()==null){
+            return Result.isNotOK(ResultEnum.LOGIN_INFO_NULL.getInfo());
+        }
         Admin currentAdmin= adminDAO.selectOne(admin);
         if(currentAdmin!=null){
             //将登录用户返回给Controller

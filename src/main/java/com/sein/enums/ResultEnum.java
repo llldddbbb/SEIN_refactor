@@ -4,7 +4,9 @@ package com.sein.enums;
  * Created by ldb on 2017/7/12.
  */
 public enum ResultEnum {
-    LOGIN_ERROR(-1,"用户名或密码错误");
+    LOGIN_ERROR(-1,"用户名或密码错误"),
+    LOGIN_INFO_NULL(-2,"用户名或密码为空")
+    ;
 
     private int state;
     private String info;
