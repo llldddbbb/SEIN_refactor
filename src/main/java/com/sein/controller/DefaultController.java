@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class DefaultController {
 
-    @RequestMapping(value = {"/","/login"})
+    @RequestMapping(value = {"/"})
     public String loginPage(){
         return "login";
+    }
+
+    @RequestMapping(value = {"/background"})
+    public String backgroundLoginPage(){
+        return "background/index";
     }
 }

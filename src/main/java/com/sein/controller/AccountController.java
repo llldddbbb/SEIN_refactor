@@ -71,15 +71,5 @@ public class AccountController {
         return "login";
     }
 
-    @PostMapping("/add")
-    @ResponseBody
-    public Result addAccount(Account account) {
-        return accountService.addAccount(account);
-    }
 
-    @PostMapping("/update")
-    @ResponseBody
-    public Result updateAccount(Account account) {
-        return accountService.updateAccount(account);
-    }
 }
