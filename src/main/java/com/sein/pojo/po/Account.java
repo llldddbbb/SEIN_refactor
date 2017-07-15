@@ -1,6 +1,9 @@
 package com.sein.pojo.po;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Created by ldb on 2017/3/28.
@@ -8,6 +11,8 @@ import javax.persistence.Column;
 public class Account {
 
     //主键
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //用户名
     @Column(name = "userName")

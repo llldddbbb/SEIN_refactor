@@ -32,8 +32,8 @@ public class PollutantService {
     @Autowired
     private DeviceDAO deviceDAO;
 
-    @Value("${PAGESIZE}")
-    private Integer PAGESEIZE;
+    @Value("${PAGE_SIZE}")
+    private Integer PAGE_SIZE;
 
     @Value("${POLLUTANT_TYPE_BASE}")
     private String POLLUTANT_TYPE_BASE;
@@ -62,7 +62,7 @@ public class PollutantService {
         if(StringUtils.isEmpty(page)){
             page="1";
         }
-        PageBean pageBean=new PageBean(Integer.parseInt(page),PAGESEIZE);
+        PageBean pageBean=new PageBean(Integer.parseInt(page),PAGE_SIZE);
         param.put("start",pageBean.getStart()+"");
         param.put("pageSize",pageBean.getPageSize()+"");
         //封装表名

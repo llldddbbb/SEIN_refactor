@@ -1,9 +1,6 @@
 package com.sein.pojo.po;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 public class Device {
 
@@ -25,6 +22,9 @@ public class Device {
 
     @Column(name = "accountId")
     private Integer accountId;
+
+    @Transient
+    private Account account;
 
 
     public Integer getId() {
@@ -83,4 +83,11 @@ public class Device {
         this.accountId = accountId;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }
