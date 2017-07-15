@@ -135,8 +135,10 @@ public class PollutantService {
 
         //根据需求要求缓慢显示两行
         if("_1min".equals(interval)){
-            pollutantList.remove(pollutantList.size()-1);
-            pollutantList.remove(pollutantList.size()-1);
+            if(pollutantList.size()>2){
+                pollutantList.remove(pollutantList.size()-1);
+                pollutantList.remove(pollutantList.size()-1);
+            }
         }
 
         //进行单位换算
