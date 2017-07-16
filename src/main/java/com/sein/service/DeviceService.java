@@ -117,7 +117,7 @@ public class DeviceService {
         if(result>0){
             return Result.isOK(ResultEnum.DELETE_SUCCESS.getInfo());
         }else{
-            return Result.isNotOK(ResultEnum.DELETE_SUCCESS.getInfo());
+            return Result.isNotOK(ResultEnum.DELETE_ERROR.getInfo());
         }
     }
 }

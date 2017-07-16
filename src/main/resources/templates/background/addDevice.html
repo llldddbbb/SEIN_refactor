@@ -53,7 +53,7 @@
         <div class="layui-input-inline">
             <img width="70"  id="picture"
                  th:src="${device}==null?'/SEIN/images/img1.jpg':${device.picture}">
-            <input type="hidden" name="picture" th:value="${device}==null?'/SEIN/images/img1.jpg':${device.picture}">
+            <input type="hidden" name="picture" id="pictureValue" th:value="${device}==null?'/SEIN/images/img1.jpg':${device.picture}">
         </div>
     </div>
     <div class="layui-form-item">
@@ -75,11 +75,23 @@
         var form = layui.form();
         layui.upload({
             url: 'uploadPicture' //上传接口
+            ,before: function () {
+                layer.msg('上传中...', {
+                    icon: 16
+                    ,shade: 0.4,
+                    time: 30000
+                });
+            }
             , success: function (result) { //上传成功后的回调
                 if (result.success) {
-                    document.getElementById("picture").src = result.picture;
+                    layer.alert('上传成功!', {
+                        closeBtn: 0,
+                        icon: 1
+                    });
+                    document.getElementById("picture").src = result.data;
+                    document.getElementById("pictureValue").value = result.data;
                 } else {
-                    alert("上传文件失败");
+                    layer.alert(result.msg, {icon: 5});
                 }
             }
         });

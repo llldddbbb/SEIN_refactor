@@ -111,7 +111,7 @@
                                 html+='<td>'+item.cityName+'</td>';
                                 html+='<td id="gps'+item.id+'">'+item.longitude+','+item.latitude+'</td>';
                                 html+='<td>'+item.pollutantTable+'</td>';
-                                html+='<td><img style="width: 70px" src='+item.picture+'/></td>';
+                                html+='<td><img style="width: 70px" src='+item.picture+'></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData('+item.id+')"><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small " onclick="layui.datalist.updateGPS('+item.id+')">更新位置</button></td>';
