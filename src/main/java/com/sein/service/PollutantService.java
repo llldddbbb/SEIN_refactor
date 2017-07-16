@@ -149,6 +149,11 @@ public class PollutantService {
 
     }
 
+    /**
+     * 判断是否存在浓度表
+     * @param pollutantTable
+     * @return
+     */
     public Result isExistPollutantTable(String pollutantTable){
         Integer existPollutantTable = pollutantDAO.isExistPollutantTable(StringUtil.formatSQLLikeRight(pollutantTable+"#_"));
         if(existPollutantTable>0){
@@ -157,6 +162,7 @@ public class PollutantService {
             return Result.isNotOK(ResultEnum.POLLUTANT_TABLE_NULL.getInfo());
         }
     }
+
 
     /**
      * 封装pollutantType和Alerm参数

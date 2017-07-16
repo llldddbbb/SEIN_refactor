@@ -87,4 +87,10 @@ public class DeviceAdminController {
         }
     }
 
+    @DeleteMapping("/device/{id}")
+    @ResponseBody
+    public Result deleteDevice(@PathVariable Integer id){
+        return deviceService.deleteDevice(id);
+    }
+
 }

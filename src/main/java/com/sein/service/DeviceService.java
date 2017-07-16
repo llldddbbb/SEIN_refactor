@@ -111,6 +111,15 @@ public class DeviceService {
             return Result.isNotOK(ResultEnum.UPDATE_SUCCESS.getInfo());
         }
     }
+
+    public Result deleteDevice(Integer id){
+        int result = deviceDAO.deleteByPrimaryKey(id);
+        if(result>0){
+            return Result.isOK(ResultEnum.DELETE_SUCCESS.getInfo());
+        }else{
+            return Result.isNotOK(ResultEnum.DELETE_SUCCESS.getInfo());
+        }
+    }
 }
 
 

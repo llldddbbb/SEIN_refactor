@@ -154,7 +154,7 @@
                             type:'DELETE',
                             success:function (result) {
                                 if(result.success){
-                                    layer.alert('删除成功!', {
+                                    layer.alert(result.data, {
                                         closeBtn: 0,
                                         icon: 1
                                     }, function(){
