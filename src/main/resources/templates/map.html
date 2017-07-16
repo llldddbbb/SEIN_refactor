@@ -48,7 +48,7 @@
         <div class="places">
             <div style="margin:20px 5px;text-align:center;" th:each="device:${deviceList}">
                 <a th:onMouseOver="'javascript:loadGeo(\''+${device.cityName}+'\')'">
-                    <img style="margin-bottom:5px;" th:src="@{'/images/'+${device.picture}}" width="95%" height="70px"/>
+                    <img style="margin-bottom:5px;" th:src="${device.picture}" width="95%" height="70px"/>
                     <span th:text="${device.cityName}"></span>
                 </a>
             </div>
