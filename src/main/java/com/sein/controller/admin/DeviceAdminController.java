@@ -8,8 +8,10 @@ import com.sein.pojo.po.DisplayConfig;
 import com.sein.service.DevicePollutantService;
 import com.sein.service.DeviceService;
 import com.sein.service.DisplayConfigService;
+import com.sein.service.PollutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -28,9 +30,21 @@ public class DeviceAdminController {
     @Autowired
     private DisplayConfigService displayConfigService;
 
+    @Autowired
+    private PollutantService pollutantSerivce;
+
     @RequestMapping("/deviceManage")
     public String deviceManagePage() {
         return "background/deviceManage";
+    }
+
+    @RequestMapping("/addDevice")
+    public String addDevicePage(Integer id, Model model) {
+        if(id!=null){
+            Device device = deviceService.getDevice(id);
+            model.addAttribute("device",device);
+        }
+        return "background/addDevice";
     }
 
     @GetMapping("/device/list/{page}")
@@ -54,6 +68,22 @@ public class DeviceAdminController {
             return deviceService.updateDeviceGPS(device,gps);
         }else{
             return deviceNewestGPS;
+        }
+    }
+
+    @PostMapping("/device/manage")
+    @ResponseBody
+    public Result operateDevice(Device device){
+        //判断表格是否存在
+        Result existPollutantTable = pollutantSerivce.isExistPollutantTable(device.getPollutantTable());
+        //不存在则返回
+        if(!existPollutantTable.isSuccess()){
+            return existPollutantTable;
+        }
+        if(device.getId()!=null){
+            return deviceService.updateDevice(device);
+        }else{
+            return deviceService.addDevice(device);
         }
     }
 

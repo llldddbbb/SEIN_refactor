@@ -93,7 +93,7 @@
         </choose>
 
         <if test="start!=null and pageSize!=null">
-             limit ${start},${pageSize}
+            limit ${start},${pageSize}
         </if>
 
 
@@ -164,8 +164,12 @@
         SELECT * FROM ${pollutantTable} WHERE Longitude>0  ORDER BY DATETIME DESC LIMIT 1
     </select>
 
-    <select id="isExistGPSColumn" resultType="Integer" parameterType="String" >
+    <select id="isExistGPSColumn" resultType="Integer" parameterType="String">
         SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='sein' AND table_name = #{pollutantTable} AND column_name = 'Latitude'
+    </select>
+
+    <select id="isExistPollutantTable" resultType="Integer" parameterType="String">
+        SELECT COUNT(*) FROM information_schema.TABLES WHERE table_name like #{pollutantTable} ESCAPE '#';
     </select>
 
 </mapper>

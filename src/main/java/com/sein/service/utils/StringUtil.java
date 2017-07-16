@@ -12,4 +12,8 @@ public class StringUtil {
     public static String formatSQLLikeStr(String str){
         return "%"+str+"%";
     }
+
+    public static String formatSQLLikeRight(String str){
+        return str+"%";
+    }
 }

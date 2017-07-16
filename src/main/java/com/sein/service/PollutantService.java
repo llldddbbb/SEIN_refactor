@@ -1,15 +1,13 @@
 package com.sein.service;
 
-import com.sein.dao.DeviceDAO;
 import com.sein.dao.PollutantDAO;
+import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.PageBean;
 import com.sein.pojo.dto.PollutantTable;
+import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Device;
 import com.sein.pojo.po.Pollutant;
-import com.sein.service.utils.ExcelUtil;
-import com.sein.service.utils.PageUtil;
-import com.sein.service.utils.PollutantUtil;
-import com.sein.service.utils.TableUtil;
+import com.sein.service.utils.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +27,6 @@ public class PollutantService {
     @Autowired
     private PollutantDAO pollutantDAO;
 
-    @Autowired
-    private DeviceDAO deviceDAO;
-
     @Value("${PAGE_SIZE}")
     private Integer PAGE_SIZE;
 
@@ -40,7 +35,7 @@ public class PollutantService {
 
     /**
      * 获取网页表格
-     * @param id
+     * @param device
      * @param interval
      * @param page
      * @param startTime
@@ -49,7 +44,7 @@ public class PollutantService {
      * @param pollutantTypeAndAlerm
      * @return
      */
-    public PollutantTable getPollutantTable(Integer id, String interval, String page, String startTime, String endTime, String unit, String pollutantTypeAndAlerm) {
+    public PollutantTable getPollutantTable(Device device, String interval, String page, String startTime, String endTime, String unit, String pollutantTypeAndAlerm) {
         PollutantTable pollutantTable=new PollutantTable();
 
         //封装参数
@@ -66,7 +61,6 @@ public class PollutantService {
         param.put("start",pageBean.getStart()+"");
         param.put("pageSize",pageBean.getPageSize()+"");
         //封装表名
-        Device device=deviceDAO.selectByPrimaryKey(id);
         param.put("pollutantTable",device.getPollutantTable()+interval);
 
         //倒序显示
@@ -107,7 +101,7 @@ public class PollutantService {
 
     /**
      * 获取Excel表格
-     * @param id
+     * @param device
      * @param interval
      * @param startTime
      * @param endTime
@@ -115,7 +109,7 @@ public class PollutantService {
      * @param pollutantTypeAndAlerm
      * @return
      */
-    public Workbook getPollutantExcel(Integer id, String interval, String startTime, String endTime, String unit, String pollutantTypeAndAlerm) {
+    public Workbook getPollutantExcel( Device device, String interval, String startTime, String endTime, String unit, String pollutantTypeAndAlerm) {
         Workbook wb=new HSSFWorkbook();
         //封装参数
         HashMap<String,Object> param=new HashMap<>();
@@ -124,7 +118,6 @@ public class PollutantService {
         //封装pollutantType和Alerm参数
         this.setPollutantTypeAndAlermParam(pollutantTypeAndAlerm,param);
         //封装表名
-        Device device=deviceDAO.selectByPrimaryKey(id);
         param.put("pollutantTable",device.getPollutantTable()+interval);
 
         //倒序显示
@@ -156,6 +149,14 @@ public class PollutantService {
 
     }
 
+    public Result isExistPollutantTable(String pollutantTable){
+        Integer existPollutantTable = pollutantDAO.isExistPollutantTable(StringUtil.formatSQLLikeRight(pollutantTable+"#_"));
+        if(existPollutantTable>0){
+            return Result.isOK();
+        }else{
+            return Result.isNotOK(ResultEnum.POLLUTANT_TABLE_NULL.getInfo());
+        }
+    }
 
     /**
      * 封装pollutantType和Alerm参数

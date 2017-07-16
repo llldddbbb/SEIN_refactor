@@ -83,6 +83,34 @@ public class DeviceService {
             return Result.isNotOK(ResultEnum.UPDATE_ERROR.getInfo());
         }
     }
+
+    /**
+     * 添加设备
+     * @param device
+     * @return
+     */
+    public Result addDevice(Device device){
+        int result = deviceDAO.insert(device);
+        if(result>0){
+            return Result.isOK(ResultEnum.ADD_SUCCESS.getInfo());
+        }else{
+            return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo());
+        }
+    }
+
+    /**
+     * 更新设备
+     * @param device
+     * @return
+     */
+    public Result updateDevice(Device device){
+        int result = deviceDAO.updateByPrimaryKey(device);
+        if(result>0){
+            return Result.isOK(ResultEnum.UPDATE_SUCCESS.getInfo());
+        }else{
+            return Result.isNotOK(ResultEnum.UPDATE_SUCCESS.getInfo());
+        }
+    }
 }
 
 

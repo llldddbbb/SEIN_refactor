@@ -13,27 +13,31 @@ public interface PollutantDAO {
 
     /**
      * 获取浓度列表
+     *
      * @param param
      * @return
      */
-    List<Pollutant> listPollutant(HashMap<String,Object> param);
+    List<Pollutant> listPollutant(HashMap<String, Object> param);
 
     /**
      * 获取单个浓度信息
+     *
      * @param param
      * @return
      */
-    Pollutant getPollutant(HashMap<String,Object> param);
+    Pollutant getPollutant(HashMap<String, Object> param);
 
     /**
      * 获取总数目
+     *
      * @param param
      * @return
      */
-    Integer getPollutantCount(HashMap<String,Object> param);
+    Integer getPollutantCount(HashMap<String, Object> param);
 
     /**
      * 获取设备最新GPS信息
+     *
      * @param pollutantTable
      * @return
      */
@@ -41,9 +45,17 @@ public interface PollutantDAO {
 
     /**
      * 查询是否有GPS列
+     *
      * @param pollutantTable
      * @return
      */
     Integer isExistGPSColumn(@Param("pollutantTable") String pollutantTable);
+
+    /**
+     * 查询是否存在浓度表
+     * @param pollutantTable
+     * @return
+     */
+    Integer isExistPollutantTable(@Param("pollutantTable") String pollutantTable);
 
 }

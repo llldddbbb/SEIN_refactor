@@ -44,7 +44,8 @@ public class TableController {
     public PollutantTable pollutantTable(Integer id, String interval,@RequestParam(required = false) String page,
                                  @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime,
                                  @RequestParam(required = false) String pollutantTypeAndAlerm,@RequestParam(required = false) String unit){
-        PollutantTable pollutantTable=pollutantService.getPollutantTable(id,interval,page,startTime,endTime,unit,pollutantTypeAndAlerm);
+        Device device = deviceService.getDevice(id);
+        PollutantTable pollutantTable=pollutantService.getPollutantTable(device,interval,page,startTime,endTime,unit,pollutantTypeAndAlerm);
         return pollutantTable;
     }
 
@@ -52,7 +53,7 @@ public class TableController {
     public void exportExcel(Integer id, String interval, @RequestParam(required = false) String startTime, @RequestParam(required = false) String endTime,
                             @RequestParam(required = false) String pollutantTypeAndAlerm, @RequestParam(required = false) String unit,HttpServletResponse response)throws Exception{
         Device device = deviceService.getDevice(id);
-        Workbook wb=pollutantService.getPollutantExcel(id,interval,startTime,endTime,unit,pollutantTypeAndAlerm);
+        Workbook wb=pollutantService.getPollutantExcel(device,interval,startTime,endTime,unit,pollutantTypeAndAlerm);
         ResponseUtil.exportExcel(response,wb,device.getPollutantTable()+"_"+device.getCityName()+interval+".xls");
     }
 
