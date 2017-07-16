@@ -2,10 +2,11 @@ package com.sein.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sein.dao.AccountDAO;
 import com.sein.dao.DeviceDAO;
+import com.sein.enums.ResultEnum;
+import com.sein.pojo.dto.GPS;
 import com.sein.pojo.dto.PageResult;
-import com.sein.pojo.po.Account;
+import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Device;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,6 @@ public class DeviceService {
 
     @Autowired
     private DeviceDAO deviceDAO;
-
-    @Autowired
-    private AccountDAO accountDAO;
 
 
     /**
@@ -52,10 +50,6 @@ public class DeviceService {
         //倒序排序
         example.setOrderByClause("id DESC");
         List<Device> deviceList =deviceDAO.selectByExample(example);
-        for (Device device : deviceList) {
-            Account account = accountDAO.selectByPrimaryKey(device.getAccountId());
-            device.setAccount(account);
-        }
         //获取总记录数
         long total = page.getTotal();
         //封装参数
@@ -71,6 +65,23 @@ public class DeviceService {
      */
     public Device getDevice(int id){
         return deviceDAO.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 更新Device的GPS信息
+     * @param device
+     * @param gps
+     * @return
+     */
+    public Result updateDeviceGPS(Device device, GPS gps){
+        device.setLongitude(gps.getX());
+        device.setLatitude(gps.getY());
+        int result = deviceDAO.updateByPrimaryKey(device);
+        if(result>0){
+            return Result.isOK(gps);
+        }else{
+            return Result.isNotOK(ResultEnum.UPDATE_ERROR.getInfo());
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.sein.service;
 
 import com.sein.dao.DeviceDAO;
 import com.sein.dao.PollutantDAO;
+import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.*;
 import com.sein.pojo.po.Device;
 import com.sein.pojo.po.DisplayConfig;
@@ -12,7 +13,6 @@ import com.sein.service.utils.StringUtil;
 import com.sein.service.utils.TransformGPSUtil;
 import com.sein.utils.AQIUtil;
 import com.sein.utils.DateUtil;
-import com.sein.utils.JacksonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by ldb on 2017/7/13.
@@ -249,6 +252,37 @@ public class DevicePollutantService {
 
         }
         return devicePollutantChartList;
+    }
+
+
+    /**
+     * 从浓度表获取最新的GPS位置信息
+     * @param displayConfig
+     * @param device
+     * @return
+     */
+    public Result getDeviceNewestGPS(DisplayConfig displayConfig,Device device){
+        GPS gps=new GPS();
+        //封装pollutantTable参数
+        String interval= PollutantUtil.getNewestPostfix(displayConfig);
+        String pollutantTable=device.getPollutantTable()+interval;
+        //执行查询是否存在GPS信息
+        Integer isExist = pollutantDAO.isExistGPSColumn(pollutantTable);
+        if(isExist>0){
+            Pollutant deviceNewestGPS = pollutantDAO.getDeviceNewestGPS(pollutantTable);
+            //没有查询到GPS信息
+            if(deviceNewestGPS==null){
+                return Result.isNotOK(ResultEnum.GPS_ERROR.getInfo());
+            }else{
+                //查询到GPS，封装返回
+                gps.setX(deviceNewestGPS.getLongitude());
+                gps.setY(deviceNewestGPS.getLatitude());
+                return Result.isOK(gps);
+            }
+        }else{
+            return Result.isNotOK(ResultEnum.GPS_COLUMN_NULL.getInfo());
+        }
+
     }
 
 }

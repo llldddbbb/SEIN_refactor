@@ -33,11 +33,11 @@ public interface PollutantDAO {
     Integer getPollutantCount(HashMap<String,Object> param);
 
     /**
-     * 获取设备GPS信息
+     * 获取设备最新GPS信息
      * @param pollutantTable
      * @return
      */
-    Pollutant getDeviceGPS(@Param("pollutantTable") String pollutantTable);
+    Pollutant getDeviceNewestGPS(@Param("pollutantTable") String pollutantTable);
 
     /**
      * 查询是否有GPS列

@@ -101,20 +101,20 @@
                             var deviceList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="20"><col width="60"><col width="80"><col width="80"><col width="60"><col width="40"><col width="20"><col width="20"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>设备别名</th><th>经纬度</th><th>浓度表</th><th>图片</th><th>所属账户</th><th colspan="2">操作</th></tr></thead>';
+                            html += '<colgroup><col width="20"><col width="60"><col width="80"><col width="80"><col width="60"><col width="20"><col width="20"><col width="30"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>设备别名</th><th>经纬度</th><th>浓度表</th><th>图片</th><th colspan="3">操作</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in deviceList){
                                 var item=deviceList[i];
                                 html+='<tr>';
                                 html+='<td>'+item.id+'</td>';
                                 html+='<td>'+item.cityName+'</td>';
-                                html+='<td>'+item.longitude+','+item.latitude+'</td>';
+                                html+='<td id="gps'+item.id+'">'+item.longitude+','+item.latitude+'</td>';
                                 html+='<td>'+item.pollutantTable+'</td>';
                                 html+='<td><img style="width: 70px" src=/SEIN/images/'+item.picture+'/></td>';
-                                html+='<td>'+item.account.userName+'</td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+')\'><i class="layui-icon">&#xe642;</i></button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=""><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small " onclick="layui.datalist.updateGPS('+item.id+')">更新位置</button></td>';
                                 html+='</tr>';
                             }
                             html+='</tbody></table>';
@@ -145,11 +145,11 @@
             //输出接口，主要是两个函数，一个删除一个编辑
             var datalist = {
                 deleteData: function (id) {
-                    layer.confirm('确定删除这条实习吗？', {
+                    layer.confirm('确定删除这条设备信息吗？', {
                         btn: ['确定', '取消'] //按钮
                     }, function () {
                         $.ajax({
-                            url:'/admin/device/'+id,
+                            url:'device/'+id,
                             data:{},
                             type:'DELETE',
                             success:function (result) {
@@ -158,7 +158,7 @@
                                         closeBtn: 0,
                                         icon: 1
                                     }, function(){
-                                        window.location.href="/admin/deviceManage"
+                                        window.location.href="deviceManage"
                                     });
                                 }else{
                                     layer.alert(result.msg, {icon: 5});
@@ -169,56 +169,37 @@
 
                     });
                 },
-                editData: function (item) {
-                    var html='';
-                    html+='<form class="layui-form layui-form-pane" action="/admin/device" method="post">';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<input type="hidden" name="_method" value="put" />';
-                    html+='<input type="hidden" name="id" value="'+item.id+'" />';
-                    html+='<input type="hidden" name="createTime" value="'+item.createTime+'" />';
-                    html+='<label class="layui-form-label" style="border: none" >实习学校:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="schoolName"  class="layui-input" value="'+item.schoolName+'">';
-                    html+='</div>';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >地点:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="site"  class="layui-input" value="'+item.site+'">';
-                    html+='</div>';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >选课数量:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="number"  class="layui-input" value="'+item.number+'" >';
-                    html+='</div>';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >开始时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="startTime" class="layui-input" value="'+item.startTime+'" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})" >';
-                    html+='</div>';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >结束时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime"  class="layui-input" value="'+item.endTime+'" onclick="layui.laydate({elem: this, istime: true,format: \'YYYY-MM-DD hh:mm:ss\'})">';
-                    html+='</div>';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >实习周数:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="is_fifteen"  class="layui-input" value="'+item.is_fifteen+'" >';
-                    html+='</div>';
-                    html+='<div style="margin: 20px 0">';
-                    html+='<label class="layui-form-label" style="border: none"  >备注:</label>';
-                    html+='<textarea  style="width:60%;color: #000!important;"  name="remark"  class="layui-textarea" >'+item.remark+'</textarea>';
-                    html+='</div>';
-                    html+='<div class="layui-form-item">';
-                    html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
-                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">修改</button>';
-                    html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
-                    html+='</div>';
-                    html+='</div>';
-                    html+='</form>';
-                    layer.open({
-                        type: 1,
-                        skin: 'layui-layer-rim', //加上边框
-                        area: '520px', //宽高
-                        title:'修改实习',
-                        content: html
+                updateGPS:function(id){
+                    layer.confirm('确定更新这条设备的GPS信息吗？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        layer.closeAll('page');
+                        layer.msg('更新中...', {
+                            icon: 16
+                            ,shade: 0.4,
+                            time: 30000
+                        });
+                        $.ajax({
+                            url:'device/'+id+'/gps',
+                            data:{},
+                            type:'PUT',
+                            success:function (result) {
+                                if(result.success){
+                                    $('#gps'+id).html(result.data.x+","+result.data.y+"(已更新)");
+                                    layer.alert('更新成功!', {
+                                        closeBtn: 0,
+                                        icon: 1
+                                    });
+                                }else{
+                                    layer.alert(result.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    }, function () {
+
                     });
-                    form.render('radio');  //radio，编辑和添加的时候
                 }
+
 
             };
             exports('datalist', datalist);
