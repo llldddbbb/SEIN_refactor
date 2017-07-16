@@ -26,7 +26,7 @@
         <div class="citylist">
             <div class="cities" style="margin-right:10px!important;" th:each="devicePollutant:${devicePollutantList}">
                 <a th:href="@{'/detail/devices/'+${devicePollutant.device.id}}">
-                    <img th:src="${devicePollutant.device.picture}"/>
+                    <img th:src="${devicePollutant.device.picture}" >
                     <h3 th:text="${devicePollutant.device.cityName}"></h3>
                     <div class="city-bottom">
                         <marquee drection="left" onMouseOver="this.stop()" onMouseOut="this.start()" behavior="scroll">

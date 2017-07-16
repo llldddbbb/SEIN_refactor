@@ -24,6 +24,7 @@
             <input type="text" name="cityName" lay-verify="required" autocomplete="off"
                    class="layui-input" th:value="${device}==null?'':${device.cityName}"/>
             <input type="hidden" name="id" th:value="${device}==null?'':${device.id}"/>
+            <input type="hidden" name="accountId" th:value="${device}==null?'':${device.accountId}"/>
         </div>
     </div>
     <div class="layui-form-item ">
@@ -106,7 +107,8 @@
                     pollutantTable:data.field.pollutantTable,
                     longitude:data.field.longitude,
                     latitude:data.field.latitude,
-                    picture:data.field.picture
+                    picture:data.field.picture,
+                    accountId:data.field.accountId
                 },
                 success:function (result) {
                     if(result.success){
