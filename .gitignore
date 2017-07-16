@@ -26,4 +26,3 @@ nbdist/
 /mvnw
 /mvnw.cmd
 /src/main/resources/application-dev.yml
-/src/main/resources/sein.properties
