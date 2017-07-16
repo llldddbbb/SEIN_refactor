@@ -112,6 +112,11 @@ public class DeviceService {
         }
     }
 
+    /**
+     * 删除设备
+     * @param id
+     * @return
+     */
     public Result deleteDevice(Integer id){
         int result = deviceDAO.deleteByPrimaryKey(id);
         if(result>0){

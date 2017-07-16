@@ -61,7 +61,7 @@ public class DeviceAdminController {
     @GetMapping("/device/list/{page}")
     @ResponseBody
     public PageResult<Device> getDeviceList(@PathVariable Integer page, Integer pageSize) {
-        //获取评论列表
+        //获取分页列表
         PageResult<Device> pageResult = deviceService.listDevice(page, pageSize);
         return pageResult;
     }
