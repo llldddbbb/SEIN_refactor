@@ -72,6 +72,9 @@
                 }
             });
             displayConfigJson += "}";
+            if(displayConfigJson=='{}'){
+                displayConfigJson=null;
+            }
             console.log(displayConfigJson);
             var accountJson="{";
             accountJson += ("\"userName\":"+"\""+$("#userName").val()+"\"");

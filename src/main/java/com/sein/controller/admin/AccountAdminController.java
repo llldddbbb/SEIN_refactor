@@ -71,6 +71,9 @@ public class AccountAdminController {
     @ResponseBody
     public Result addAccount(String displayConfigJson, String accountJson) throws Exception {
         DisplayConfig displayConfig = JacksonUtil.readValue(displayConfigJson, DisplayConfig.class);
+        if(displayConfig==null){
+            return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo()+",数据库没有对应浓度表");
+        }
         Account account = JacksonUtil.readValue(accountJson, Account.class);
         Integer id = accountService.addAccount(account);
         displayConfig.setId(id);
