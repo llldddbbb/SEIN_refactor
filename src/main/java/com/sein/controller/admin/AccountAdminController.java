@@ -67,17 +67,28 @@ public class AccountAdminController {
     }
 
     @PostMapping("/account")
-    @Transactional//开启事物
+    @Transactional
     @ResponseBody
-    public Result addAccount(String displayConfigJson, String accountJson) throws Exception {
+    public Result addAccount(String displayConfigJson, String accountJson) throws Exception{
         DisplayConfig displayConfig = JacksonUtil.readValue(displayConfigJson, DisplayConfig.class);
-        if(displayConfig==null){
-            return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo()+",数据库没有对应浓度表");
+        if (displayConfig == null) {
+            return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo() + ",数据库没有对应浓度表");
         }
         Account account = JacksonUtil.readValue(accountJson, Account.class);
         Integer id = accountService.addAccount(account);
         displayConfig.setId(id);
         displayConfigService.addDeviceConfig(displayConfig);
         return Result.isOK(ResultEnum.ADD_SUCCESS.getInfo());
+    }
+
+    @DeleteMapping("/account/{id}")
+    @Transactional
+    @ResponseBody
+    public Result deleteAccount(@PathVariable Integer id) throws Exception{
+        DisplayConfig displayConfig = displayConfigService.getDisplayConfig(id);
+        if(displayConfig!=null){
+            displayConfigService.deleteDisplayConfig(id);
+        }
+        return accountService.deleteAccount(id);
     }
 }

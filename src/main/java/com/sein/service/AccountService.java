@@ -3,13 +3,15 @@ package com.sein.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sein.dao.AccountDAO;
+import com.sein.dao.DisplayConfigDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.PageResult;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
-import com.sein.pojo.po.Account;
+import com.sein.pojo.po.DisplayConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -40,16 +42,17 @@ public class AccountService {
 
     /**
      * 根据用户名查找Account
+     *
      * @param userName
      * @return
      */
-    public Account getAccountByUserName(String userName){
-        Example example=new Example(Account.class);
-        example.createCriteria().andEqualTo("userName",userName);
+    public Account getAccountByUserName(String userName) {
+        Example example = new Example(Account.class);
+        example.createCriteria().andEqualTo("userName", userName);
         List<Account> accountList = accountDAO.selectByExample(example);
-        if(accountList!=null&&accountList.size()>0){
+        if (accountList != null && accountList.size() > 0) {
             return accountList.get(0);
-        }else{
+        } else {
             return new Account();
         }
 
@@ -61,7 +64,7 @@ public class AccountService {
      * @param account
      * @return
      */
-    public Integer addAccount(Account account) {
+    public Integer addAccount(Account account){
         accountDAO.insert(account);
         return account.getId();
     }
@@ -82,19 +85,30 @@ public class AccountService {
     }
 
     /**
+     * 删除用户信息
+     * @param accountId
+     * @return
+     */
+    public Result deleteAccount(Integer accountId){
+        accountDAO.deleteByPrimaryKey(accountId);
+        return Result.isOK(ResultEnum.DELETE_SUCCESS.getInfo());
+    }
+
+    /**
      * 获取所有账户封装成分页列表信息
+     *
      * @param pageNum
      * @return
      */
     public PageResult<Account> listAccount(Integer pageNum, Integer pageSize) {
-        PageResult<Account> pageResult=new PageResult<>();
+        PageResult<Account> pageResult = new PageResult<>();
         //切入分页sql
-        Page<Account> page = PageHelper.startPage(pageNum,pageSize);
+        Page<Account> page = PageHelper.startPage(pageNum, pageSize);
         //获取分页后结果
-        Example example=new Example(Account.class);
+        Example example = new Example(Account.class);
         //倒序排序
         example.setOrderByClause("id DESC");
-        List<Account> accountList =accountDAO.selectByExample(example);
+        List<Account> accountList = accountDAO.selectByExample(example);
         //获取总记录数
         long total = page.getTotal();
         //封装参数
@@ -105,6 +119,7 @@ public class AccountService {
 
     /**
      * 根据Id获取用户名
+     *
      * @param id
      * @return
      */

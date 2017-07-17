@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
+
 /**
  * Created by ldb on 2017/7/12.
  */
@@ -25,7 +27,22 @@ public class DisplayConfigService {
     public DisplayConfig getDisplayConfig(Integer accountId) {
         Example example = new Example(DisplayConfig.class);
         example.createCriteria().andEqualTo("id", accountId);
-        return displayConfigDAO.selectByExample(example).get(0);
+        List<DisplayConfig> displayConfigs = displayConfigDAO.selectByExample(example);
+        if(displayConfigs!=null&&displayConfigs.size()>0){
+            return displayConfigs.get(0);
+        }else{
+            return null;
+        }
+
+    }
+
+    /**
+     * 删除配置信息
+     * @param id
+     * @return
+     */
+    public int deleteDisplayConfig(int id){
+        return displayConfigDAO.deleteByPrimaryKey(id);
     }
 
     /**

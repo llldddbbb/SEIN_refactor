@@ -3,8 +3,10 @@ package com.sein.pojo.po;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 
 public class DisplayConfig {
+    @Id
     private Integer id;
 
     @JsonProperty("PM25")
