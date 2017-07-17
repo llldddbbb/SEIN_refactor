@@ -1,68 +1,97 @@
 package com.sein.pojo.po;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 
 public class DisplayConfig {
     private Integer id;
 
+    @JsonProperty("PM25")
     private Integer pm25=0;
 
+    @JsonProperty("PM10")
     private Integer pm10=0;
 
+    @JsonProperty("CO")
     private Integer co=0;
 
+    @JsonProperty("CO2")
     private Integer co2=0;
 
+    @JsonProperty("SO")
     private Integer so=0;
 
+    @JsonProperty("SO2")
     private Integer so2=0;
 
+    @JsonProperty("NO")
     private Integer no=0;
 
+    @JsonProperty("NO2")
     private Integer no2=0;
 
+    @JsonProperty("O3")
     private Integer o3=0;
 
+    @JsonProperty("CL2")
     private Integer cl2=0;
 
+    @JsonProperty("VOC")
     private Integer voc=0;
 
+    @JsonProperty("Temp")
     private Integer temp=0;
 
+    @JsonProperty("Humi")
     private Integer humi=0;
 
+    @JsonProperty("AQI")
     private Integer aqi=0;
 
+    @JsonProperty("AQHI")
     private Integer aqhi=0;
 
     @Column(name = "1min")
+    @JsonProperty("1min")
     private Integer min1=0;
 
     @Column(name = "10min")
+    @JsonProperty("10min")
     private Integer min10=0;
 
     @Column(name = "15min")
+    @JsonProperty("15min")
     private Integer min15=0;
 
     @Column(name = "30min")
+    @JsonProperty("30min")
     private Integer min30=0;
 
     @Column(name = "1h")
+    @JsonProperty("1h")
     private Integer h1=0;
 
     @Column(name = "1d")
+    @JsonProperty("1d")
     private Integer d1=0;
 
+    @JsonProperty("Longitude")
     private Integer longitude=0;
 
+    @JsonProperty("Latitude")
     private Integer latitude=0;
 
+    @JsonProperty("Press")
     private Integer press=0;
 
+    @JsonProperty("PM1")
     private Integer pm1=0;
 
+    @JsonProperty("original")
     private Integer original=0;
 
+    @JsonProperty("Zero_P")
     private Integer zero_p=0;
 
 

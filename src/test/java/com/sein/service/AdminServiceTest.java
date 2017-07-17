@@ -17,6 +17,12 @@ public class AdminServiceTest {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private AccountService accountService;
+
+    @Autowired
+    private DisplayConfigService displayConfigService;
+
     @Test
     public void testLogin(){
         Admin user=new Admin();
@@ -24,5 +30,7 @@ public class AdminServiceTest {
         user.setPassword("admin");
         adminService.checkLogin(user);
     }
+
+
 
 }

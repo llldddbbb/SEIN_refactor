@@ -56,18 +56,14 @@ public class AccountService {
     }
 
     /**
-     * 添加用户
+     * 添加用户,并回显主键
      *
      * @param account
      * @return
      */
-    public Result addAccount(Account account) {
-        int result = accountDAO.insert(account);
-        if (result > 0) {
-            return Result.isOK();
-        } else {
-            return Result.isNotOK();
-        }
+    public Integer addAccount(Account account) {
+        accountDAO.insert(account);
+        return account.getId();
     }
 
     /**

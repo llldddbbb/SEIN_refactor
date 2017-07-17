@@ -18,23 +18,21 @@
 
 <form class="layui-form" action="" method="post">
     <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" onclick="layui.datalist.showSelectDevice()">选择设备</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
         <label class="layui-form-label">账户名</label>
         <div class="layui-input-inline">
-            <input type="text" name="userName" lay-verify="required" autocomplete="off"
-                   class="layui-input" th:value="${account}==null?'':${account.userName}"/>
-            <input type="hidden" name="id"  th:value="${account}==null?'':${account.id}"/>
+            <input type="text" name="userName" id="userName" lay-verify="required" autocomplete="off"
+                   class="layui-input"  />
         </div>
     </div>
     <div class="layui-form-item ">
         <label class="layui-form-label">密码</label>
         <div class="layui-input-inline">
-            <input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input"
-                   th:value="${account}==null?'':${account.password}">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" onclick="layui.datalist.showSelectDevice()">选择设备</button>
+            <input type="text" name="password" id="password" lay-verify="required" autocomplete="off" class="layui-input" >
         </div>
     </div>
     <div class="layui-form-item" id="selectedDevices">
@@ -65,13 +63,26 @@
         var laypageId = 'pageNav';
         //监听提交
         form.on('submit(submitAccount)', function (data) {
+            var displayConfigJson="{";
+            $('input:checkbox[name=displayConfig]:checked').each(function(i){
+                if(0==i){
+                    displayConfigJson += ("\""+$(this).val()+"\":1");
+                }else{
+                    displayConfigJson += (",\""+$(this).val()+"\":1");
+                }
+            });
+            displayConfigJson += "}";
+            console.log(displayConfigJson);
+            var accountJson="{";
+            accountJson += ("\"userName\":"+"\""+$("#userName").val()+"\"");
+            accountJson += (",\"password\":"+"\""+$("#password").val()+"\"");
+            accountJson += "}";
             $.ajax({
-                url: "account/manage",
+                url: "account",
                 type: "POST",
                 data: {
-                    id: data.field.id,
-                    userName: data.field.userName,
-                    password: data.field.password,
+                    displayConfigJson: displayConfigJson,
+                    accountJson: accountJson
                 },
                 success: function (result) {
                     if (result.success) {

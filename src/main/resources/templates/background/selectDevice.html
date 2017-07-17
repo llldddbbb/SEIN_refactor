@@ -179,12 +179,12 @@
                                     if(pollutantConfig[i]=='DateTime'){
                                         continue;
                                     }
-                                    html+='<input type="checkbox" name="displayConfig" value="1" lay-skin="primary" title="'+pollutantConfig[i]+'" checked="">';
+                                    html+='<input type="checkbox" name="displayConfig" value="'+pollutantConfig[i]+'" lay-skin="primary" title="'+pollutantConfig[i]+'" checked="">';
                                 }
                                 $(html).appendTo(pollutantObj);
                                 html ='<label class="layui-form-label">显示的间隔</label>';
                                 for(var i=0;i<intervalConfig.length;i++){
-                                    html+='<input type="checkbox" name="displayConfig" value="1" lay-skin="primary" title="'+intervalConfig[i]+'" checked="">';
+                                    html+='<input type="checkbox" name="displayConfig" value="'+intervalConfig[i]+'" lay-skin="primary" title="'+intervalConfig[i]+'" checked="">';
                                 }
                                 $(html).appendTo(intervalObj);
                                 iframeAWin.render();
