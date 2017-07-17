@@ -8,4 +8,7 @@ import com.sein.utils.MyMapper;
  * 用户dao类
  */
 public interface AccountDAO extends MyMapper<Account> {
+
+    Account getAccountById(Integer id);
+
 }

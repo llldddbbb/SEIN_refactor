@@ -12,7 +12,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result column="picture" property="picture" jdbcType="VARCHAR" />
         <result column="pollutantTable" property="pollutantTable" jdbcType="VARCHAR" />
         <result column="accountId" property="accountId" jdbcType="INTEGER" />
+        <association column="accountId" property="account" select="com.sein.dao.AccountDAO.getAccountById" />
     </resultMap>
 
 
-</mapper> 
+    <select id="listDeviceWithAccount" resultMap="deviceResultMap" parameterType="Map">
+        SELECT * from device
+        <where>
+            <if test="accountId!=null">
+                and accountId=#{account}
+            </if>
+        </where>
+        ORDER BY id DESC
+    </select>
+
+</mapper>

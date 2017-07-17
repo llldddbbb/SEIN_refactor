@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 /**
  * Created by ldb on 2017/7/13.
@@ -283,6 +280,75 @@ public class DevicePollutantService {
             return Result.isNotOK(ResultEnum.GPS_COLUMN_NULL.getInfo());
         }
 
+    }
+
+
+    /**
+     * 获取多个设备公共配置
+     * 将所有配置塞进List里，判断出现次数是否等于设备个数
+     * @param selectedDeviceId
+     * @return
+     */
+    public Result getDevicesConfig(String[] selectedDeviceId){
+        DeviceConfig deviceConfig=new DeviceConfig();
+        //根据deviceId列表获取deviceList
+        List<Device> deviceList=new ArrayList<>();
+        for (String s : selectedDeviceId) {
+            Device device = deviceDAO.selectByPrimaryKey(Integer.parseInt(s));
+            deviceList.add(device);
+        }
+        //浓度参数总数
+        List<String> pollutantConfigTotalList=new ArrayList<>();
+        //分辨率参数总数
+        List<String> intervalConfigTotalList=new ArrayList<>();
+
+        for (int i=0;i<deviceList.size();i++) {
+            Device device=deviceList.get(i);
+            String interval = null;
+            //获取这个设备的所有表名
+            List<String> tableNameList = pollutantDAO.getTableNameList(StringUtil.formatSQLLikeRight(device.getPollutantTable() + "#_"));
+            //遍历表名，获取分辨率
+            for (String tableName : tableNameList) {
+                interval=tableName.split("_").length>1?tableName.split("_")[1]:null;
+                //添加进TotalList里
+                intervalConfigTotalList.add(interval);
+            }
+            //获取这个设备的浓度列
+            List<String> columnNameList = pollutantDAO.getColumnNameList(device.getPollutantTable()+"_"+interval);
+            //遍历浓度列，获取浓度
+            for (String str : columnNameList) {
+                String columnName=str.split("_")[0];
+                //添加进TotalList里
+                pollutantConfigTotalList.add(columnName);
+            }
+        }
+        //定义要返回的最终浓度配置
+        TreeSet<String> pollutantConfigSet=new TreeSet<>();
+
+        Set<String> uniquePollutantSet = new HashSet<String>(pollutantConfigTotalList);
+        for (String temp : uniquePollutantSet) {
+            int frequency = Collections.frequency(pollutantConfigTotalList, temp);
+            //判断出现次数是否等于设备个数，如果等于就添加
+            if(frequency==deviceList.size()){
+                pollutantConfigSet.add(temp);
+            }
+        }
+
+        //定义要返回的最终分辨率配置
+        TreeSet<String> intervalConfigSet=new TreeSet<>();
+        Set<String> uniqueIntervalSet = new HashSet<String>(intervalConfigTotalList);
+        for (String temp : uniqueIntervalSet) {
+            int frequency = Collections.frequency(intervalConfigTotalList, temp);
+            //判断出现次数是否等于设备个数，如果等于就添加
+            if(frequency==deviceList.size()){
+                intervalConfigSet.add(temp);
+            }
+        }
+        //封装参数
+        deviceConfig.setDeviceList(deviceList);
+        deviceConfig.setIntervalConfig(intervalConfigSet);
+        deviceConfig.setPollutantConfig(pollutantConfigSet);
+        return Result.isOK(deviceConfig);
     }
 
 }

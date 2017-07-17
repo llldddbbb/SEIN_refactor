@@ -57,7 +57,7 @@
         /*分页页容量样式END*/
     </style>
 </head>
-<body>
+<body style="width:95%; margin: auto">
     <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
         <legend style="text-align:center;">设备信息列表</legend>
         <div class="layui-field-box layui-form">
@@ -66,25 +66,27 @@
             </div>
             <div id="pageNav"></div>
         </div>
+        <button class="layui-btn layui-btn-big" onclick="layui.datalist.selectDevice(2)">确定选择</button>
     </fieldset>
     <!-- layui.js -->
     <script th:src="@{/background/plugin/layui/layui.js}" src="../../static/background/plugin/layui/layui.js"></script>
     <!-- layui规范化用法 -->
+
+
     <script type="text/javascript" th:inline="javascript">
         layui.define(['element','laypage', 'layer', 'form' ,'laydate'], function (exports) {
             var $ = layui.jquery;
-            var layer = layui.layer;
             var form = layui.form();
             var laypage = layui.laypage;
+            var layer = layui.layer;
             var element = layui.element();
             var laypageId = 'pageNav';
             var laydate = layui.laydate;
 
-            initilData(1, 10);
+            initilData(1, 30);
             //页数据初始化
             //currentIndex：当前页面
             //pageSize：页容量（每页显示的条数）
-            var deviceNum;
             function initilData(currentIndex, pageSize) {
                 var index = layer.load(1);
                 //模拟数据加载
@@ -97,30 +99,25 @@
                             pageSize:pageSize
                         },
                         success:function(result){
-                            deviceNum=result.total;
+                            var deviceNum=result.total;
                             var deviceList=result.rows;
-                            var html = '';
+                            var html = '<form class="layui-form" action="" method="post">';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="20"><col width="50"><col width="80"><col width="80"><col width="60"><col width="50"><col width="20"><col width="20"><col width="30"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>设备别名</th><th>经纬度</th><th>浓度表</th><th>图片</th><th>所属账户</th><th colspan="3">操作</th></tr></thead>';
+                            html += '<colgroup><col width="20"><col width="20"><col width="80"><col width="80"></colgroup>';
+                            html += '<thead><tr><th>选择</th><th>编号</th><th>设备别名</th><th>浓度表</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in deviceList){
                                 var item=deviceList[i];
                                 html+='<tr>';
+                                html+='<td><input type="checkbox" name="selectedDevices" lay-skin="primary" value="'+item.id+'" ></td>';
                                 html+='<td>'+item.id+'</td>';
                                 html+='<td>'+item.cityName+'</td>';
-                                html+='<td id="gps'+item.id+'">'+item.longitude+','+item.latitude+'</td>';
                                 html+='<td>'+item.pollutantTable+'</td>';
-                                html+='<td><img style="width: 70px" src='+item.picture+'></td>';
-                                html+='<td>'+(item.account==null?'暂无所属账户':item.account.userName)+'</td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData('+item.id+')"><i class="layui-icon">&#xe642;</i></button></td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
-                                html+='<td><button class="layui-btn layui-btn-small " onclick="layui.datalist.updateGPS('+item.id+')">更新位置</button></td>';
                                 html+='</tr>';
                             }
-                            html+='</tbody></table>';
+                            html+='</tbody></table></form>';
                             $('#dataContent').html(html);
-                            element.init();
+                            form.render();
                             $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
                             laypage({
                                 cont: laypageId,
@@ -145,63 +142,64 @@
 
             //输出接口，主要是两个函数，一个删除一个编辑
             var datalist = {
-                deleteData: function (id) {
-                    layer.confirm('确定删除这条设备信息吗？', {
-                        btn: ['确定', '取消'] //按钮
-                    }, function () {
-                        $.ajax({
-                            url:'device/'+id,
-                            data:{},
-                            type:'DELETE',
-                            success:function (result) {
-                                if(result.success){
-                                    layer.alert(result.data, {
-                                        closeBtn: 0,
-                                        icon: 1
-                                    }, function(){
-                                        window.location.href="deviceManage"
-                                    });
-                                }else{
-                                    layer.alert(result.msg, {icon: 5});
-                                }
-                            }
-                        });
-                    }, function () {
-
+                selectDevice: function (id) {
+                    //获取同级iframe
+                    var iframeAWin = top['iframe_a'];
+                    var pollutantObj=iframeAWin.document.getElementById('pollutantConfig');
+                    var intervalObj=iframeAWin.document.getElementById('intervalConfig');
+                    var selectedDevicesObj=iframeAWin.document.getElementById('selectedDevices');
+                    var selectedDevicesId;
+                    $('input:checkbox[name=selectedDevices]:checked').each(function(i){
+                        if(0==i){
+                            selectedDevicesId = $(this).val();
+                        }else{
+                            selectedDevicesId += (","+$(this).val());
+                        }
                     });
-                },
-                updateGPS:function(id){
-                    layer.confirm('确定更新这条设备的GPS信息吗？', {
-                        btn: ['确定', '取消'] //按钮
-                    }, function () {
-                        layer.closeAll('page');
-                        layer.msg('更新中...', {
-                            icon: 16
-                            ,shade: 0.4,
-                            time: 30000
-                        });
-                        $.ajax({
-                            url:'device/'+id+'/gps',
-                            data:{},
-                            type:'PUT',
-                            success:function (result) {
-                                if(result.success){
-                                    $('#gps'+id).html(result.data.x+","+result.data.y+"(已更新)");
-                                    layer.alert('更新成功!', {
-                                        closeBtn: 0,
-                                        icon: 1
-                                    });
-                                }else{
-                                    layer.alert(result.msg, {icon: 5});
+                    $.ajax({
+                        url:"devicesConfig",
+                        type:"POST",
+                        data:{
+                            selectedDeviceId:selectedDevicesId
+                        },
+                        success:function (result) {
+                            if(result.success){
+                                var pollutantConfig=result.data.pollutantConfig;
+                                var intervalConfig=result.data.intervalConfig;
+                                var deviceList=result.data.deviceList;
+                                var html='<label class="layui-form-label">选择的设备</label>';
+                                html+='<span class="layui-breadcrumb" style="display: block;padding-top: 6px;" lay-separator="|">';
+                                for(var i=0;i<deviceList.length;i++){
+                                    html+='<a >'+deviceList[i].pollutantTable+'</a>';
                                 }
+                                html+='</span>';
+                                $(html).appendTo(selectedDevicesObj);
+                                html='<label class="layui-form-label">显示的浓度</label>';
+                                for(var i=0;i<pollutantConfig.length;i++){
+                                    if(pollutantConfig[i]=='DateTime'){
+                                        continue;
+                                    }
+                                    html+='<input type="checkbox" name="displayConfig" value="1" lay-skin="primary" title="'+pollutantConfig[i]+'" checked="">';
+                                }
+                                $(html).appendTo(pollutantObj);
+                                html ='<label class="layui-form-label">显示的间隔</label>';
+                                for(var i=0;i<intervalConfig.length;i++){
+                                    html+='<input type="checkbox" name="displayConfig" value="1" lay-skin="primary" title="'+intervalConfig[i]+'" checked="">';
+                                }
+                                $(html).appendTo(intervalObj);
+                                iframeAWin.render();
+                                layer.alert('选择成功', {
+                                    closeBtn: 0,
+                                    icon: 1
+                                }, function(){
+                                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                    parent.layer.close(index);
+                                });
+                            }else{
+                                layer.alert(result.msg, {icon: 5});
                             }
-                        });
-                    }, function () {
-
+                        }
                     });
-                },
-                editData: function (id) {
-                    parent.switchTab(parent.$,parent.element,'修改设备信息','addDevice?id='+id,'Device'+id);
                 }
 
 

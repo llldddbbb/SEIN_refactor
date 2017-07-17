@@ -58,4 +58,18 @@ public interface PollutantDAO {
      */
     Integer isExistPollutantTable(@Param("pollutantTable") String pollutantTable);
 
+    /**
+     * 获取浓度表的列名列表
+     * @param pollutantTable
+     * @return
+     */
+    List<String> getColumnNameList(@Param("pollutantTable")String pollutantTable);
+
+    /**
+     * 获取浓度表表名列表
+     * @param pollutantTable
+     * @return
+     */
+    List<String> getTableNameList(@Param("pollutantTable")String pollutantTable);
+
 }

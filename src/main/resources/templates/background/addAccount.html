@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加账户页面</title>
+    <link th:href="@{/background/plugin/layui/css/layui.css}" href="../../static/background/plugin/layui/css/layui.css"
+          rel="stylesheet"/>
+    <style>
+        .layui-form-selected dl {
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+    <legend>账户信息维护</legend>
+</fieldset>
+
+<form class="layui-form" action="" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">账户名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="userName" lay-verify="required" autocomplete="off"
+                   class="layui-input" th:value="${account}==null?'':${account.userName}"/>
+            <input type="hidden" name="id"  th:value="${account}==null?'':${account.id}"/>
+        </div>
+    </div>
+    <div class="layui-form-item ">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-inline">
+            <input type="text" name="password" lay-verify="required" autocomplete="off" class="layui-input"
+                   th:value="${account}==null?'':${account.password}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" onclick="layui.datalist.showSelectDevice()">选择设备</button>
+        </div>
+    </div>
+    <div class="layui-form-item" id="selectedDevices">
+    </div>
+    <div class="layui-form-item" id="pollutantConfig">
+    </div>
+    <div class="layui-form-item" id="intervalConfig">
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" id="submit" lay-submit="" lay-filter="submitAccount">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+<div id="pageNav"></div>
+<!-- layui.js -->
+<script th:src="@{/background/plugin/layui/layui.js}" src="../../static/background/plugin/layui/layui.js"></script>
+<script th:inline="javascript" type="text/javascript">
+    var form;
+    var element;
+    layui.define(['element', 'laypage', 'layer', 'form', 'laydate'], function (exports) {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        form = layui.form();
+        var laypage = layui.laypage;
+        element= layui.element();
+        var laypageId = 'pageNav';
+        //监听提交
+        form.on('submit(submitAccount)', function (data) {
+            $.ajax({
+                url: "account/manage",
+                type: "POST",
+                data: {
+                    id: data.field.id,
+                    userName: data.field.userName,
+                    password: data.field.password,
+                },
+                success: function (result) {
+                    if (result.success) {
+                        layer.alert(result.data, {icon: 1}, function () {
+                            window.location.href = "accountManage";
+                        });
+                    } else {
+                        layer.alert(result.msg, {icon: 5});
+                    }
+                }
+            });
+            return false;
+        });
+
+        //输出接口，主要是两个函数，一个删除一个编辑
+        var datalist = {
+            showSelectDevice: function () {
+                parent.layer.open({
+                    type: 2,
+                    title: '选择设备',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: true, //开启最大化最小化按钮
+                    area: ['893px', '600px'],
+                    content: 'showSelectDevice',
+                });
+            }
+
+        };
+        exports('datalist', datalist);
+    });
+
+    function render(){
+        form.render();
+        element.init();
+    }
+
+
+</script>
+</body>
+</html>

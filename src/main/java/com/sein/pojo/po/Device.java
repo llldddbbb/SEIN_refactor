@@ -23,8 +23,8 @@ public class Device {
     @Column(name = "accountId")
     private Integer accountId;
 
-
-
+    @Transient
+    private Account account;
 
     public Integer getId() {
         return id;
@@ -82,5 +82,11 @@ public class Device {
         this.accountId = accountId;
     }
 
+    public Account getAccount() {
+        return account;
+    }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 }

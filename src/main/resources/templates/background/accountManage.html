@@ -120,7 +120,7 @@
                             $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
                             laypage({
                                 cont: laypageId,
-                                pages: accountNum/pageSize==0?accountNum/pageSize:accountNum/pageSize+1,
+                                pages: accountNum%pageSize==0?accountNum/pageSize:accountNum/pageSize+1,
                                 groups: 5,
                                 skip: true,
                                 curr: currentIndex,

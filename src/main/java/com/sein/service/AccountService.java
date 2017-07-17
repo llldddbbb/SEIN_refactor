@@ -106,4 +106,13 @@ public class AccountService {
         pageResult.setTotal(total);
         return pageResult;
     }
+
+    /**
+     * 根据Id获取用户名
+     * @param id
+     * @return
+     */
+    public Account getAccount(Integer id) {
+        return accountDAO.selectByPrimaryKey(id);
+    }
 }

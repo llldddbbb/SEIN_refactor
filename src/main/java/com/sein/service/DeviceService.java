@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,10 +47,10 @@ public class DeviceService {
         //切入分页sql
         Page<Device> page = PageHelper.startPage(pageNum,pageSize);
         //获取分页后结果
-        Example example=new Example(Device.class);
-        //倒序排序
-        example.setOrderByClause("id DESC");
-        List<Device> deviceList =deviceDAO.selectByExample(example);
+        // Example example=new Example(Device.class);
+        // //倒序排序
+        // example.setOrderByClause("id DESC");
+        List<Device> deviceList =deviceDAO.listDeviceWithAccount(new HashMap<>());
         //获取总记录数
         long total = page.getTotal();
         //封装参数
