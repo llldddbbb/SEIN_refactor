@@ -91,4 +91,10 @@ public class AccountAdminController {
         }
         return accountService.deleteAccount(id);
     }
+
+    @PutMapping("/account")
+    public String updateAccount(Account account){
+        accountService.updateAccount(account);
+        return "redirect:/admin/accountManage";
+    }
 }

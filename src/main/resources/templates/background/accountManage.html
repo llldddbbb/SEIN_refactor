@@ -110,7 +110,7 @@
                                 html+='<td>'+item.id+'</td>';
                                 html+='<td>'+item.userName+'</td>';
                                 html+='<td>'+item.password+'</td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData('+item.id+')"><i class="layui-icon">&#xe642;</i></button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+')\'><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
                                 html+='</tr>';
                             }
@@ -166,9 +166,35 @@
 
                     });
                 },
-                editData: function (id) {
-                    parent.switchTab(parent.$,parent.element,'修改账户信息','addAccount?id='+id,'Account'+id);
-                }
+                editData: function (item) {
+                    var html='';
+                    html+='<form class="layui-form layui-form-pane" action="account" method="post">';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<input type="hidden" name="_method" value="put" />';
+                    html+='<input type="hidden" name="id" value="'+item.id+'" />';
+                    html+='<label class="layui-form-label" style="border: none" >用户名:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="userName"  class="layui-input" value="'+item.userName+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >密码:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="password"  class="layui-input" value="'+item.password+'">';
+                    html+='</div>';
+                    html+='<div class="layui-form-item">';
+                    html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
+                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">修改</button>';
+                    html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
+                    html+='</div>';
+                    html+='</div>';
+                    html+='</form>';
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '520px', //宽高
+                        title:'修改用户名密码',
+                        content: html
+                    });
+                    form.render('radio');  //radio，编辑和添加的时候
+                },
 
 
             };
