@@ -4,9 +4,11 @@ import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.PageResult;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
+import com.sein.pojo.po.Device;
 import com.sein.pojo.po.DisplayConfig;
 import com.sein.service.AccountService;
 import com.sein.service.DevicePollutantService;
+import com.sein.service.DeviceService;
 import com.sein.service.DisplayConfigService;
 import com.sein.utils.JacksonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.util.StringUtils;
 
 /**
  * Created by ldb on 2017/7/16.
@@ -30,6 +33,9 @@ public class AccountAdminController {
 
     @Autowired
     private DisplayConfigService displayConfigService;
+
+    @Autowired
+    private DeviceService deviceService;
 
     @RequestMapping("/accountManage")
     public String accountManagePage() {
@@ -69,15 +75,27 @@ public class AccountAdminController {
     @PostMapping("/account")
     @Transactional
     @ResponseBody
-    public Result addAccount(String displayConfigJson, String accountJson) throws Exception{
+    public Result addAccount(String displayConfigJson, String accountJson,String deviceIdStr) throws Exception{
         DisplayConfig displayConfig = JacksonUtil.readValue(displayConfigJson, DisplayConfig.class);
         if (displayConfig == null) {
             return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo() + ",数据库没有对应浓度表");
         }
+        //插入账户，并获取账户的id
         Account account = JacksonUtil.readValue(accountJson, Account.class);
-        Integer id = accountService.addAccount(account);
-        displayConfig.setId(id);
+        Integer accountId = accountService.addAccount(account);
+        //displayConfig设置id
+        displayConfig.setId(accountId);
         displayConfigService.addDeviceConfig(displayConfig);
+        //更新添加的device
+        if(StringUtils.isEmpty(deviceIdStr)){
+            throw new RuntimeException();
+        }
+        String[] split = deviceIdStr.replace("/","").split("-");
+        for (String s : split) {
+            Device device = deviceService.getDevice(Integer.parseInt(s));
+            device.setAccountId(accountId);
+            deviceService.updateDevice(device);
+        }
         return Result.isOK(ResultEnum.ADD_SUCCESS.getInfo());
     }
 

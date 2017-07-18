@@ -69,6 +69,18 @@ public class DeviceService {
     }
 
     /**
+     * 根据用户id获取设备列表
+     * @param accountId
+     * @return
+     */
+    public List<Device> listDeviceByAccountId(int accountId){
+        Example example=new Example(Device.class);
+        example.createCriteria().andEqualTo("accountId",accountId);
+        List<Device> deviceList = deviceDAO.selectByExample(example);
+        return deviceList;
+    }
+
+    /**
      * 更新Device的GPS信息
      * @param device
      * @param gps

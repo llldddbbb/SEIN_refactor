@@ -144,7 +144,7 @@
             var datalist = {
                 selectDevice: function (id) {
                     //获取同级iframe
-                    var iframeAWin = top['iframe_a'];
+                    var iframeAWin = top['iframe_a3'];
                     var pollutantObj=iframeAWin.document.getElementById('pollutantConfig');
                     var intervalObj=iframeAWin.document.getElementById('intervalConfig');
                     var selectedDevicesObj=iframeAWin.document.getElementById('selectedDevices');
@@ -170,7 +170,8 @@
                                 var html='<label class="layui-form-label">选择的设备</label>';
                                 html+='<span class="layui-breadcrumb" style="display: block;padding-top: 6px;" lay-separator="|">';
                                 for(var i=0;i<deviceList.length;i++){
-                                    html+='<a >'+deviceList[i].pollutantTable+'</a>';
+                                    html+='<a>'+deviceList[i].pollutantTable+'</a>';
+                                    html+='<input type="hidden" name="deviceId" value='+deviceList[i].id+'/>';
                                 }
                                 html+='</span>';
                                 $(html).appendTo(selectedDevicesObj);

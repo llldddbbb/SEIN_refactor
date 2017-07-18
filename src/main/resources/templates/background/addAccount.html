@@ -75,17 +75,22 @@
             if(displayConfigJson=='{}'){
                 displayConfigJson=null;
             }
-            console.log(displayConfigJson);
             var accountJson="{";
             accountJson += ("\"userName\":"+"\""+$("#userName").val()+"\"");
             accountJson += (",\"password\":"+"\""+$("#password").val()+"\"");
             accountJson += "}";
+            var deviceId=[];
+            $("input[name='deviceId']").each(function(i){
+                deviceId.push($(this).val());
+            });
+            var deviceIdStr=deviceId.join("-");
             $.ajax({
                 url: "account",
                 type: "POST",
                 data: {
                     displayConfigJson: displayConfigJson,
-                    accountJson: accountJson
+                    accountJson: accountJson,
+                    deviceIdStr: deviceIdStr
                 },
                 success: function (result) {
                     if (result.success) {
