@@ -64,7 +64,6 @@
             <div id="dataContent" class="">
                 <!--内容区域 ajax获取-->
             </div>
-            <div id="pageNav"></div>
         </div>
         <button class="layui-btn layui-btn-big" onclick="layui.datalist.selectDevice(2)">确定选择</button>
     </fieldset>
@@ -77,30 +76,26 @@
         layui.define(['element','laypage', 'layer', 'form' ,'laydate'], function (exports) {
             var $ = layui.jquery;
             var form = layui.form();
-            var laypage = layui.laypage;
             var layer = layui.layer;
             var element = layui.element();
-            var laypageId = 'pageNav';
-            var laydate = layui.laydate;
 
-            initilData(1, 30);
+            initilData();
             //页数据初始化
             //currentIndex：当前页面
             //pageSize：页容量（每页显示的条数）
-            function initilData(currentIndex, pageSize) {
+            function initilData() {
                 var index = layer.load(1);
                 //模拟数据加载
                 setTimeout(function () {
                     layer.close(index);
                     $.ajax({
-                        url:"device/list/"+currentIndex,
+                        url:"device/select/list",
                         type:"GET",
                         data:{
-                            pageSize:pageSize
+
                         },
                         success:function(result){
-                            var deviceNum=result.total;
-                            var deviceList=result.rows;
+                            var deviceList=result;
                             var html = '<form class="layui-form" action="" method="post">';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
                             html += '<colgroup><col width="20"><col width="20"><col width="80"><col width="80"></colgroup>';
@@ -119,20 +114,6 @@
                             $('#dataContent').html(html);
                             form.render();
                             $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
-                            laypage({
-                                cont: laypageId,
-                                pages: deviceNum%pageSize==0?deviceNum/pageSize:deviceNum/pageSize+1,
-                                groups: 5,
-                                skip: true,
-                                curr: currentIndex,
-                                jump: function (obj, first) {
-                                    var currentIndex = obj.curr;
-                                    if (!first) {
-                                        initilData(currentIndex, pageSize);
-                                    }
-                                }
-                            });
-
                         }
                     });
 
@@ -187,6 +168,7 @@
                                 for(var i=0;i<intervalConfig.length;i++){
                                     html+='<input type="checkbox" name="displayConfig" value="'+intervalConfig[i]+'" lay-skin="primary" title="'+intervalConfig[i]+'" checked="">';
                                 }
+                                html+='<input style="display:none;" type="checkbox" name="displayConfig" value="AQI" lay-skin="primary"  checked="">';
                                 $(html).appendTo(intervalObj);
                                 iframeAWin.render();
                                 layer.alert('选择成功', {

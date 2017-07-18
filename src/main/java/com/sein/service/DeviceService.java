@@ -149,6 +149,12 @@ public class DeviceService {
         example.createCriteria().andEqualTo("accountId",accountId);
         return deviceDAO.deleteByExample(example);
     }
+
+    public List<Device> listNotSelectDevice() {
+        Example example=new Example(Device.class);
+        example.createCriteria().andIsNull("accountId");
+        return deviceDAO.selectByExample(example);
+    }
 }
 
 

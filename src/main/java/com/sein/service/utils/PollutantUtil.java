@@ -312,27 +312,28 @@ public class PollutantUtil {
      */
     public static void transformUnit(List<Pollutant> pollutantList){
         for(Pollutant pollutant:pollutantList){
-            if(pollutant.getTemp()==null){
+            if(pollutant.getTemp()==null||pollutant.getPress()==null){
                 continue;
             }
-            double temp=pollutant.getTemp();
+            double Temp=pollutant.getTemp();
+            double Press=pollutant.getPress();
             if(pollutant.getNo()!=null){
-                pollutant.setNo(DecimalUtil.formatDecimal(pollutant.getNo()*(12.187)*30/(273.15+temp),"#.##"));
+                pollutant.setNo(DecimalUtil.formatDecimal(pollutant.getNo()*30*273*Press/(22.41*(Temp+273)*101325),"#.##"));
             }
             if(pollutant.getNo2()!=null){
-                pollutant.setNo2(DecimalUtil.formatDecimal(pollutant.getNo2()*(12.187)*46/(273.15+temp),"#.##"));
+                pollutant.setNo2(DecimalUtil.formatDecimal(pollutant.getNo2()*46*273*Press/(22.41*(Temp+273)*101325),"#.##"));
             }
             if(pollutant.getO3()!=null){
-                pollutant.setO3(DecimalUtil.formatDecimal(pollutant.getO3()*(12.187)*48/(273.15+temp),"#.##"));
+                pollutant.setO3(DecimalUtil.formatDecimal(pollutant.getO3()*48*273*Press/(22.41*(Temp+273)*101325),"#.##"));
             }
             if(pollutant.getCo()!=null){
-                pollutant.setCo(DecimalUtil.formatDecimal(pollutant.getCo()*(1000)*(12.187)*28/(273.15+temp),"#.##"));
+                pollutant.setCo(DecimalUtil.formatDecimal(pollutant.getCo()*1000*28*273*Press/(22.41*(Temp+273)*101325),"#.##"));
             }
             if(pollutant.getCo2()!=null){
-                pollutant.setCo2(DecimalUtil.formatDecimal(pollutant.getCo2()*(1000)*(12.187)*44/(273.15+temp),"#.##"));
+                pollutant.setCo2(DecimalUtil.formatDecimal(pollutant.getCo2()*1000*44*273*Press/(22.41*(Temp+273)*101325),"#.##"));
             }
             if(pollutant.getSo2()!=null){
-                pollutant.setSo2(DecimalUtil.formatDecimal(pollutant.getSo2()*(12.187)*64/(273.15+temp),"#.##"));
+                pollutant.setSo2(DecimalUtil.formatDecimal(pollutant.getSo2()*64*273*Press/(22.41*(Temp+273)*101325),"#.##"));
             }
         }
     }

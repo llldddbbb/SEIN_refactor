@@ -12,6 +12,10 @@ public class DisplayConfig {
     @JsonProperty("PM25")
     private Integer pm25=0;
 
+
+    @JsonProperty("PM1")
+    private Integer pm1=0;
+
     @JsonProperty("PM10")
     private Integer pm10=0;
 
@@ -48,6 +52,15 @@ public class DisplayConfig {
     @JsonProperty("Humi")
     private Integer humi=0;
 
+    @JsonProperty("Longitude")
+    private Integer longitude=0;
+
+    @JsonProperty("Latitude")
+    private Integer latitude=0;
+
+    @JsonProperty("Press")
+    private Integer press=0;
+
     @JsonProperty("AQI")
     private Integer aqi=0;
 
@@ -78,23 +91,9 @@ public class DisplayConfig {
     @JsonProperty("1d")
     private Integer d1=0;
 
-    @JsonProperty("Longitude")
-    private Integer longitude=0;
-
-    @JsonProperty("Latitude")
-    private Integer latitude=0;
-
-    @JsonProperty("Press")
-    private Integer press=0;
-
-    @JsonProperty("PM1")
-    private Integer pm1=0;
-
     @JsonProperty("original")
     private Integer original=0;
 
-    @JsonProperty("Zero_P")
-    private Integer zero_p=0;
 
 
     public Integer getId() {
@@ -311,14 +310,6 @@ public class DisplayConfig {
 
     public void setOriginal(Integer original) {
         this.original = original;
-    }
-
-    public Integer getZero_p() {
-        return zero_p;
-    }
-
-    public void setZero_p(Integer zero_p) {
-        this.zero_p = zero_p;
     }
 
     @Override

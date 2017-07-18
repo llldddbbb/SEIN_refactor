@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
+import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * Created by ldb on 2017/7/16.
@@ -114,6 +115,37 @@ public class AccountAdminController {
     @PutMapping("/account")
     public String updateAccount(Account account){
         accountService.updateAccount(account);
+        return "redirect:/admin/accountManage";
+    }
+
+    @GetMapping("/account/displayConfig/{id}")
+    @ResponseBody
+    public Result showDisplayConfig(@PathVariable Integer id){
+        DisplayConfig displayConfig = displayConfigService.getDisplayConfig(id);
+        return Result.isOK(JacksonUtil.toJSon(displayConfig));
+    }
+
+    @PutMapping("account/displayConfig")
+    public String updateDisplayConfig(String displayConfigStr,Integer id){
+        DisplayConfig displayConfig;
+        if(StringUtil.isEmpty(displayConfigStr)){
+            displayConfig=new DisplayConfig();
+            displayConfig.setId(id);
+            displayConfigService.updateDisplayConfig(displayConfig);
+            return "redirect:/admin/accountManage";
+        }else{
+            String[] split = displayConfigStr.split(",");
+            StringBuffer json=new StringBuffer("{");
+            for (String s : split) {
+                s="\""+s+"\"";
+                json.append(s+":"+1+",");
+            }
+            json.deleteCharAt(json.length()-1);
+            json.append("}");
+            displayConfig = JacksonUtil.readValue(json.toString(), DisplayConfig.class);
+            displayConfig.setId(id);
+        }
+        displayConfigService.updateDisplayConfig(displayConfig);
         return "redirect:/admin/accountManage";
     }
 }

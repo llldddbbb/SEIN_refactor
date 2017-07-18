@@ -7,7 +7,7 @@ server:
 spring:
   #环境:pro/dev
   profiles:
-    active: dev
+    active: pro
   #数据源配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource

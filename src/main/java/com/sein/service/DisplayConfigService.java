@@ -55,4 +55,9 @@ public class DisplayConfigService {
         displayConfigDAO.insert(displayConfig);
         return Result.isOK();
     }
+
+    public Result updateDisplayConfig(DisplayConfig displayConfig) {
+        int result = displayConfigDAO.updateByPrimaryKey(displayConfig);
+        return Result.isOK();
+    }
 }

@@ -82,19 +82,13 @@
                                 <input type="checkbox" name="airQulityType" id="Press" value="Press" checked class="radio" th:text="#{Press}"><br>
                             </div>
                         </div>
-                        <div class="table-select" th:if="${session.displayConfig.getPm10()}==1">
+                        <div class="table-select" >
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="PM10" value="PM10" checked class="radio" >PM<sub>10</sub><br>
-                            <div th:if="${session.displayConfig.getLongitude()}==1" style="margin-top: 3px;">
-                                <input type="checkbox" name="airQulityType" id="Longitude" value="Longitude" checked class="radio" th:text="#{Longitude}"><br>
-                            </div>
+                            <input th:if="${session.displayConfig.getPm10()}==1" type="checkbox" name="airQulityType" id="PM10" value="PM10" checked class="radio" >PM<sub>10</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getPm1()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="PM1" value="PM1" checked class="radio" >PM<sub>1</sub><br>
-                            <div th:if="${session.displayConfig.getLatitude()}==1" style="margin-top: 3px;">
-                                <input type="checkbox" name="airQulityType" id="Latitude" value="Latitude" checked class="radio" th:text="#{Latitude}"><br>
-                            </div>
+                            <input  type="checkbox" name="airQulityType" id="PM1" value="PM1" checked class="radio" >PM<sub>1</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getCo()}==1">
                             <div>&nbsp;</div>
@@ -139,6 +133,14 @@
                         <div class="table-select"th:if="${session.displayConfig.getHumi()}==1">
                             <div>&nbsp;</div>
                             <input type="checkbox" name="airQulityType" id="Humi" value="Humi" checked class="radio" th:text="#{HUMI}"><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getLongitude()}==1">
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="Longitude" value="Longitude" checked class="radio" th:text="#{Longitude}"><br>
+                        </div>
+                        <div class="table-select" th:if="${session.displayConfig.getLatitude()}==1" >
+                            <div>&nbsp;</div>
+                            <input type="checkbox" name="airQulityType" id="Latitude" value="Latitude" checked class="radio" th:text="#{Latitude}"><br>
                         </div>
                     </div>
                 </div>

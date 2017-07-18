@@ -19,6 +19,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * Created by ldb on 2017/7/15.
  */
@@ -64,6 +66,12 @@ public class DeviceAdminController {
         //获取分页列表
         PageResult<Device> pageResult = deviceService.listDevice(page, pageSize);
         return pageResult;
+    }
+
+    @GetMapping("/device/select/list")
+    @ResponseBody
+    public List<Device> listNotSelectDevice(){
+        return deviceService.listNotSelectDevice();
     }
 
     @PutMapping("/device/{id}/gps")

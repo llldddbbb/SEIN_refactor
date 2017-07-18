@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class AccountController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Result login(Account account) {
+    public Result login(Account account, HttpSession session) {
         Subject subject= SecurityUtils.getSubject();
         UsernamePasswordToken token=new UsernamePasswordToken(account.getUserName(), account.getPassword());
         try{
@@ -50,10 +51,10 @@ public class AccountController {
             Account currentAccount=(Account) SecurityUtils.getSubject().getSession().getAttribute("currentAccount");
             //将配置信息存入session中
             DisplayConfig displayConfig = displayConfigService.getDisplayConfig(currentAccount.getId());
-            SecurityUtils.getSubject().getSession().setAttribute("displayConfig", displayConfig);
+            session.setAttribute("displayConfig", displayConfig);
             //获取时间段
             List<Duration> durationList = durationService.listDuration(displayConfig.getId());
-            SecurityUtils.getSubject().getSession().setAttribute("durationList", durationList);
+            session.setAttribute("durationList", durationList);
             return Result.isOK();
         }catch(Exception e){
             //登录失败
