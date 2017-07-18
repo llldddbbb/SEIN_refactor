@@ -4,8 +4,12 @@ import com.sein.dao.AdminDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Admin;
+import com.sein.pojo.po.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.List;
 
 /**
  * Created by ldb on 2017/7/12.
@@ -32,6 +36,24 @@ public class AdminService {
         }else{
             return Result.isNotOK(ResultEnum.LOGIN_ERROR.getInfo());
         }
+    }
+
+    /**
+     * 根据用户名查找Admin
+     *
+     * @param adminName
+     * @return
+     */
+    public Admin getAdminByUserName(String adminName) {
+        Example example = new Example(Admin.class);
+        example.createCriteria().andEqualTo("adminName", adminName);
+        List<Admin> adminList = adminDAO.selectByExample(example);
+        if (adminList != null && adminList.size() > 0) {
+            return adminList.get(0);
+        } else {
+            return new Admin();
+        }
+
     }
 
 

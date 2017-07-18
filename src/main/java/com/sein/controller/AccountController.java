@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -43,7 +42,7 @@ public class AccountController {
 
     @PostMapping("/login")
     @ResponseBody
-    public Result login(Account account, HttpSession session) {
+    public Result login(Account account) {
         Subject subject= SecurityUtils.getSubject();
         UsernamePasswordToken token=new UsernamePasswordToken(account.getUserName(), account.getPassword());
         try{

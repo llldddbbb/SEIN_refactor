@@ -64,10 +64,11 @@ public class ShiroConfig {
 
         Map<String, String> filterChainDefinitionManager = new LinkedHashMap<String, String>();
         //其他所有页面都需要登录
-        filterChainDefinitionManager.put("/detail/**", "authc");
-        filterChainDefinitionManager.put("/list/**", "authc");
-        filterChainDefinitionManager.put("/map/**", "authc");
-        filterChainDefinitionManager.put("/table/**", "authc");
+        filterChainDefinitionManager.put("/detail/**", "authc,roles[user]");
+        filterChainDefinitionManager.put("/list/**", "authc,roles[user]");
+        filterChainDefinitionManager.put("/map/**", "authc,roles[user]");
+        filterChainDefinitionManager.put("/table/**", "authc,roles[user]");
+        filterChainDefinitionManager.put("/admin/**", "authc,roles[admin]");
         //登录页面不拦截
         filterChainDefinitionManager.put("/**", "anon");
 
