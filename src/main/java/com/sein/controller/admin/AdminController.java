@@ -3,11 +3,9 @@ package com.sein.controller.admin;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Admin;
-import com.sein.service.AdminService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class AdminController {
-
-    @Autowired
-    private AdminService adminService;
 
     @RequestMapping("admin/main")
     public String goMain(){
@@ -40,6 +35,15 @@ public class AdminController {
             //登录失败
             return Result.isNotOK(ResultEnum.LOGIN_ERROR.getInfo());
         }
+    }
+
+    @RequestMapping("/admin/logout")
+    public String logout(){
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存
+        }
+        return "login";
     }
 
 
