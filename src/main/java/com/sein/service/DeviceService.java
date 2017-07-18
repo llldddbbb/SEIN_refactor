@@ -138,6 +138,17 @@ public class DeviceService {
             return Result.isNotOK(ResultEnum.DELETE_ERROR.getInfo());
         }
     }
+
+    /**
+     * 根据accountId条件删除设备
+     * @param accountId
+     * @return
+     */
+    public int deleteDeviceByAccountId(Integer accountId){
+        Example example=new Example(Device.class);
+        example.createCriteria().andEqualTo("accountId",accountId);
+        return deviceDAO.deleteByExample(example);
+    }
 }
 
 

@@ -107,6 +107,7 @@ public class AccountAdminController {
         if(displayConfig!=null){
             displayConfigService.deleteDisplayConfig(id);
         }
+        deviceService.deleteDeviceByAccountId(id);
         return accountService.deleteAccount(id);
     }
 
