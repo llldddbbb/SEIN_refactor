@@ -68,8 +68,8 @@ public class ShiroConfig {
         filterChainDefinitionManager.put("/list/**", "authc,roles[user]");
         filterChainDefinitionManager.put("/map/**", "authc,roles[user]");
         filterChainDefinitionManager.put("/table/**", "authc,roles[user]");
-        // filterChainDefinitionManager.put("/admin/**", "authc,roles[admin]");
-        filterChainDefinitionManager.put("/admin/**", "anon");
+        filterChainDefinitionManager.put("/admin/**", "authc,roles[admin]");
+        // filterChainDefinitionManager.put("/admin/**", "anon");
         //登录页面不拦截
         filterChainDefinitionManager.put("/**", "anon");
 

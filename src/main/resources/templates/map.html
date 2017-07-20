@@ -45,13 +45,16 @@
 
 <div class="detail-main" style="position:fixed">
     <div style="background:#4585d7; float:left; width:20%; height:100%; display:inline;color:#fff;">
-        <div class="places">
+        <div class="places" style="height: 73%">
             <div style="margin:20px 5px;text-align:center;" th:each="device:${deviceList}">
-                <a th:onMouseOver="'javascript:loadGeo(\''+${device.cityName}+'\')'">
+                <a th:onclick="'javascript:loadGeo(\''+${device.cityName}+'\')'">
                     <img style="margin-bottom:5px;" th:src="${device.picture}" width="95%" height="70px"/>
                     <span th:text="${device.cityName}"></span>
                 </a>
             </div>
+        </div>
+        <div class="detail-left" style="width: auto;position:relative">
+            <a class="map-left" th:href="'javascript:updateGeo(\''+${session.currentAccount.id}+'\')'" th:text="#{UpdateLocation}"style="margin-top: 30px">更新位置</a>
         </div>
     </div>
 
@@ -95,10 +98,10 @@
                         map.centerAndZoom(new BMap.Point(val.device.longitude, val.device.latitude), 9);
                     }
                     var content="<div class='mapInfo_content'><div class='mapInfo_content_left' ><span style='font-size: 14px;' id='AQITITLE'>空气质量指数<br></span><span>";
-                    if(displayConfig.aqi==1){
+                    if(displayConfig.AQI==1){
                         content=content+"AQI</span></div><div class='mapInfo_content_middle'>"+val.aqi+"</div><div class='mapInfo_content_right'>";
                     }
-                    if(displayConfig.aqhi==1){
+                    if(displayConfig.AQHI==1){
                         content=content+"AQHI</span></div><div class='mapInfo_content_middle'>"+val.aqhi+"</div><div class='mapInfo_content_right'>";
                     }
                     for(var j in val.pollutantItemList){
@@ -191,6 +194,24 @@
                 }
             }
         });
+    }
+
+    function updateGeo(accountId) {
+        $.ajax({
+            url:"update/gps",
+            type:"get",
+            data:{
+                accountId:accountId
+            },
+            success: function (result) {
+                if(result.success){
+                    alert("更新位置成功");
+                    window.location.href="/SEIN/map/devices"
+                }else{
+                    alert(result.msg);
+                }
+            }
+        })
     }
 
 
