@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -27,8 +28,22 @@ public class ListController {
         //获取配置表
         DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
         List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
+        for (DevicePollutant devicePollutant : devicePollutantList) {
+            devicePollutantService.setInitStatus(devicePollutant);
+        }
         model.addAttribute("devicePollutantList",devicePollutantList);
         return "list";
+    }
+
+    @RequestMapping("/devices/real")
+    @ResponseBody
+    public List<DevicePollutant> getRealTimeDevice(HttpSession session) {
+        DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
+        List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
+        for (DevicePollutant devicePollutant : devicePollutantList) {
+            devicePollutantService.updateStatus(devicePollutant);
+        }
+        return devicePollutantList;
     }
 
     @RequestMapping("/search")

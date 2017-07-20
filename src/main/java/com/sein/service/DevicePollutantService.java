@@ -1,7 +1,9 @@
 package com.sein.service;
 
+import com.sein.dao.AccountDAO;
 import com.sein.dao.DeviceDAO;
 import com.sein.dao.PollutantDAO;
+import com.sein.dao.redis.RedisDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.*;
 import com.sein.pojo.po.Device;
@@ -37,6 +39,9 @@ public class DevicePollutantService {
 
     @Autowired
     private PollutantDAO pollutantDAO;
+
+    @Autowired
+    private RedisDAO redisDAO;
 
     @Value("${POLLUTANT_TYPE_BASE}")
     private String POLLUTANT_TYPE_BASE;
@@ -152,9 +157,8 @@ public class DevicePollutantService {
         //封装devicePollutant参数并添加
         devicePollutant.setAQI((int) Math.floor(AQI) + "");
         devicePollutant.setPollutantItemList(pollutantItemList);
-        //设置状态
-        DevicePollutantUtil.setStatus(devicePollutant, pollutant.getTime());
         devicePollutant.setDevice(device);
+
         return devicePollutant;
     }
 
@@ -351,4 +355,59 @@ public class DevicePollutantService {
         return Result.isOK(deviceConfig);
     }
 
+    /**
+     * 设置初始状态并存入redis
+     * @param devicePollutant
+     */
+    public void setInitStatus(DevicePollutant devicePollutant) {
+        //将当前最新的浓度数据存进redis,目的是用redis的ttl做状态的判断
+        for(PollutantItem item:devicePollutant.getPollutantItemList()){
+            if("time".equals(item.getType())){
+                try {
+                    //设置状态
+                    DevicePollutantUtil.setStatus(devicePollutant, item.getValue());
+                    redisDAO.set(devicePollutant.getDevice().getPollutantTable()+":"+devicePollutant.getDevice().getId(),item.getValue());
+                    //设置过期时间,5分钟
+                    redisDAO.expire(devicePollutant.getDevice().getPollutantTable()+":"+devicePollutant.getDevice().getId(),60*5);
+                }catch (Exception e){
+                }
+            }
+        }
+    }
+
+    /**
+     * 更新状态
+     * @param devicePollutant
+     */
+    public void updateStatus(DevicePollutant devicePollutant) {
+        //获取目标的ttl
+        long ttl=0;
+        try{
+            ttl=redisDAO.ttl(devicePollutant.getDevice().getPollutantTable()+":"+devicePollutant.getDevice().getId());
+        }catch (Exception e){
+            e.printStackTrace();
+            return;
+        }
+        //5分钟内有变化
+        if(ttl<=300&&ttl>0){
+            String time = redisDAO.get(devicePollutant.getDevice().getPollutantTable()+":"+devicePollutant.getDevice().getId());
+            for(PollutantItem item:devicePollutant.getPollutantItemList()){
+                if("time".equals(item.getType())){
+                    //如果5分钟内不相等，则证明有变化，设置状态为续传中
+                    if((!item.getValue().equals(time))&&DateUtil.getMinDifference(item.getValue())>90){
+                        devicePollutant.setStatus(2);
+                        redisDAO.set(devicePollutant.getDevice().getPollutantTable()+":"+devicePollutant.getDevice().getId(),item.getValue());
+                        //重置过期时间,5分钟
+                        redisDAO.expire(devicePollutant.getDevice().getPollutantTable()+":"+devicePollutant.getDevice().getId(),60*5);
+                    }
+                }
+            }
+        }else if(ttl<=0){
+            for(PollutantItem item:devicePollutant.getPollutantItemList()) {
+                if ("time".equals(item.getType())) {
+                   DevicePollutantUtil.setStatus(devicePollutant,item.getValue());
+                }
+            }
+        }
+    }
 }

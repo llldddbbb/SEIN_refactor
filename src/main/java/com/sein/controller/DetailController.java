@@ -25,21 +25,23 @@ public class DetailController {
 
     @Autowired
     private DevicePollutantService devicePollutantService;
-
+    
 
     @RequestMapping("/devices/{id}")
     public String getDevices(@PathVariable("id") Integer id, HttpSession session, Model model) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         DevicePollutant devicePollutant = devicePollutantService.getDevicePollutantById(displayConfig, id);
+        devicePollutantService.setInitStatus(devicePollutant);
         model.addAttribute("devicePollutant", devicePollutant);
         return "detail";
     }
 
     @RequestMapping("/devices/real/{id}")
     @ResponseBody
-    public DevicePollutant getRealTimeDevices(@PathVariable("id") Integer id, HttpSession session) {
+    public DevicePollutant getRealTimeDevice(@PathVariable("id") Integer id, HttpSession session) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         DevicePollutant devicePollutant = devicePollutantService.getDevicePollutantById(displayConfig, id);
+        devicePollutantService.updateStatus(devicePollutant);
         return devicePollutant;
     }
 
@@ -55,3 +57,5 @@ public class DetailController {
         return pollutantChartList;
     }
 }
+
+

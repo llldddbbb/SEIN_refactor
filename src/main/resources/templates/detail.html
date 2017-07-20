@@ -28,6 +28,7 @@
                 <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollutant.pollutantItemList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
                     <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollutant.status}==0">${device.getStatus() }</span>
                     <span id="status_real" style="color:#6EC038" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==1">${device.getStatus() }</span>
+                    <span id="status_real" style="color:#d0d001" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==2">${device.getStatus() }</span>
                 </div>
             </div>
             <div class="content_middle"><span class="AQI" id="AQI_real" th:text="${devicePollutant.AQI}"></span></div>
@@ -315,7 +316,8 @@
         dataType:'json',
 
         success:function(res) {
-            $("#AQI_real").val(res.device.AQI);
+            $("#AQI_real").html(res.aqi);
+            changeStatusLanguage(res.status);
             var realPollutant=res.pollutantItemList;
             for(var i in realPollutant){
                 if(realPollutant[i].type=='time'){
@@ -376,6 +378,32 @@
     //Ajax定时访问服务端，不断获取数据 ，这里是10秒请求一次。
 
     window.setInterval(function(){$.ajax(getting)},10000);
+
+    function changeStatusLanguage(status) {
+        $.ajax({
+            url:"/SEIN/changeMessageInfoLanguage",
+            success:function (result) {
+                if(result.success){
+                    if(status==1){
+                        $("#status_real").html("<span style='color:#6EC038'>ONLINE</span>");
+                    }else if(status==2){
+                        $("#status_real").html("<span style='color:#e0e001'>RESUMING</span>");
+                    }else if(status==0){
+                        $("#status_real").html("<span style='color:#FF0000'>OFFLINE</span>");
+                    }
+                }else{
+                    if(status==1){
+                        $("#status_real").html("<span style='color:#6EC038'>在线</span>");
+                    }else if(status==2){
+                        $("#status_real").html("<span style='color:#e0e001'>续传中</span>");
+                    }else if(status==0){
+                        $("#status_real").html("<span style='color:#FF0000'>离线</span>");
+                    }
+
+                }
+            }
+        });
+    }
 
 
 </script>

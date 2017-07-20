@@ -14,7 +14,7 @@ public class DevicePollutant {
 
     private List<PollutantItem> pollutantItemList;
 
-    //离线在线状态
+    //离线0 在线1 续传2状态
     private Integer status;
 
     //AQI与AQHI
