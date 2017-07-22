@@ -29,7 +29,7 @@ public class ListController {
         DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
         List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
         for (DevicePollutant devicePollutant : devicePollutantList) {
-            devicePollutantService.setInitStatus(devicePollutant);
+            devicePollutantService.setInitStatus(devicePollutant,session.getId());
         }
         model.addAttribute("devicePollutantList",devicePollutantList);
         return "list";
@@ -41,7 +41,7 @@ public class ListController {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
         for (DevicePollutant devicePollutant : devicePollutantList) {
-            devicePollutantService.updateStatus(devicePollutant);
+            devicePollutantService.updateStatus(devicePollutant,session.getId());
         }
         return devicePollutantList;
     }

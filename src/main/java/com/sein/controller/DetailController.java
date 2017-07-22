@@ -31,7 +31,7 @@ public class DetailController {
     public String getDevices(@PathVariable("id") Integer id, HttpSession session, Model model) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         DevicePollutant devicePollutant = devicePollutantService.getDevicePollutantById(displayConfig, id);
-        devicePollutantService.setInitStatus(devicePollutant);
+        devicePollutantService.setInitStatus(devicePollutant,session.getId());
         model.addAttribute("devicePollutant", devicePollutant);
         return "detail";
     }
@@ -41,7 +41,7 @@ public class DetailController {
     public DevicePollutant getRealTimeDevice(@PathVariable("id") Integer id, HttpSession session) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         DevicePollutant devicePollutant = devicePollutantService.getDevicePollutantById(displayConfig, id);
-        devicePollutantService.updateStatus(devicePollutant);
+        devicePollutantService.updateStatus(devicePollutant,session.getId());
         return devicePollutant;
     }
 
