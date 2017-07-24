@@ -20,8 +20,6 @@ spring:
   thymeleaf:
       cache: false
 
-
-
 #mybatis
 mybatis:
   type-aliases-package: com.sein.pojo.po
