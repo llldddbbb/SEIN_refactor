@@ -1,6 +1,6 @@
 package com.sein.service;
 
-import com.sein.dao.PollutantDAO;
+import com.sein.dao.sein.PollutantDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.PageBean;
 import com.sein.pojo.dto.PollutantTable;

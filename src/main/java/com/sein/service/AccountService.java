@@ -2,16 +2,13 @@ package com.sein.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sein.dao.AccountDAO;
-import com.sein.dao.DisplayConfigDAO;
+import com.sein.dao.sein.AccountDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.PageResult;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
-import com.sein.pojo.po.DisplayConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;

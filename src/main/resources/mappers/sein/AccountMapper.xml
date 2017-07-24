@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 对应dao接口 -->
-<mapper namespace="com.sein.dao.AccountDAO">
+<mapper namespace="com.sein.dao.sein.AccountDAO">
     <resultMap id="accountResultMap" type="com.sein.pojo.po.Account" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="userName" property="userName" jdbcType="VARCHAR" />

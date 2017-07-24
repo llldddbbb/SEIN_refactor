@@ -1,6 +1,6 @@
 package com.sein.service;
 
-import com.sein.dao.DisplayConfigDAO;
+import com.sein.dao.sein.DisplayConfigDAO;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.DisplayConfig;
 import org.springframework.beans.factory.annotation.Autowired;

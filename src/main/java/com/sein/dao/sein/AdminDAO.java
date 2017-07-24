@@ -1,4 +1,4 @@
-package com.sein.dao;
+package com.sein.dao.sein;
 
 import com.sein.pojo.po.Admin;
 import com.sein.utils.MyMapper;

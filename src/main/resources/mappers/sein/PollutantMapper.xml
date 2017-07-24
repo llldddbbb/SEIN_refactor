@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 对应dao接口 -->
-<mapper namespace="com.sein.dao.PollutantDAO">
+<mapper namespace="com.sein.dao.sein.PollutantDAO">
 
     <resultMap id="pollutantResultMap" type="com.sein.pojo.po.Pollutant">
         <result column="DateTime" property="time" jdbcType="TIMESTAMP"/>

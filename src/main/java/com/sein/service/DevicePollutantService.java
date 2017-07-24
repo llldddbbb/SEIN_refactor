@@ -1,7 +1,7 @@
 package com.sein.service;
 
-import com.sein.dao.DeviceDAO;
-import com.sein.dao.PollutantDAO;
+import com.sein.dao.sein.DeviceDAO;
+import com.sein.dao.sein.PollutantDAO;
 import com.sein.dao.redis.RedisDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.*;

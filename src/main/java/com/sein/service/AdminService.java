@@ -1,9 +1,8 @@
 package com.sein.service;
 
-import com.sein.dao.AdminDAO;
+import com.sein.dao.sein.AdminDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.Result;
-import com.sein.pojo.po.Admin;
 import com.sein.pojo.po.Admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

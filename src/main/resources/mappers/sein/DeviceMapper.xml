@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 对应dao接口 -->
-<mapper namespace="com.sein.dao.DeviceDAO">
+<mapper namespace="com.sein.dao.sein.DeviceDAO">
     <resultMap id="deviceResultMap" type="com.sein.pojo.po.Device" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="cityName" property="cityName" jdbcType="VARCHAR" />
@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result column="picture" property="picture" jdbcType="VARCHAR" />
         <result column="pollutantTable" property="pollutantTable" jdbcType="VARCHAR" />
         <result column="accountId" property="accountId" jdbcType="INTEGER" />
-        <association column="accountId" property="account" select="com.sein.dao.AccountDAO.getAccountById" />
+        <association column="accountId" property="account" select="com.sein.dao.sein.AccountDAO.getAccountById" />
     </resultMap>
 
 

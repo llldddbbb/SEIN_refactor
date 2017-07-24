@@ -1,8 +1,6 @@
+
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sein?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-    username: root
-    password: 123456
     #连接池配置信息
     initialSize: 10
     minIdle: 10
@@ -16,6 +14,18 @@ spring:
     testOnReturn: false
     poolPreparedStatements: true
     maxPoolPreparedStatementPerConnectionSize: 20
+master:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sein?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
+cluster:
+  datasource:
+    url: jdbc:mysql://localhost:3306/sensor_info?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+    driverClassName: com.mysql.jdbc.Driver
 
 REDIS_HOST:
   123.207.233.85

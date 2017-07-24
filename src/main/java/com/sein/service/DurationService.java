@@ -1,6 +1,6 @@
 package com.sein.service;
 
-import com.sein.dao.DurationDAO;
+import com.sein.dao.sein.DurationDAO;
 import com.sein.pojo.po.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

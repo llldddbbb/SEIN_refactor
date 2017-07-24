@@ -2,7 +2,7 @@ package com.sein.service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sein.dao.DeviceDAO;
+import com.sein.dao.sein.DeviceDAO;
 import com.sein.enums.ResultEnum;
 import com.sein.pojo.dto.GPS;
 import com.sein.pojo.dto.PageResult;
