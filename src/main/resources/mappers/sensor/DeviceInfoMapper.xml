@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sein.dao.sensor.DeviceInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.sein.pojo.po.DeviceInfo" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="index" property="index" jdbcType="BIGINT" />
+    <result column="DeviceName" property="deviceName" jdbcType="VARCHAR" />
+    <result column="StartTime" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="EndTime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="NO_Code" property="NO_Code" jdbcType="VARCHAR" />
+    <result column="NO2_Code" property="NO2_Code" jdbcType="VARCHAR" />
+    <result column="CO_Code" property="CO_Code" jdbcType="VARCHAR" />
+    <result column="CO2_Code" property="CO2_Code" jdbcType="VARCHAR" />
+    <result column="SO2_Code" property="SO2_Code" jdbcType="VARCHAR" />
+    <result column="O3_Code" property="o3_Code" jdbcType="VARCHAR" />
+    <result column="VOC_Code" property="VOC_Code" jdbcType="VARCHAR" />
+    <result column="PM1_Code" property="PM1_Code" jdbcType="VARCHAR" />
+    <result column="PM25_Code" property="PM25_Code" jdbcType="VARCHAR" />
+    <result column="PM10_Code" property="PM10_Code" jdbcType="VARCHAR" />
+    <result column="Recorder" property="recorder" jdbcType="VARCHAR" />
+    <result column="Project" property="project" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

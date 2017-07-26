@@ -169,7 +169,7 @@
     </select>
 
     <select id="isExistPollutantTable" resultType="Integer" parameterType="String">
-        SELECT COUNT(*) FROM information_schema.TABLES WHERE table_name like #{pollutantTable} ESCAPE '#' AND table_schema ='sein';;
+        SELECT COUNT(*) FROM information_schema.TABLES WHERE table_name like #{pollutantTable} ESCAPE '#' AND table_schema ='sein';
     </select>
 
     <select id="getColumnNameList" resultType="String" parameterType="String">
@@ -177,7 +177,7 @@
     </select>
 
     <select id="getTableNameList" resultType="String" parameterType="String">
-        SELECT DISTINCT table_name FROM information_schema.TABLES WHERE table_name LIKE #{pollutantTable} ESCAPE '#' AND table_schema ='sein';;
+        SELECT DISTINCT table_name FROM information_schema.TABLES WHERE table_name LIKE #{pollutantTable} ESCAPE '#' AND table_schema ='sein';
     </select>
 
 </mapper>

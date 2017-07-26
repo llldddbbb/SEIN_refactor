@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>数据列表页面</title>
+    <!-- layui.css -->
+    <link th:href="@{/background/plugin/layui/css/layui.css}" href="../../static/background/plugin/layui/css/layui.css" rel="stylesheet" />
+    <style>
+
+        tr td:not(:nth-child(0)),
+        tr th:not(:nth-child(0)) {
+            text-align: center;
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            -o-text-overflow:ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+
+        #dataConsole {
+            text-align: center;
+        }
+        /*分页页容量样式*/
+        /*可选*/
+        .layui-laypage {
+            display: block;
+        }
+
+            /*可选*/
+            .layui-laypage > * {
+                float: left;
+            }
+            /*可选*/
+            .layui-laypage .laypage-extend-pagesize {
+                float: right;
+            }
+            /*可选*/
+            .layui-laypage:after {
+                content: ".";
+                display: block;
+                height: 0;
+                clear: both;
+                visibility: hidden;
+            }
+
+            /*必须*/
+            .layui-laypage .laypage-extend-pagesize {
+                height: 30px;
+                line-height: 30px;
+                margin: 0px;
+                border: none;
+                font-weight: 400;
+            }
+        /*分页页容量样式END*/
+    </style>
+</head>
+<body>
+    <div class="layui-field-box" style="text-align: center">
+    <div id="articleIndexTop">
+        <form class="layui-form layui-form-pane" action="">
+            <div class="layui-form-item" style="margin:0;margin-top:15px;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">设备</label>
+                    <div class="layui-input-inline">
+                        <select name="equation">
+                            <option value="0"></option>
+                            <option value="1"  th:each="equation:${equationList}" th:value="${equation}" th:text="${equation}">类别1</option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline" style="width:auto">
+                        <button class="layui-btn" lay-submit lay-filter="select">选择</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+    <fieldset id="dataList" class="layui-elem-field layui-field-title sys-list-field" style="display:none;">
+        <legend style="text-align:center;">设备信息列表</legend>
+        <div class="layui-field-box layui-form">
+            <div id="dataContent" class="">
+                <!--内容区域 ajax获取-->
+            </div>
+            <div id="pageNav"></div>
+        </div>
+    </fieldset>
+    <!-- layui.js -->
+    <script th:src="@{/background/plugin/layui/layui.js}" src="../../static/background/plugin/layui/layui.js"></script>
+    <!-- layui规范化用法 -->
+    <script type="text/javascript" th:inline="javascript">
+        layui.define(['element','laypage', 'layer', 'form' ,'laydate'], function (exports) {
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form();
+            var laypage = layui.laypage;
+            var element = layui.element();
+            var laypageId = 'pageNav';
+            var laydate = layui.laydate;
+
+            form.on('submit(select)', function(data) {
+                var index = layer.load(1);
+
+                layer.close(index);
+
+                $.ajax({
+                    url:"background/login",
+                    type:"POST",
+                    data:{
+                        equation:data.field.equation,
+                    },
+                    success:function (result) {
+                        if(result.success){
+                            layer.msg('登陆成功，正在跳转......', { icon: 6 });
+                            layer.closeAll('page');
+                            setTimeout(function () {
+                                location.href = "/SEIN/admin/main";
+                            }, 1000);
+                        }else{
+                            layer.msg(result.msg, { icon: 5 });
+                        }
+                    }
+                });
+                return false;
+            });
+
+
+//            initilData(1, 10);
+            //页数据初始化
+            //currentIndex：当前页面
+            //pageSize：页容量（每页显示的条数）
+            var equationNum;
+            function initilData(currentIndex, pageSize) {
+                var index = layer.load(1);
+                //模拟数据加载
+                setTimeout(function () {
+                    layer.close(index);
+                    $.ajax({
+                        url:"equation/list/"+currentIndex,
+                        type:"GET",
+                        data:{
+                            pageSize:pageSize
+                        },
+                        success:function(result){
+                            equationNum=result.total;
+                            var equationList=result.rows;
+                            var html = '';
+                            html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
+                            html += '<colgroup><col width="20"><col width="50"><col width="80"><col width="80"><col width="60"><col width="50"><col width="20"><col width="20"><col width="30"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>设备别名</th><th>经纬度</th><th>浓度表</th><th>图片</th><th>所属账户</th><th colspan="3">操作</th></tr></thead>';
+                            html += '<tbody>';
+                            for(var i in equationList){
+                                var item=equationList[i];
+                                html+='<tr>';
+                                html+='<td>'+item.id+'</td>';
+                                html+='<td>'+item.cityName+'</td>';
+                                html+='<td id="gps'+item.id+'">'+item.longitude+','+item.latitude+'</td>';
+                                html+='<td>'+item.pollutantTable+'</td>';
+                                html+='<td><img style="width: 70px" src='+item.picture+'></td>';
+                                html+='<td>'+(item.account==null?'暂无所属账户':item.account.userName)+'</td>';
+                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData('+item.id+')"><i class="layui-icon">&#xe642;</i></button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small " onclick="layui.datalist.updateGPS('+item.id+')">更新位置</button></td>';
+                                html+='</tr>';
+                            }
+                            html+='</tbody></table>';
+                            $('#dataContent').html(html);
+                            element.init();
+                            $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
+                            laypage({
+                                cont: laypageId,
+                                pages: equationNum%pageSize==0?equationNum/pageSize:equationNum/pageSize+1,
+                                groups: 5,
+                                skip: true,
+                                curr: currentIndex,
+                                jump: function (obj, first) {
+                                    var currentIndex = obj.curr;
+                                    if (!first) {
+                                        initilData(currentIndex, pageSize);
+                                    }
+                                }
+                            });
+
+                        }
+                    });
+
+
+                }, 500);
+            }
+
+            //输出接口，主要是两个函数，一个删除一个编辑
+            var datalist = {
+                deleteData: function (id) {
+                    layer.confirm('确定删除这条设备信息吗？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        $.ajax({
+                            url:'equation/'+id,
+                            data:{},
+                            type:'DELETE',
+                            success:function (result) {
+                                if(result.success){
+                                    layer.alert(result.data, {
+                                        closeBtn: 0,
+                                        icon: 1
+                                    }, function(){
+                                        window.location.href="equationManage"
+                                    });
+                                }else{
+                                    layer.alert(result.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    }, function () {
+
+                    });
+                },
+                updateGPS:function(id){
+                    layer.confirm('确定更新这条设备的GPS信息吗？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        layer.closeAll('page');
+                        layer.msg('更新中...', {
+                            icon: 16
+                            ,shade: 0.4,
+                            time: 30000
+                        });
+                        $.ajax({
+                            url:'equation/'+id+'/gps',
+                            data:{},
+                            type:'PUT',
+                            success:function (result) {
+                                if(result.success){
+                                    $('#gps'+id).html(result.data.x+","+result.data.y+"(已更新)");
+                                    layer.alert('更新成功!', {
+                                        closeBtn: 0,
+                                        icon: 1
+                                    });
+                                }else{
+                                    layer.alert(result.msg, {icon: 5});
+                                }
+                            }
+                        });
+                    }, function () {
+
+                    });
+                },
+                editData: function (id) {
+                    parent.switchTab(parent.$,parent.element,'修改设备信息','addDevice?id='+id,'Device'+id);
+                }
+
+
+            };
+            exports('datalist', datalist);
+        });
+
+    </script>
+</body>
+</html>

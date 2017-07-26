@@ -20,7 +20,7 @@ public class ClusterDataSourceConfig {
     // 精确到 cluster 目录，以便跟其他数据源隔离
     static final String PACKAGE = "com.sein.dao.sensor";
 
-    static final String MAPPER_LOCATION = "classpath:mappers/sein/*.xml";
+    static final String MAPPER_LOCATION = "classpath:mappers/sensor/*.xml";
 
     @Value("${cluster.datasource.url}")
     private String url;

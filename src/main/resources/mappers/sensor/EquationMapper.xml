@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sein.dao.sensor.EquationDAO">
+  <resultMap id="BaseResultMap" type="com.sein.pojo.po.Equation">
+    <result column="Item" jdbcType="INTEGER" property="item" />
+    <result column="Code" jdbcType="VARCHAR" property="code" />
+    <result column="StartTime" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="EndTime" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="a" jdbcType="REAL" property="a" />
+    <result column="b" jdbcType="REAL" property="b" />
+    <result column="c" jdbcType="REAL" property="c" />
+    <result column="d" jdbcType="REAL" property="d" />
+    <result column="e" jdbcType="REAL" property="e" />
+    <result column="f" jdbcType="REAL" property="f" />
+    <result column="i" jdbcType="REAL" property="i" />
+    <result column="a_1" jdbcType="REAL" property="a_1" />
+    <result column="Validity" jdbcType="REAL" property="validity" />
+    <result column="Recorder" jdbcType="VARCHAR" property="recorder" />
+    <result column="Remark" jdbcType="VARCHAR" property="remark" />
+    <result column="DeviceName" jdbcType="VARCHAR" property="deviceName" />
+  </resultMap>
+
+  <select id="getTableNameList" resultType="String">
+    SELECT DISTINCT TABLE_NAME FROM information_schema.columns WHERE  table_schema ='sensor_info';
+  </select>
+
+</mapper>
