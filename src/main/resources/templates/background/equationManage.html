@@ -212,7 +212,7 @@
                     html+='<form class="layui-form layui-form-pane" action="equation" method="post">';
                     html+='<div style="margin: 20px 0">';
                     html+='<input type="hidden" name="_method" value="put" />';
-                    html+='<input type="hidden" name="id" value="'+item.item+'" />';
+                    html+='<input type="hidden" name="item" value="'+item.item+'" />';
                     html+='<input type="hidden" name="project" value="'+project+'" />';
                     html+='<label class="layui-form-label" style="border: none" >设备名:</label>';
                     html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="deviceName"  class="layui-input" value="'+item.deviceName+'">';
@@ -248,6 +248,14 @@
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >i:</label>';
                     html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="i"  class="layui-input" value="'+item.i+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >起始时间:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="startTime" onclick="layui.laydate({elem: this, istime: true, format: \'YYYY-MM-DD hh:mm:ss\'})"  class="layui-input" value="'+item.startTime+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >结束时间:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime" onclick="layui.laydate({elem: this, istime: true, format: \'YYYY-MM-DD hh:mm:ss\'})"  class="layui-input" value="'+item.endTime+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >记录人:</label>';

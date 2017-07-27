@@ -140,6 +140,8 @@
 
     //动态改变图表数据的方法
     var id=[[${devicePollutant.device.id}]];
+    var date=[];
+    var data=[];
     function getChartsData(){
         var pollutantType=$("#pollutantType").val();
         var startTime=$("#startTime").val();
@@ -164,8 +166,8 @@
         myChart.showLoading();
         $.post("/SEIN/detail/chart",{"id":id,"pollutantType":pollutantType,"interval":interval,"startTime":startTime,"endTime":endTime},function(result){
             if(result){
-                var date=[];
-                var data=[];
+                date.splice(0,date.length);
+                data.splice(0,data.length);
                 for(var i in result){
                     date.push(result[i].time);
                     data.push(result[i].value);
@@ -316,9 +318,35 @@
         dataType:'json',
 
         success:function(res) {
-            $("#AQI_real").html(res.aqi);
-            changeStatusLanguage(res.status);
+            var lastDate=date[date.length-1];
+            var interval=$("#timepicker").val();
+            var pollutantType=$("#pollutantType").val();
+//            $("#AQI_real").html(res.aqi);
             var realPollutant=res.pollutantItemList;
+            if(interval=="_original"){
+                for(var i in realPollutant){
+                    if(realPollutant[i].type=='time'&&lastDate!==realPollutant[i].value){
+                        console.log("更新前")
+                        date.push(realPollutant[i].value)
+                        for(var j in realPollutant){
+                            if(pollutantType==realPollutant[j].type){
+                                data.push(realPollutant[j].value);
+                                myChart.setOption({
+                                    series: [{
+                                        data: data
+                                    }],
+                                    xAxis: {
+                                        data: date
+                                    },
+                                });
+                                console.log("已经更新折线图")
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
             for(var i in realPollutant){
                 if(realPollutant[i].type=='time'){
                     $("#time_real").html(realPollutant[i].value);
@@ -379,31 +407,31 @@
 
     window.setInterval(function(){$.ajax(getting)},10000);
 
-    function changeStatusLanguage(status) {
-        $.ajax({
-            url:"/SEIN/changeMessageInfoLanguage",
-            success:function (result) {
-                if(result.success){
-                    if(status==1){
-                        $("#status_real").html("<span style='color:#6EC038'>ONLINE</span>");
-                    }else if(status==2){
-                        $("#status_real").html("<span style='color:#e0e001'>RESUMING</span>");
-                    }else if(status==0){
-                        $("#status_real").html("<span style='color:#FF0000'>OFFLINE</span>");
-                    }
-                }else{
-                    if(status==1){
-                        $("#status_real").html("<span style='color:#6EC038'>在线</span>");
-                    }else if(status==2){
-                        $("#status_real").html("<span style='color:#e0e001'>续传中</span>");
-                    }else if(status==0){
-                        $("#status_real").html("<span style='color:#FF0000'>离线</span>");
-                    }
-
-                }
-            }
-        });
-    }
+//    function changeStatusLanguage(status) {
+//        $.ajax({
+//            url:"/SEIN/changeMessageInfoLanguage",
+//            success:function (result) {
+//                if(result.success){
+//                    if(status==1){
+//                        $("#status_real").html("<span style='color:#6EC038'>ONLINE</span>");
+//                    }else if(status==2){
+//                        $("#status_real").html("<span style='color:#e0e001'>RESUMING</span>");
+//                    }else if(status==0){
+//                        $("#status_real").html("<span style='color:#FF0000'>OFFLINE</span>");
+//                    }
+//                }else{
+//                    if(status==1){
+//                        $("#status_real").html("<span style='color:#6EC038'>在线</span>");
+//                    }else if(status==2){
+//                        $("#status_real").html("<span style='color:#e0e001'>续传中</span>");
+//                    }else if(status==0){
+//                        $("#status_real").html("<span style='color:#FF0000'>离线</span>");
+//                    }
+//
+//                }
+//            }
+//        });
+//    }
 
 
 </script>

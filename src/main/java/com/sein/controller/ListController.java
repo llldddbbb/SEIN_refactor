@@ -28,9 +28,6 @@ public class ListController {
         //获取配置表
         DisplayConfig displayConfig=(DisplayConfig) session.getAttribute("displayConfig");
         List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
-        for (DevicePollutant devicePollutant : devicePollutantList) {
-            devicePollutantService.setInitStatus(devicePollutant,session.getId());
-        }
         model.addAttribute("devicePollutantList",devicePollutantList);
         return "list";
     }
@@ -40,9 +37,6 @@ public class ListController {
     public List<DevicePollutant> getRealTimeDevice(HttpSession session) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
         List<DevicePollutant> devicePollutantList=devicePollutantService.listDevicePollutant(displayConfig,null);
-        for (DevicePollutant devicePollutant : devicePollutantList) {
-            devicePollutantService.updateStatus(devicePollutant,session.getId());
-        }
         return devicePollutantList;
     }
 

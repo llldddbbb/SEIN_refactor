@@ -10,6 +10,11 @@
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
 
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+
         <!--使用通用Mapper插件，指定MyMapper路径-->
         <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
             <property name="mappers" value="com.sein.utils.MyMapper"/>
@@ -33,7 +38,7 @@
                              type="XMLMAPPER"/>
 
         <!-- 指定数据库表 -->
-        <table schema="MYSQL" tableName="device_info_new">
+        <table schema="MYSQL" tableName="">
             <!--true使用原列名，false:下划线转换成驼峰形式-->
             <property name="useActualColumnNames" value="true" />
         </table>

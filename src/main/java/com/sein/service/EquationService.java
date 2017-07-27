@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sein.dao.sensor.EquationDAO;
 import com.sein.pojo.dto.PageResult;
+import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Equation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,10 @@ public class EquationService {
     @Autowired
     private EquationDAO equationDAO;
 
+    /**
+     * 截取表的前半部分做为项目名，获取所有的项目名。
+     * @return
+     */
     public List<String> getProjectList(){
         List<String> projectList=new ArrayList<>();
 
@@ -64,5 +69,17 @@ public class EquationService {
         pageResult.setRows(equationList);
         pageResult.setTotal(total);
         return pageResult;
+    }
+
+    /**
+     * 更新参数表
+     * @param equation
+     * @return
+     */
+    public Result updateEquation(Equation equation) {
+        //加上表格后缀
+        equation.setProject(equation.getProject()+"_equation");
+        equationDAO.updateEquation(equation);
+        return Result.isOK();
     }
 }

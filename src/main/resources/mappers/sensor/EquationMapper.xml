@@ -31,5 +31,59 @@
   <select id="getPollutantType" resultType="String" parameterType="String">
     SELECT Type FROM sensor_basic WHERE Code=#{code}
   </select>
+  
+  <update id="updateEquation" parameterType="com.sein.pojo.po.Equation" statementType="STATEMENT">
+    update ${project}
+    <set >
+      <if test="code != null" >
+        Code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        StartTime = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        EndTime = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="a != null" >
+        a = #{a,jdbcType=REAL},
+      </if>
+      <if test="b != null" >
+        b = #{b,jdbcType=REAL},
+      </if>
+      <if test="c != null" >
+        c = #{c,jdbcType=REAL},
+      </if>
+      <if test="d != null" >
+        d = #{d,jdbcType=REAL},
+      </if>
+      <if test="e != null" >
+        e = #{e,jdbcType=REAL},
+      </if>
+      <if test="f != null" >
+        f = #{f,jdbcType=REAL},
+      </if>
+      <if test="i != null" >
+        i = #{i,jdbcType=REAL},
+      </if>
+      <if test="a_1 != null" >
+        a_1 = #{a_1,jdbcType=REAL},
+      </if>
+      <if test="validity != null" >
+        Validity = #{validity,jdbcType=REAL},
+      </if>
+      <if test="recorder != null" >
+        Recorder = #{recorder,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        Remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceName != null" >
+        DeviceName = #{deviceName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <where>
+        Item = #{item,jdbcType=INTEGER},
+    </where>
+  </update>
 
 </mapper>

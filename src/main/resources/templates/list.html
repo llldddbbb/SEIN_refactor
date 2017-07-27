@@ -83,50 +83,50 @@
         window.location.href="/SEIN/list/search?cityName="+cityName;
     }
 
-    var getting = {
+//    var getting = {
+//
+//        url:'/SEIN/list/devices/real',
+//
+//        dataType:'json',
+//
+//        success:function(res) {
+//            for(var i in res){
+//                changeStatusLanguage(res[i].device.id,res[i].status);
+//            }
+//
+//        }
+//
+//    };
+//
+//    //Ajax定时访问服务端，不断获取数据 ，这里是10秒请求一次。
+//
+//    window.setInterval(function(){$.ajax(getting)},10000);
 
-        url:'/SEIN/list/devices/real',
-
-        dataType:'json',
-
-        success:function(res) {
-            for(var i in res){
-                changeStatusLanguage(res[i].device.id,res[i].status);
-            }
-
-        }
-
-    };
-
-    //Ajax定时访问服务端，不断获取数据 ，这里是10秒请求一次。
-
-    window.setInterval(function(){$.ajax(getting)},10000);
-
-    function changeStatusLanguage(id,status) {
-        $.ajax({
-            url:"/SEIN/changeMessageInfoLanguage",
-            success:function (result) {
-                if(result.success){
-                    if(status==1){
-                        $("#status_real"+id).html(" <p class=\"airlevel level-1\" >ONLINE</p>");
-                    }else if(status==2){
-                        $("#status_real"+id).html(" <p class=\"airlevel level-2\" style='font-size: 18px'>RESUMING</p>");
-                    }else if(status==0){
-                        $("#status_real"+id).html(" <p class=\"airlevel level-3\" >OFFLINE</p>");
-                    }
-                }else{
-                    if(status==1){
-                        $("#status_real"+id).html(" <p class=\"airlevel level-1\" >在线</p>");
-                    }else if(status==2){
-                        $("#status_real"+id).html(" <p class=\"airlevel level-2\">续传中</p>");
-                    }else if(status==0){
-                        $("#status_real"+id).html(" <p class=\"airlevel level-3\" >离线</p>");
-                    }
-
-                }
-
-            }
-        });
-    }
+//    function changeStatusLanguage(id,status) {
+//        $.ajax({
+//            url:"/SEIN/changeMessageInfoLanguage",
+//            success:function (result) {
+//                if(result.success){
+//                    if(status==1){
+//                        $("#status_real"+id).html(" <p class=\"airlevel level-1\" >ONLINE</p>");
+//                    }else if(status==2){
+//                        $("#status_real"+id).html(" <p class=\"airlevel level-2\" style='font-size: 18px'>RESUMING</p>");
+//                    }else if(status==0){
+//                        $("#status_real"+id).html(" <p class=\"airlevel level-3\" >OFFLINE</p>");
+//                    }
+//                }else{
+//                    if(status==1){
+//                        $("#status_real"+id).html(" <p class=\"airlevel level-1\" >在线</p>");
+//                    }else if(status==2){
+//                        $("#status_real"+id).html(" <p class=\"airlevel level-2\">续传中</p>");
+//                    }else if(status==0){
+//                        $("#status_real"+id).html(" <p class=\"airlevel level-3\" >离线</p>");
+//                    }
+//
+//                }
+//
+//            }
+//        });
+//    }
 </script>
 </html>
