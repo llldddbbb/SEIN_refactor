@@ -86,4 +86,8 @@
     </where>
   </update>
 
+  <delete id="deleteEquation" statementType="STATEMENT">
+    DELETE FROM ${projectTable} WHERE Item=${item}
+  </delete>
+
 </mapper>

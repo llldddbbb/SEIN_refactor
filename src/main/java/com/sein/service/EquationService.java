@@ -82,4 +82,18 @@ public class EquationService {
         equationDAO.updateEquation(equation);
         return Result.isOK();
     }
+
+    /**
+     * 删除一条参数信息
+     * @param item
+     * @param project
+     * @return
+     */
+    public Result deleteEquation(Integer item,String project) {
+        HashMap<String,Object> param=new HashMap<>();
+        param.put("item",item);
+        param.put("projectTable",project+"_equation");
+        equationDAO.deleteEquation(param);
+        return Result.isOK();
+    }
 }

@@ -171,7 +171,6 @@
                             html += '<tbody>';
                             for(var i in equationList){
                                 var item=equationList[i];
-                                console.log(item)
                                 html+='<tr>';
                                 html+='<td>'+item.item+'</td>';
                                 html+='<td>'+item.deviceName+'</td>';
@@ -185,7 +184,7 @@
                                 html+='<td>'+item.f+'</td>';
                                 html+='<td>'+item.i+'</td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+',\"'+project+'\")\'><i class="layui-icon">&#xe642;</i></button></td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.item+',\''+project+'\')"><i class="layui-icon">&#xe640;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small " >Run</button></td>';
                                 html+='</tr>';
                             }
@@ -216,22 +215,19 @@
 
             //输出接口，主要是两个函数，一个删除一个编辑
             var datalist = {
-                deleteData: function (id) {
-                    layer.confirm('确定删除这条设备信息吗？', {
+                deleteData: function (item,project) {
+                    layer.confirm('确定删除这条信息吗？', {
                         btn: ['确定', '取消'] //按钮
                     }, function () {
                         $.ajax({
-                            url:'equation/'+id,
-                            data:{},
+                            url:'equation/'+item+"/"+project,
+                            data:{
+                            },
                             type:'DELETE',
                             success:function (result) {
                                 if(result.success){
-                                    layer.alert(result.data, {
-                                        closeBtn: 0,
-                                        icon: 1
-                                    }, function(){
-                                        window.location.href="equationManage"
-                                    });
+                                    initilData(1, 10,project);
+                                    layer.closeAll();
                                 }else{
                                     layer.alert(result.msg, {icon: 5});
                                 }

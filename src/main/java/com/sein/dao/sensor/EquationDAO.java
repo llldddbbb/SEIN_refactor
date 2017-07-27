@@ -17,4 +17,6 @@ public interface EquationDAO {
     String getPollutantType(@Param("code") String code);
 
     int updateEquation(Equation equation);
+
+    int deleteEquation(HashMap<String, Object> param);
 }

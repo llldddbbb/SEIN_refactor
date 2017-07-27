@@ -40,5 +40,11 @@ public class EquationAdminController {
         return Result.isOK();
     }
 
+    @DeleteMapping("/equation/{item}/{project}")
+    @ResponseBody
+    public Result deleteEquation(@PathVariable Integer item,@PathVariable String project){
+        return equationService.deleteEquation(item,project);
+    }
+
 
 }
