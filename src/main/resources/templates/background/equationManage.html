@@ -110,6 +110,39 @@
                 initilData(1, 10,data.field.project);
                 return false;
             });
+            form.on('submit(updateEquation)', function(data) {
+                $.ajax({
+                    url:"equation",
+                    type:"PUT",
+                    data:{
+                        "item" : data.field.item,
+                        "project" : data.field.project,
+                        "deviceName" : data.field.deviceName,
+                        "code" : data.field.code,
+                        "a" : data.field.a,
+                        "b" : data.field.b,
+                        "c" : data.field.c,
+                        "d" : data.field.d,
+                        "e" : data.field.e,
+                        "f" : data.field.f,
+                        "i" : data.field.i,
+                        "startTime" : data.field.startTime,
+                        "endTime" : data.field.endTime,
+                        "recorder" : data.field.recorder,
+                        "remark" : data.field.remark
+                    },
+                    success:function (result) {
+                        if(result.success){
+                            initilData(1, 10,data.field.project);
+                            layer.closeAll();
+                        }
+
+                    }
+                });
+                return false;
+            });
+
+
 
 
 //            initilData(1, 10);
@@ -138,6 +171,7 @@
                             html += '<tbody>';
                             for(var i in equationList){
                                 var item=equationList[i];
+                                console.log(item)
                                 html+='<tr>';
                                 html+='<td>'+item.item+'</td>';
                                 html+='<td>'+item.deviceName+'</td>';
@@ -209,9 +243,8 @@
                 },
                 editData: function (item,project) {
                     var html='';
-                    html+='<form class="layui-form layui-form-pane" action="equation" method="post">';
+                    html+='<form class="layui-form layui-form-pane" action="" method="post">';
                     html+='<div style="margin: 20px 0">';
-                    html+='<input type="hidden" name="_method" value="put" />';
                     html+='<input type="hidden" name="item" value="'+item.item+'" />';
                     html+='<input type="hidden" name="project" value="'+project+'" />';
                     html+='<label class="layui-form-label" style="border: none" >设备名:</label>';
@@ -251,11 +284,11 @@
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >起始时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="startTime" onclick="layui.laydate({elem: this, istime: true, format: \'YYYY-MM-DD hh:mm:ss\'})"  class="layui-input" value="'+item.startTime+'">';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="startTime" onclick="layui.laydate({elem: this, istime: true, format: \'YYYY-MM-DD hh:mm:ss\'})"  class="layui-input" value="'+(item.startTime==null?"":item.startTime)+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >结束时间:</label>';
-                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime" onclick="layui.laydate({elem: this, istime: true, format: \'YYYY-MM-DD hh:mm:ss\'})"  class="layui-input" value="'+item.endTime+'">';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="endTime" onclick="layui.laydate({elem: this, istime: true, format: \'YYYY-MM-DD hh:mm:ss\'})"  class="layui-input" value="'+(item.endTime==null?"":item.endTime)+'">';
                     html+='</div>';
                     html+='<div style="margin: 20px 0">';
                     html+='<label class="layui-form-label" style="border: none"  >记录人:</label>';
@@ -267,7 +300,7 @@
                     html+='</div>';
                     html+='<div class="layui-form-item">';
                     html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
-                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">修改</button>';
+                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="updateEquation">修改</button>';
                     html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
                     html+='</div>';
                     html+='</div>';

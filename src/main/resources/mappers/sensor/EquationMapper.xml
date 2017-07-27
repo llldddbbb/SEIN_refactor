@@ -36,53 +36,53 @@
     update ${project}
     <set >
       <if test="code != null" >
-        Code = #{code,jdbcType=VARCHAR},
+        Code = '${code}',
       </if>
       <if test="startTime != null" >
-        StartTime = #{startTime,jdbcType=TIMESTAMP},
+        StartTime = '${startTime}',
       </if>
       <if test="endTime != null" >
-        EndTime = #{endTime,jdbcType=TIMESTAMP},
+        EndTime = '${endTime}',
       </if>
       <if test="a != null" >
-        a = #{a,jdbcType=REAL},
+        a = ${a},
       </if>
       <if test="b != null" >
-        b = #{b,jdbcType=REAL},
+        b = ${b},
       </if>
       <if test="c != null" >
-        c = #{c,jdbcType=REAL},
+        c = ${c},
       </if>
       <if test="d != null" >
-        d = #{d,jdbcType=REAL},
+        d = ${d},
       </if>
       <if test="e != null" >
-        e = #{e,jdbcType=REAL},
+        e = ${e},
       </if>
       <if test="f != null" >
-        f = #{f,jdbcType=REAL},
+        f = ${f},
       </if>
       <if test="i != null" >
-        i = #{i,jdbcType=REAL},
+        i = ${i},
       </if>
       <if test="a_1 != null" >
-        a_1 = #{a_1,jdbcType=REAL},
+        a_1 = ${a_1},
       </if>
       <if test="validity != null" >
-        Validity = #{validity,jdbcType=REAL},
+        Validity = ${validity},
       </if>
       <if test="recorder != null" >
-        Recorder = #{recorder,jdbcType=VARCHAR},
+        Recorder = '${recorder}',
       </if>
       <if test="remark != null" >
-        Remark = #{remark,jdbcType=VARCHAR},
+        Remark = '${remark}',
       </if>
       <if test="deviceName != null" >
-        DeviceName = #{deviceName,jdbcType=VARCHAR},
+        DeviceName = '${deviceName}',
       </if>
     </set>
     <where>
-        Item = #{item,jdbcType=INTEGER},
+        Item = ${item}
     </where>
   </update>
 

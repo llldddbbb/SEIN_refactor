@@ -2,7 +2,6 @@ package com.sein.pojo.po;
 
 import javax.persistence.Column;
 import javax.persistence.Transient;
-import java.util.Date;
 
 public class Equation {
     @Column(name = "Item")
@@ -12,10 +11,10 @@ public class Equation {
     private String code;
 
     @Column(name = "StartTime")
-    private Date startTime;
+    private String startTime;
 
     @Column(name = "EndTime")
-    private Date endTime;
+    private String endTime;
 
     private Float a;
 
@@ -79,32 +78,20 @@ public class Equation {
         this.code = code;
     }
 
-    /**
-     * @return StartTime
-     */
-    public Date getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    /**
-     * @param startTime
-     */
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    /**
-     * @return EndTime
-     */
-    public Date getEndTime() {
-        return endTime;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
-    /**
-     * @param endTime
-     */
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public String getEndTime() {
+        return endTime;
     }
 
     /**

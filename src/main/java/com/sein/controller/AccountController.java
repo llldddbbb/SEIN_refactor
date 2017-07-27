@@ -5,7 +5,6 @@ import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Account;
 import com.sein.pojo.po.DisplayConfig;
 import com.sein.pojo.po.Duration;
-import com.sein.service.AccountService;
 import com.sein.service.DisplayConfigService;
 import com.sein.service.DurationService;
 import org.apache.shiro.SecurityUtils;
@@ -31,8 +30,6 @@ public class AccountController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private AccountService accountService;
 
     @Autowired
     private DisplayConfigService displayConfigService;

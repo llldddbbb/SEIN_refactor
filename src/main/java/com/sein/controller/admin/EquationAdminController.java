@@ -1,6 +1,7 @@
 package com.sein.controller.admin;
 
 import com.sein.pojo.dto.PageResult;
+import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Equation;
 import com.sein.service.EquationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,10 @@ public class EquationAdminController {
     }
 
     @PutMapping("/equation")
-    public String updateEquation(Equation equation){
+    @ResponseBody
+    public Result updateEquation(Equation equation){
         equationService.updateEquation(equation);
-        return "redirect:/equationManage";
+        return Result.isOK();
     }
 
 
