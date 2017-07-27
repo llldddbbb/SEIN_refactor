@@ -24,4 +24,12 @@
     SELECT DISTINCT TABLE_NAME FROM information_schema.columns WHERE  table_schema ='sensor_info';
   </select>
 
+  <select id="listEquation" resultMap="BaseResultMap" parameterType="Map" statementType="STATEMENT">
+    SELECT * FROM ${projectTable} ORDER BY Item desc
+  </select>
+
+  <select id="getPollutantType" resultType="String" parameterType="String">
+    SELECT Type FROM sensor_basic WHERE Code=#{code}
+  </select>
+
 </mapper>

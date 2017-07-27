@@ -1,6 +1,7 @@
 package com.sein.pojo.po;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import java.util.Date;
 
 public class Equation {
@@ -43,6 +44,12 @@ public class Equation {
 
     @Column(name = "DeviceName")
     private String deviceName;
+
+    @Transient
+    private String type;//浓度类型
+
+    @Transient
+    private String project;//项目名称
 
     /**
      * @return Item
@@ -266,5 +273,21 @@ public class Equation {
      */
     public void setDeviceName(String deviceName) {
         this.deviceName = deviceName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
     }
 }

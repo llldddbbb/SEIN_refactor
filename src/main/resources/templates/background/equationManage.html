@@ -63,11 +63,11 @@
         <form class="layui-form layui-form-pane" action="">
             <div class="layui-form-item" style="margin:0;margin-top:15px;">
                 <div class="layui-inline">
-                    <label class="layui-form-label">设备</label>
+                    <label class="layui-form-label">项目</label>
                     <div class="layui-input-inline">
-                        <select name="equation">
-                            <option value="0"></option>
-                            <option value="1"  th:each="equation:${equationList}" th:value="${equation}" th:text="${equation}">类别1</option>
+                        <select name="project">
+                            <option value="0">请选择项目</option>
+                            <option value="1"  th:each="project:${projectList}" th:value="${project}" th:text="${project}">类别1</option>
                         </select>
                     </div>
                     <div class="layui-input-inline" style="width:auto">
@@ -101,28 +101,13 @@
             var laydate = layui.laydate;
 
             form.on('submit(select)', function(data) {
+                if(data.field.project==0){
+                    return false;
+                }
                 var index = layer.load(1);
 
                 layer.close(index);
-
-                $.ajax({
-                    url:"background/login",
-                    type:"POST",
-                    data:{
-                        equation:data.field.equation,
-                    },
-                    success:function (result) {
-                        if(result.success){
-                            layer.msg('登陆成功，正在跳转......', { icon: 6 });
-                            layer.closeAll('page');
-                            setTimeout(function () {
-                                location.href = "/SEIN/admin/main";
-                            }, 1000);
-                        }else{
-                            layer.msg(result.msg, { icon: 5 });
-                        }
-                    }
-                });
+                initilData(1, 10,data.field.project);
                 return false;
             });
 
@@ -131,8 +116,7 @@
             //页数据初始化
             //currentIndex：当前页面
             //pageSize：页容量（每页显示的条数）
-            var equationNum;
-            function initilData(currentIndex, pageSize) {
+            function initilData(currentIndex, pageSize,project) {
                 var index = layer.load(1);
                 //模拟数据加载
                 setTimeout(function () {
@@ -141,34 +125,40 @@
                         url:"equation/list/"+currentIndex,
                         type:"GET",
                         data:{
-                            pageSize:pageSize
+                            pageSize:pageSize,
+                            project:project
                         },
                         success:function(result){
-                            equationNum=result.total;
+                            var equationNum=result.total;
                             var equationList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="20"><col width="50"><col width="80"><col width="80"><col width="60"><col width="50"><col width="20"><col width="20"><col width="30"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>设备别名</th><th>经纬度</th><th>浓度表</th><th>图片</th><th>所属账户</th><th colspan="3">操作</th></tr></thead>';
+                            html += '<colgroup><col width="13"><col width="35"><col width="15"><col width="25"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="15"><col width="15"><col width="15"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>设备名</th><th>浓度</th><th>浓度Code</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>i</th><th colspan="3">操作</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in equationList){
                                 var item=equationList[i];
                                 html+='<tr>';
-                                html+='<td>'+item.id+'</td>';
-                                html+='<td>'+item.cityName+'</td>';
-                                html+='<td id="gps'+item.id+'">'+item.longitude+','+item.latitude+'</td>';
-                                html+='<td>'+item.pollutantTable+'</td>';
-                                html+='<td><img style="width: 70px" src='+item.picture+'></td>';
-                                html+='<td>'+(item.account==null?'暂无所属账户':item.account.userName)+'</td>';
-                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick="layui.datalist.editData('+item.id+')"><i class="layui-icon">&#xe642;</i></button></td>';
+                                html+='<td>'+item.item+'</td>';
+                                html+='<td>'+item.deviceName+'</td>';
+                                html+='<td>'+item.type+'</td>';
+                                html+='<td>'+item.code+'</td>';
+                                html+='<td>'+item.a+'</td>';
+                                html+='<td>'+item.b+'</td>';
+                                html+='<td>'+item.c+'</td>';
+                                html+='<td>'+item.d+'</td>';
+                                html+='<td>'+item.e+'</td>';
+                                html+='<td>'+item.f+'</td>';
+                                html+='<td>'+item.i+'</td>';
+                                html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+',\"'+project+'\")\'><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.id+')"><i class="layui-icon">&#xe640;</i></button></td>';
-                                html+='<td><button class="layui-btn layui-btn-small " onclick="layui.datalist.updateGPS('+item.id+')">更新位置</button></td>';
+                                html+='<td><button class="layui-btn layui-btn-small " >Run</button></td>';
                                 html+='</tr>';
                             }
                             html+='</tbody></table>';
                             $('#dataContent').html(html);
-                            element.init();
                             $('#dataConsole,#dataList').attr('style', 'display:block'); //显示FiledBox
+                            element.init();
                             laypage({
                                 cont: laypageId,
                                 pages: equationNum%pageSize==0?equationNum/pageSize:equationNum/pageSize+1,
@@ -178,7 +168,7 @@
                                 jump: function (obj, first) {
                                     var currentIndex = obj.curr;
                                     if (!first) {
-                                        initilData(currentIndex, pageSize);
+                                        initilData(currentIndex, pageSize,project);
                                     }
                                 }
                             });
@@ -217,39 +207,72 @@
 
                     });
                 },
-                updateGPS:function(id){
-                    layer.confirm('确定更新这条设备的GPS信息吗？', {
-                        btn: ['确定', '取消'] //按钮
-                    }, function () {
-                        layer.closeAll('page');
-                        layer.msg('更新中...', {
-                            icon: 16
-                            ,shade: 0.4,
-                            time: 30000
-                        });
-                        $.ajax({
-                            url:'equation/'+id+'/gps',
-                            data:{},
-                            type:'PUT',
-                            success:function (result) {
-                                if(result.success){
-                                    $('#gps'+id).html(result.data.x+","+result.data.y+"(已更新)");
-                                    layer.alert('更新成功!', {
-                                        closeBtn: 0,
-                                        icon: 1
-                                    });
-                                }else{
-                                    layer.alert(result.msg, {icon: 5});
-                                }
-                            }
-                        });
-                    }, function () {
-
+                editData: function (item,project) {
+                    var html='';
+                    html+='<form class="layui-form layui-form-pane" action="equation" method="post">';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<input type="hidden" name="_method" value="put" />';
+                    html+='<input type="hidden" name="id" value="'+item.item+'" />';
+                    html+='<input type="hidden" name="project" value="'+project+'" />';
+                    html+='<label class="layui-form-label" style="border: none" >设备名:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="deviceName"  class="layui-input" value="'+item.deviceName+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >浓度Code:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="code"  class="layui-input" value="'+item.code+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >a:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="a"  class="layui-input" value="'+item.a+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >b:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="b"  class="layui-input" value="'+item.b+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >c:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="c"  class="layui-input" value="'+item.c+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >d:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="d"  class="layui-input" value="'+item.d+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >e:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="e"  class="layui-input" value="'+item.e+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >f:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="f"  class="layui-input" value="'+item.f+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >i:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="i"  class="layui-input" value="'+item.i+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >记录人:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="recorder"  class="layui-input" value="'+item.recorder+'">';
+                    html+='</div>';
+                    html+='<div style="margin: 20px 0">';
+                    html+='<label class="layui-form-label" style="border: none"  >备注:</label>';
+                    html+='<input  style="width:60%;color: #000!important;" lay-verify="required" name="remark"  class="layui-input" value="'+item.remark+'">';
+                    html+='</div>';
+                    html+='<div class="layui-form-item">';
+                    html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
+                    html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="demo1">修改</button>';
+                    html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
+                    html+='</div>';
+                    html+='</div>';
+                    html+='</form>';
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: '520px', //宽高
+                        title:'修改公式参数',
+                        content: html
                     });
+                    form.render('radio');  //radio，编辑和添加的时候
                 },
-                editData: function (id) {
-                    parent.switchTab(parent.$,parent.element,'修改设备信息','addDevice?id='+id,'Device'+id);
-                }
 
 
             };
