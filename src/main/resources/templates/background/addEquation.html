@@ -14,19 +14,26 @@
 </head>
 <body>
 <div id="articleIndexTop">
-    <form class="layui-form layui-form-pane" action="">
+    <form class="layui-form layui-form-pane">
         <div class="layui-form-item" style="margin:0;margin-top:15px;">
             <div class="layui-inline">
-                <label class="layui-form-label">项目</label>
+                <label class="layui-form-label">项目表格</label>
                 <div class="layui-input-inline">
                     <select name="project" id="project">
-                        <option value="0">请选择项目</option>
+                        <option value="0">请选择项目表格</option>
                         <option value="1"  th:each="project:${projectList}" th:value="${project}" th:text="${project}">类别1</option>
                     </select>
                 </div>
             </div>
         </div>
     </form>
+
+</div>
+<div class="layui-form-item">
+    <label class="layui-form-label" style="width: 100px">无项目表格：</label>
+    <div class="layui-input-inline">
+        <button class="layui-btn" onclick="layui.datalist.createTable()">添加表格</button>
+    </div>
 </div>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
     <legend>公式信息添加</legend>
@@ -111,7 +118,7 @@
     //实例化编辑器
 
 
-    layui.define(['form', 'upload', 'layer'], function (exports) {
+    layui.define(['element','laypage', 'layer', 'form' ,'laydate'], function (exports) {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form();
@@ -152,9 +159,55 @@
             });
             return false;
         });
+
+        form.on('submit(createProject)', function (data){
+            $.ajax({
+                url: "createProject",
+                type: "POST",
+                data: {
+                    project:data.field.project
+                },
+                success: function (result) {
+                    if(result.success){
+                        layer.alert('添加成功!', {
+                            closeBtn: 0,
+                            icon: 1
+                        },function () {
+                            location.reload();
+                        });
+                    }else{
+
+                    }
+                }
+            });
+            return false;
+        });
+
+
         //输出接口，主要是两个函数，一个删除一个编辑
         var datalist = {
-
+            createTable: function () {
+                var html='';
+                html+='<form class="layui-form layui-form-pane"  method="post">';
+                html+='<div style="margin: 20px 0">';
+                html+='<label class="layui-form-label" style="border: none" >表格名称:</label>';
+                html+='<input  style="display: inline-block;width:20%;color: #000!important;" lay-verify="required" name="project"  class="layui-input" ><span>_euqation</span>';
+                html+='</div>';
+                html+='<div class="layui-form-item">';
+                html+='<div class="layui-input-inline" style="margin:10px auto 0 auto;display: block;float: none;">';
+                html+='<button class="layui-btn" id="submit"  lay-submit="" lay-filter="createProject">创建表格</button>';
+                html+='<button type="reset" class="layui-btn layui-btn-primary">重置</button>';
+                html+='</div>';
+                html+='</div>';
+                html+='</form>';
+                layer.open({
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: '520px', //宽高
+                    title:'添加项目表格',
+                    content: html
+                });
+            }
         };
         exports('datalist', datalist);
     });

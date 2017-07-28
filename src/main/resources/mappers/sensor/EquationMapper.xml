@@ -194,4 +194,26 @@
       </trim>
   </insert>
 
+  <update id="createProject" parameterType="String" statementType="STATEMENT">
+  CREATE TABLE `${projectTable}` (
+  `Item` INT(11) DEFAULT NULL AUTO_INCREMENT,
+  `Code` VARCHAR(50) DEFAULT NULL,
+  `StartTime` DATETIME DEFAULT NULL,
+  `EndTime` DATETIME DEFAULT NULL,
+  `a` FLOAT DEFAULT NULL,
+  `b` FLOAT DEFAULT NULL,
+  `c` FLOAT DEFAULT NULL,
+  `d` FLOAT DEFAULT NULL,
+  `e` FLOAT DEFAULT NULL,
+  `f` FLOAT DEFAULT NULL,
+  `i` FLOAT DEFAULT NULL,
+  `a_1` FLOAT DEFAULT NULL,
+  `Validity` FLOAT DEFAULT NULL,
+  `Recorder` VARCHAR(50) DEFAULT NULL,
+  `Remark` VARCHAR(50) DEFAULT NULL,
+  `DeviceName` VARCHAR(50) DEFAULT NULL,
+  KEY `Item` (`Item`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8
+  </update>
+
 </mapper>

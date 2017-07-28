@@ -106,4 +106,9 @@ public class EquationService {
         equationDAO.addEquation(equation);
         return Result.isOK();
     }
+
+    public Result createProject(String project) {
+        equationDAO.createProject(project.trim()+"_equation");
+        return Result.isOK();
+    }
 }

@@ -21,4 +21,6 @@ public interface EquationDAO {
     int deleteEquation(HashMap<String, Object> param);
 
     int addEquation(Equation equation);
+
+    int createProject(@Param("projectTable") String projectTable);
 }

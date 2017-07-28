@@ -59,5 +59,11 @@ public class EquationAdminController {
         return equationService.addEquation(equation);
     }
 
+    @PostMapping("/createProject")
+    @ResponseBody
+    public Result createProject(String project){
+        return equationService.createProject(project);
+    }
+
 
 }
