@@ -293,7 +293,7 @@ public class DevicePollutantService {
      * @param selectedDeviceId
      * @return
      */
-    public Result getDevicesConfig(String[] selectedDeviceId){
+    public Result getDevicesConfig(List<String> selectedDeviceId){
         DeviceConfig deviceConfig=new DeviceConfig();
         //根据deviceId列表获取deviceList
         List<Device> deviceList=new ArrayList<>();

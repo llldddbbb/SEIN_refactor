@@ -1,6 +1,7 @@
 package com.sein.controller.admin;
 
 import com.sein.enums.ResultEnum;
+import com.sein.pojo.dto.DeviceConfig;
 import com.sein.pojo.dto.GPS;
 import com.sein.pojo.dto.PageResult;
 import com.sein.pojo.dto.Result;
@@ -10,6 +11,7 @@ import com.sein.service.DevicePollutantService;
 import com.sein.service.DeviceService;
 import com.sein.service.DisplayConfigService;
 import com.sein.service.PollutantService;
+import com.sein.service.utils.DevicePollutantUtil;
 import com.sein.utils.DateUtil;
 import com.sein.utils.QiNiuUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +21,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by ldb on 2017/7/15.
@@ -123,6 +128,53 @@ public class DeviceAdminController {
             return Result.isOK(IMAGE_URL_BASE+"/"+filePath);
         }else{
             return Result.isNotOK(ResultEnum.UPDATE_ERROR.getInfo());
+        }
+    }
+
+    @PostMapping("/addAccountId")
+    @ResponseBody
+    public Result addAccount(Integer accountId,Integer deviceId){
+        //设备表先插入accountId
+        deviceService.updateAccount(accountId,deviceId);
+        //更新配置
+        List<Device> deviceList = deviceService.listDevice(accountId);
+        List<String> selectedDeviceId=new ArrayList<>();
+        for (Device device : deviceList) {
+            selectedDeviceId.add(device.getId()+"");
+        }
+        Result devicesConfigResult = devicePollutantService.getDevicesConfig(selectedDeviceId);
+        DeviceConfig deviceConfig=(DeviceConfig)devicesConfigResult.getData();
+        DisplayConfig displayConfig=new DisplayConfig();
+        displayConfig.setId(accountId);
+        //将值填充进DisplayConfig
+        this.setDisplayConfig(displayConfig,deviceConfig.getPollutantConfig(),deviceConfig.getIntervalConfig());
+        displayConfigService.updateDisplayConfig(displayConfig);
+        return Result.isOK();
+    }
+
+    private void setDisplayConfig(DisplayConfig displayConfig,TreeSet<String> pollutantConfig, TreeSet<String> intervalConfig) {
+        try {
+            Class c = Class.forName("com.sein.pojo.po.DisplayConfig");
+            for (String pollutantType : pollutantConfig) {
+                if("datetime".equals(pollutantType.toLowerCase())||"zero_p".equals(pollutantType.toLowerCase())){
+                    continue;
+                }
+                //获取对应属性
+                Field field = c.getDeclaredField(pollutantType.toLowerCase());
+                field.setAccessible(true); //使用反射机制可以打破封装性，导致了java对象的属性不安全。
+                //给displayConfig对象的对应属性赋值"1"
+                field.set(displayConfig, 1);
+            }
+            for (String interval : intervalConfig) {
+                //获取对应属性
+                Field field = c.getDeclaredField(DevicePollutantUtil.sortArray(interval.toLowerCase()));
+                //使用反射机制可以打破封装性，导致了java对象的属性不安全。
+                field.setAccessible(true);
+                //给displayConfig对象的对应属性赋值"1"
+                field.set(displayConfig, 1); //set
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

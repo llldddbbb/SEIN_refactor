@@ -57,7 +57,7 @@ public class DisplayConfigService {
     }
 
     public Result updateDisplayConfig(DisplayConfig displayConfig) {
-        int result = displayConfigDAO.updateByPrimaryKey(displayConfig);
+        int result = displayConfigDAO.updateByPrimaryKeySelective(displayConfig);
         return Result.isOK();
     }
 }

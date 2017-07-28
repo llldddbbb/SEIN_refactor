@@ -97,7 +97,7 @@ public class AccountService {
      * @param pageNum
      * @return
      */
-    public PageResult<Account> listAccount(Integer pageNum, Integer pageSize) {
+    public PageResult<Account> listPageAccount(Integer pageNum, Integer pageSize) {
         PageResult<Account> pageResult = new PageResult<>();
         //切入分页sql
         Page<Account> page = PageHelper.startPage(pageNum, pageSize);
@@ -115,6 +115,17 @@ public class AccountService {
     }
 
     /**
+     * 获取所有账户
+     * @return
+     */
+    public Result listAccount() {
+        Example example = new Example(Account.class);
+        example.setOrderByClause("id DESC");
+        List<Account> accountList = accountDAO.selectByExample(example);
+        return Result.isOK(accountList);
+    }
+
+    /**
      * 根据Id获取用户名
      *
      * @param id
@@ -123,4 +134,6 @@ public class AccountService {
     public Account getAccount(Integer id) {
         return accountDAO.selectByPrimaryKey(id);
     }
+
+
 }

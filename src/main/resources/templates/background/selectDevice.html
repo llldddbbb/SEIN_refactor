@@ -163,12 +163,12 @@
                                     }
                                     html+='<input type="checkbox" name="displayConfig" value="'+pollutantConfig[i]+'" lay-skin="primary" title="'+pollutantConfig[i]+'" checked="">';
                                 }
+                                html+='<input  title="AQI" type="checkbox" name="displayConfig" value="AQI" lay-skin="primary"  checked="">';
                                 $(html).appendTo(pollutantObj);
                                 html ='<label class="layui-form-label">显示的间隔</label>';
                                 for(var i=0;i<intervalConfig.length;i++){
                                     html+='<input type="checkbox" name="displayConfig" value="'+intervalConfig[i]+'" lay-skin="primary" title="'+intervalConfig[i]+'" checked="">';
                                 }
-                                html+='<input style="display:none;" type="checkbox" name="displayConfig" value="AQI" lay-skin="primary"  checked="">';
                                 $(html).appendTo(intervalObj);
                                 iframeAWin.render();
                                 layer.alert('选择成功', {

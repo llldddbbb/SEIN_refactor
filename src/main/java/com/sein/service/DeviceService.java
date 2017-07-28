@@ -150,10 +150,28 @@ public class DeviceService {
         return deviceDAO.deleteByExample(example);
     }
 
+    /**
+     * 获取没有被选择的设备
+     * @return
+     */
     public List<Device> listNotSelectDevice() {
         Example example=new Example(Device.class);
         example.createCriteria().andIsNull("accountId");
         return deviceDAO.selectByExample(example);
+    }
+
+    /**
+     * 更新设备所属用户
+     * @param accountId
+     * @param deviceId
+     * @return
+     */
+    public Result updateAccount(Integer accountId,Integer deviceId){
+        Device device=new Device();
+        device.setAccountId(accountId);
+        device.setId(deviceId);
+        deviceDAO.updateByPrimaryKeySelective(device);
+        return Result.isOK();
     }
 }
 

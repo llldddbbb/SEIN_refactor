@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 import tk.mybatis.mapper.util.StringUtil;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by ldb on 2017/7/16.
  */
@@ -47,8 +50,14 @@ public class AccountAdminController {
     @ResponseBody
     public PageResult<Account> getAccountList(@PathVariable Integer page, Integer pageSize) {
         //获取分页列表
-        PageResult<Account> pageResult = accountService.listAccount(page, pageSize);
+        PageResult<Account> pageResult = accountService.listPageAccount(page, pageSize);
         return pageResult;
+    }
+
+    @GetMapping("/account")
+    @ResponseBody
+    public Result listAccount(){
+        return accountService.listAccount();
     }
 
 
@@ -69,7 +78,8 @@ public class AccountAdminController {
     @RequestMapping("/devicesConfig")
     @ResponseBody
     public Result getDevicesConfig(String[] selectedDeviceId) {
-        Result devicesConfig = devicePollutantService.getDevicesConfig(selectedDeviceId);
+        List<String> selectedDeviceIdList= Arrays.asList(selectedDeviceId);
+        Result devicesConfig = devicePollutantService.getDevicesConfig(selectedDeviceIdList);
         return devicesConfig;
     }
 
@@ -77,6 +87,9 @@ public class AccountAdminController {
     @Transactional
     @ResponseBody
     public Result addAccount(String displayConfigJson, String accountJson,String deviceIdStr) throws Exception{
+        if(StringUtils.isEmpty(displayConfigJson)){
+            return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo() + ",请先添加设备信息");
+        }
         DisplayConfig displayConfig = JacksonUtil.readValue(displayConfigJson, DisplayConfig.class);
         if (displayConfig == null) {
             return Result.isNotOK(ResultEnum.ADD_ERROR.getInfo() + ",数据库没有对应浓度表");
@@ -148,4 +161,5 @@ public class AccountAdminController {
         displayConfigService.updateDisplayConfig(displayConfig);
         return "redirect:/admin/accountManage";
     }
+
 }

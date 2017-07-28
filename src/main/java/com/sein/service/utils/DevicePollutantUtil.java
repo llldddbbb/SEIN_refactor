@@ -22,4 +22,22 @@ public class DevicePollutantUtil {
             devicePollutant.setStatus(1);
         }
     }
+
+    /**
+     * 将数字转移在字母后面
+     * @param str
+     * @return
+     */
+    public static String sortArray(String str) {
+        StringBuffer letterBuffer = new StringBuffer();
+        StringBuffer numberBuffer = new StringBuffer();
+
+        for(char c : str.toCharArray()) {
+            if(c >= '0' && c <= '9')
+                numberBuffer.append(c);
+            else
+                letterBuffer.append(c);
+        }
+        return  letterBuffer.toString()+numberBuffer.toString();
+    }
 }
