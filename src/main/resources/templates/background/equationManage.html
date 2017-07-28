@@ -72,6 +72,7 @@
                     </div>
                     <div class="layui-input-inline" style="width:auto">
                         <button class="layui-btn" lay-submit lay-filter="select">选择</button>
+                        <button class="layui-btn layui-btn-warm" >Run</button>
                     </div>
                 </div>
             </div>
@@ -166,8 +167,8 @@
                             var equationList=result.rows;
                             var html = '';
                             html += '<table style="table-layout: fixed" class="layui-table" lay-even>';
-                            html += '<colgroup><col width="13"><col width="35"><col width="15"><col width="25"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="15"><col width="15"><col width="15"></colgroup>';
-                            html += '<thead><tr><th>编号</th><th>设备名</th><th>浓度</th><th>浓度Code</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>i</th><th colspan="3">操作</th></tr></thead>';
+                            html += '<colgroup><col width="13"><col width="35"><col width="15"><col width="25"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="20"><col width="15"><col width="15"></colgroup>';
+                            html += '<thead><tr><th>编号</th><th>设备名</th><th>浓度</th><th>浓度Code</th><th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>i</th><th colspan="2">操作</th></tr></thead>';
                             html += '<tbody>';
                             for(var i in equationList){
                                 var item=equationList[i];
@@ -185,7 +186,6 @@
                                 html+='<td>'+item.i+'</td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-normal" onclick=\'layui.datalist.editData('+JSON.stringify(item)+',\"'+project+'\")\'><i class="layui-icon">&#xe642;</i></button></td>';
                                 html+='<td><button class="layui-btn layui-btn-small layui-btn-danger" onclick="layui.datalist.deleteData('+item.item+',\''+project+'\')"><i class="layui-icon">&#xe640;</i></button></td>';
-                                html+='<td><button class="layui-btn layui-btn-small " >Run</button></td>';
                                 html+='</tr>';
                             }
                             html+='</tbody></table>';
