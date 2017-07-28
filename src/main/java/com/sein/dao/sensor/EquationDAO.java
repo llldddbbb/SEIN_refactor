@@ -23,4 +23,6 @@ public interface EquationDAO {
     int addEquation(Equation equation);
 
     int createProject(@Param("projectTable") String projectTable);
+
+    int isExistTable(@Param("projectTable") String projectTable);
 }

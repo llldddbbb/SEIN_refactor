@@ -108,6 +108,10 @@ public class EquationService {
     }
 
     public Result createProject(String project) {
+        int existTable = equationDAO.isExistTable(project.trim() + "#_equation");
+        if(existTable>=1){
+            return Result.isNotOK("数据库已经存在该表");
+        }
         equationDAO.createProject(project.trim()+"_equation");
         return Result.isOK();
     }

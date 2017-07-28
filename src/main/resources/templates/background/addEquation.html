@@ -161,24 +161,30 @@
         });
 
         form.on('submit(createProject)', function (data){
-            $.ajax({
-                url: "createProject",
-                type: "POST",
-                data: {
-                    project:data.field.project
-                },
-                success: function (result) {
-                    if(result.success){
-                        layer.alert('添加成功!', {
-                            closeBtn: 0,
-                            icon: 1
-                        },function () {
-                            location.reload();
-                        });
-                    }else{
-
+            layer.confirm('此操作会在数据库创建表格,是否创建？', {
+                btn: ['确定','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    url: "createProject",
+                    type: "POST",
+                    data: {
+                        project:data.field.project
+                    },
+                    success: function (result) {
+                        if(result.success){
+                            layer.alert('添加成功!', {
+                                closeBtn: 0,
+                                icon: 1
+                            },function () {
+                                location.reload();
+                            });
+                        }else{
+                            layer.alert(result.msg, {icon: 5});
+                        }
                     }
-                }
+                });
+            }, function(){
+                layer.closeAll();
             });
             return false;
         });

@@ -216,4 +216,8 @@
 ) ENGINE=INNODB DEFAULT CHARSET=utf8
   </update>
 
+  <select id="isExistTable" parameterType="String" resultType="Integer">
+    SELECT COUNT(*) FROM information_schema.TABLES WHERE table_name like #{projectTable} ESCAPE '#' AND table_schema ='sensor_info';
+  </select>
+
 </mapper>
