@@ -90,4 +90,108 @@
     DELETE FROM ${projectTable} WHERE Item=${item}
   </delete>
 
+  <insert id="addEquation" parameterType="com.sein.pojo.po.Equation" statementType="STATEMENT">
+      insert into ${project}
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="item != null" >
+          Item,
+        </if>
+        <if test="code != null" >
+          Code,
+        </if>
+        <if test="startTime != null" >
+          StartTime,
+        </if>
+        <if test="endTime != null" >
+          EndTime,
+        </if>
+        <if test="a != null" >
+          a,
+        </if>
+        <if test="b != null" >
+          b,
+        </if>
+        <if test="c != null" >
+          c,
+        </if>
+        <if test="d != null" >
+          d,
+        </if>
+        <if test="e != null" >
+          e,
+        </if>
+        <if test="f != null" >
+          f,
+        </if>
+        <if test="i != null" >
+          i,
+        </if>
+        <if test="a_1 != null" >
+          a_1,
+        </if>
+        <if test="validity != null" >
+          Validity,
+        </if>
+        <if test="recorder != null" >
+          Recorder,
+        </if>
+        <if test="remark != null" >
+          Remark,
+        </if>
+        <if test="deviceName != null" >
+          DeviceName,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="item != null" >
+          ${item},
+        </if>
+        <if test="code != null" >
+          '${code}',
+        </if>
+        <if test="startTime != null" >
+          '${startTime}',
+        </if>
+        <if test="endTime != null" >
+          '${endTime}',
+        </if>
+        <if test="a != null" >
+          ${a},
+        </if>
+        <if test="b != null" >
+          ${b},
+        </if>
+        <if test="c != null" >
+          ${c},
+        </if>
+        <if test="d != null" >
+          ${d},
+        </if>
+        <if test="e != null" >
+          ${e},
+        </if>
+        <if test="f != null" >
+          ${f},
+        </if>
+        <if test="i != null" >
+          ${i},
+        </if>
+        <if test="a_1 != null" >
+          ${a_1},
+        </if>
+        <if test="validity != null" >
+          ${validity},
+        </if>
+        <if test="recorder != null" >
+          '${recorder}',
+        </if>
+        <if test="remark != null" >
+          '${remark}',
+        </if>
+        <if test="deviceName != null" >
+          '${deviceName}',
+        </if>
+      </trim>
+  </insert>
+
 </mapper>

@@ -46,5 +46,18 @@ public class EquationAdminController {
         return equationService.deleteEquation(item,project);
     }
 
+    @RequestMapping("/addEquation")
+    public String addEquationPage(Model model) {
+        List<String> projectList = equationService.getProjectList();
+        model.addAttribute("projectList",projectList);
+        return "background/addEquation";
+    }
+
+    @PostMapping("/equation")
+    @ResponseBody
+    public Result addEquation(Equation equation){
+        return equationService.addEquation(equation);
+    }
+
 
 }

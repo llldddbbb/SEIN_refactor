@@ -19,4 +19,6 @@ public interface EquationDAO {
     int updateEquation(Equation equation);
 
     int deleteEquation(HashMap<String, Object> param);
+
+    int addEquation(Equation equation);
 }
