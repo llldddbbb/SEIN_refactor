@@ -2,8 +2,12 @@ package com.sein.controller;
 
 import com.sein.pojo.dto.DevicePollutant;
 import com.sein.pojo.dto.PollutantChartItem;
+import com.sein.pojo.po.Device;
 import com.sein.pojo.po.DisplayConfig;
+import com.sein.pojo.po.Pollutant;
 import com.sein.service.DevicePollutantService;
+import com.sein.service.DeviceService;
+import com.sein.service.PollutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +29,12 @@ public class DetailController {
 
     @Autowired
     private DevicePollutantService devicePollutantService;
+
+    @Autowired
+    private PollutantService pollutantService;
+
+    @Autowired
+    private DeviceService deviceService;
     
 
     @RequestMapping("/devices/{id}")
@@ -37,10 +47,11 @@ public class DetailController {
 
     @RequestMapping("/devices/real/{id}")
     @ResponseBody
-    public DevicePollutant getRealTimeDevice(@PathVariable("id") Integer id, HttpSession session) {
+    public List<Pollutant> getRealTimeDevice(@PathVariable("id") Integer id, HttpSession session) {
         DisplayConfig displayConfig = (DisplayConfig) session.getAttribute("displayConfig");
-        DevicePollutant devicePollutant = devicePollutantService.getDevicePollutantById(displayConfig, id);
-        return devicePollutant;
+        Device device = deviceService.getDevice(id);
+        List<Pollutant> pollutantList = pollutantService.listRealPollutant(displayConfig, device);
+        return pollutantList;
     }
 
     @RequestMapping("/chart")

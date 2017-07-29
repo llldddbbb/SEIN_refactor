@@ -317,88 +317,49 @@
 
         dataType:'json',
 
-        success:function(res) {
-            var lastDate=date[date.length-1];
+        success:function(result) {
+            var pollutantList=result.reverse();
+            var realPollutant=pollutantList[pollutantList.length-1];
             var interval=$("#timepicker").val();
-            var pollutantType=$("#pollutantType").val();
-//            $("#AQI_real").html(res.aqi);
-            var realPollutant=res.pollutantItemList;
+            var pollutantType=$("#pollutantType").val().toLowerCase();
+            var lastIndexJ=0;
             if(interval=="_original"){
-                for(var i in realPollutant){
-                    if(realPollutant[i].type=='time'&&lastDate!==realPollutant[i].value){
-                        console.log("更新前")
-                        date.push(realPollutant[i].value)
-                        for(var j in realPollutant){
-                            if(pollutantType==realPollutant[j].type){
-                                data.push(realPollutant[j].value);
-                                myChart.setOption({
-                                    series: [{
-                                        data: data
-                                    }],
-                                    xAxis: {
-                                        data: date
-                                    },
-                                });
-                                console.log("已经更新折线图")
-                                break;
-                            }
-                        }
+                for(var j=0;j<pollutantList.length;j++){
+                    if(date[date.length-1]==pollutantList[j]['time'].substring(0,pollutantList[j]['time'].length-2)){
+                        lastIndexJ=j;
+                        break;
                     }
                 }
+                for(var k=lastIndexJ+1;k<pollutantList.length;k++){
+                    date.push(pollutantList[k]['time'].substring(0,pollutantList[k]['time'].length-2));
+                    data.push(pollutantList[k][pollutantType]);
+                }
+                myChart.setOption({
+                    series: [{
+                        data: data
+                    }],
+                    xAxis: {
+                        data: date
+                    }
+                });
             }
 
-            for(var i in realPollutant){
-                if(realPollutant[i].type=='time'){
-                    $("#time_real").html(realPollutant[i].value);
-                }
-                if(realPollutant[i].type=='Humi'){
-                    $("#Humi_real").html(realPollutant[i].value+"%");
-                }
-                if(realPollutant[i].type=='Temp'){
-                    $("#Temp_real").html(realPollutant[i].value+"℃&nbsp;&nbsp;&nbsp;&nbsp;");
-                }
-                if(realPollutant[i].type=='PM25'){
-                    $("#PM25_real").html(realPollutant[i].value+" &micro;g/m<sup>3</sup></b>");
-                }
-                if(realPollutant[i].type=='PM10'){
-                    $("#PM10_real").html(realPollutant[i].value+" &micro;g/m<sup>3</sup></b>");
-                }
-                if(realPollutant[i].type=='PM1'){
-                    $("#PM1_real").html(realPollutant[i].value+" &micro;g/m<sup>3</sup></b>");
-                }
-                if(realPollutant[i].type=='CO'){
-                    $("#CO_real").html(realPollutant[i].value+" &nbsp;ppm</b>");
-                }
-                if(realPollutant[i].type=='CO2'){
-                    $("#CO2_real").html(realPollutant[i].value+" &nbsp;ppm</b>");
-                }
-                if(realPollutant[i].type=='NO'){
-                    $("#NO_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='NO2'){
-                    $("#NO2_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='SO'){
-                    $("#SO_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='SO2'){
-                    $("#SO2_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='O3'){
-                    $("#O3_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='CL2'){
-                    $("#CL2_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='VOC'){
-                    $("#VOC_real").html(realPollutant[i].value+" &nbsp;ppb</b>");
-                }
-                if(realPollutant[i].type=='Press'){
-                    $("#Press_real").html(realPollutant[i].value);
-                }
-            }
-            //console.log(res);
-
+            $("#time_real").html(realPollutant['time'].substring(0,realPollutant['time'].length-2));
+            $("#Humi_real").html(realPollutant['humi']+"%");
+            $("#Temp_real").html(realPollutant['temp']+"℃&nbsp;&nbsp;&nbsp;&nbsp;");
+            $("#PM25_real").html(realPollutant['pm25']+" &micro;g/m<sup>3</sup></b>");
+            $("#PM10_real").html(realPollutant['pm10']+" &micro;g/m<sup>3</sup></b>");
+            $("#PM1_real").html(realPollutant['pm1']+" &micro;g/m<sup>3</sup></b>");
+            $("#CO_real").html(realPollutant['co']+" &nbsp;ppm</b>");
+            $("#CO2_real").html(realPollutant['co2']+" &nbsp;ppm</b>");
+            $("#NO_real").html(realPollutant['no']+" &nbsp;ppb</b>");
+            $("#NO2_real").html(realPollutant['no2']+" &nbsp;ppb</b>");
+            $("#SO_real").html(realPollutant['so']+" &nbsp;ppb</b>");
+            $("#SO2_real").html(realPollutant['so2']+" &nbsp;ppb</b>");
+            $("#O3_real").html(realPollutant['o3']+" &nbsp;ppb</b>");
+            $("#CL2_real").html(realPollutant['cl2']+" &nbsp;ppb</b>");
+            $("#VOC_real").html(realPollutant['voc']+" &nbsp;ppb</b>");
+            $("#Press_real").html(realPollutant['press']);
         }
 
     };
@@ -407,31 +368,6 @@
 
     window.setInterval(function(){$.ajax(getting)},10000);
 
-//    function changeStatusLanguage(status) {
-//        $.ajax({
-//            url:"/SEIN/changeMessageInfoLanguage",
-//            success:function (result) {
-//                if(result.success){
-//                    if(status==1){
-//                        $("#status_real").html("<span style='color:#6EC038'>ONLINE</span>");
-//                    }else if(status==2){
-//                        $("#status_real").html("<span style='color:#e0e001'>RESUMING</span>");
-//                    }else if(status==0){
-//                        $("#status_real").html("<span style='color:#FF0000'>OFFLINE</span>");
-//                    }
-//                }else{
-//                    if(status==1){
-//                        $("#status_real").html("<span style='color:#6EC038'>在线</span>");
-//                    }else if(status==2){
-//                        $("#status_real").html("<span style='color:#e0e001'>续传中</span>");
-//                    }else if(status==0){
-//                        $("#status_real").html("<span style='color:#FF0000'>离线</span>");
-//                    }
-//
-//                }
-//            }
-//        });
-//    }
 
 
 </script>

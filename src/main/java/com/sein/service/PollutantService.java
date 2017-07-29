@@ -6,6 +6,7 @@ import com.sein.pojo.dto.PageBean;
 import com.sein.pojo.dto.PollutantTable;
 import com.sein.pojo.dto.Result;
 import com.sein.pojo.po.Device;
+import com.sein.pojo.po.DisplayConfig;
 import com.sein.pojo.po.Pollutant;
 import com.sein.service.utils.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -191,6 +192,28 @@ public class PollutantService {
         pollutantType = pollutantType.substring(0,pollutantType.length()-1);
         param.put("pollutantType",pollutantType);
         return param;
+    }
+
+    /**
+     * 获取最新的30条数据
+     * @param displayConfig
+     * @param device
+     * @return
+     */
+    public List<Pollutant> listRealPollutant(DisplayConfig displayConfig,Device device){
+        HashMap<String,Object> param=new HashMap<>();
+        String pollutantType="*";
+        String pollutantTable=device.getPollutantTable()+PollutantUtil.getNewestPostfix(displayConfig);
+        Integer start=0;
+        Integer pageSize=30;
+        String desc="desc";
+        param.put("pollutantType",pollutantType);
+        param.put("pollutantTable",pollutantTable);
+        param.put("start",start);
+        param.put("pageSize",pageSize);
+        param.put("desc",desc);
+        List<Pollutant> pollutantList = pollutantDAO.listPollutant(param);
+        return pollutantList;
     }
 
 

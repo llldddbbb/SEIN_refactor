@@ -25,6 +25,7 @@ import java.util.List;
 @RequestMapping("/table")
 public class TableController {
 
+
     @Autowired
     private DeviceService deviceService;
 
