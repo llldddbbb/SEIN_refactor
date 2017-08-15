@@ -13,10 +13,6 @@ public class DevicePollutant {
     private Device device;
 
     private List<PollutantItem> pollutantItemList;
-
-    //离线0 在线1 续传2状态
-    private Integer status;
-
     //AQI与AQHI
     private String AQI;
 
@@ -36,14 +32,6 @@ public class DevicePollutant {
 
     public void setPollutantItemList(List<PollutantItem> pollutantItemList) {
         this.pollutantItemList = pollutantItemList;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getAQI() {

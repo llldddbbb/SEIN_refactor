@@ -26,9 +26,9 @@
                     <span th:text="AQHI" th:if="${session.displayConfig.aqhi}==1"></span>
                 </div>
                 <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollutant.pollutantItemList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
-                    <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollutant.status}==0">${device.getStatus() }</span>
-                    <span id="status_real" style="color:#6EC038" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==1">${device.getStatus() }</span>
-                    <span id="status_real" style="color:#d0d001" th:text="#{STATUS_ON}" th:if="${devicePollutant.status}==2">${device.getStatus() }</span>
+                    <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollutant.device.status}==3">${device.getStatus() }</span>
+                    <span id="status_real" style="color:#d0d001" th:text="#{STATUS_RESUME}" th:if="${devicePollutant.device.status}==2">${device.getStatus() }</span>
+                    <span id="status_real" style="color:#6EC038" th:text="#{STATUS_ON}" th:if="${devicePollutant.device.status}==1">${device.getStatus() }</span>
                 </div>
             </div>
             <div class="content_middle"><span class="AQI" id="AQI_real" th:text="${devicePollutant.AQI}"></span></div>

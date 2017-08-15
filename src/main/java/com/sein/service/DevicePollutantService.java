@@ -81,7 +81,9 @@ public class DevicePollutantService {
 
             //封装devicePollutant参数并添加
             //设置状态
-            DevicePollutantUtil.setStatus(devicePollutant, pollutant.getTime());
+            if(device.getStatus()==null){
+                DevicePollutantUtil.setStatus(device, pollutant.getTime());
+            }
             devicePollutant.setDevice(device);
             devicePollutant.setPollutantItemList(pollutantItemList);
 
@@ -155,7 +157,9 @@ public class DevicePollutantService {
         //封装devicePollutant参数并添加
         devicePollutant.setAQI((int) Math.floor(AQI) + "");
         //设置状态
-        DevicePollutantUtil.setStatus(devicePollutant, pollutant.getTime());
+        if(device.getStatus()==null){
+            DevicePollutantUtil.setStatus(device, pollutant.getTime());
+        }
         devicePollutant.setPollutantItemList(pollutantItemList);
         devicePollutant.setDevice(device);
 

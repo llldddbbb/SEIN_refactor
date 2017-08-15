@@ -26,6 +26,8 @@ public class Device {
     @Transient
     private Account account;
 
+    private String status;
+
     public Integer getId() {
         return id;
     }
@@ -88,5 +90,13 @@ public class Device {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

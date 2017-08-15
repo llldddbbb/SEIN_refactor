@@ -63,8 +63,9 @@
                                     </span>
                                 </span>
                         </marquee>
-                        <p class="airlevel level-3" th:id="'status_real'+${devicePollutant.device.id}" th:if="${devicePollutant.status}==0" th:text="#{STATUS_OFF}"></p>
-                        <p class="airlevel level-1" th:id="'status_real'+${devicePollutant.device.id}" th:if="${devicePollutant.status}==1" th:text="#{STATUS_ON}"></p>
+                        <p class="airlevel level-3" th:id="'status_real'+${devicePollutant.device.id}" th:if="${devicePollutant.device.status}==3" th:text="#{STATUS_OFF}"></p>
+                        <p class="airlevel level-1" th:id="'status_real'+${devicePollutant.device.id}" th:if="${devicePollutant.device.status}==1" th:text="#{STATUS_ON}"></p>
+                        <p class="airlevel level-2" th:id="'status_real'+${devicePollutant.device.id}" th:if="${devicePollutant.device.status}==2" th:text="#{STATUS_RESUME}"></p>
                     </div>
                 </a>
             </div>

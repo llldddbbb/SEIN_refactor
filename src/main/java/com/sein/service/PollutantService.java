@@ -70,13 +70,6 @@ public class PollutantService {
         //根据参数获取浓度列表
         List<Pollutant> pollutantList=pollutantDAO.listPollutant(param);
 
-        //根据需求要求缓慢显示两行
-        if("_1min".equals(interval)){
-            if(pollutantList.size()>2){
-                pollutantList.remove(pollutantList.size()-1);
-                pollutantList.remove(pollutantList.size()-1);
-            }
-        }
 
         //进行单位换算
         if("umgm".equals(unit)){
@@ -126,14 +119,6 @@ public class PollutantService {
 
         //根据参数获取浓度列表
         List<Pollutant> pollutantList=pollutantDAO.listPollutant(param);
-
-        //根据需求要求缓慢显示两行
-        if("_1min".equals(interval)){
-            if(pollutantList.size()>2){
-                pollutantList.remove(pollutantList.size()-1);
-                pollutantList.remove(pollutantList.size()-1);
-            }
-        }
 
         //进行单位换算
         if("umgm".equals(unit)){

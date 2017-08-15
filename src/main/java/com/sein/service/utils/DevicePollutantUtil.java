@@ -1,6 +1,6 @@
 package com.sein.service.utils;
 
-import com.sein.pojo.dto.DevicePollutant;
+import com.sein.pojo.po.Device;
 import com.sein.utils.DateUtil;
 
 /**
@@ -11,15 +11,14 @@ public class DevicePollutantUtil {
 
     /**
      * 封装离线在线状态
-     * @param devicePollutant
      * @param time
      */
-    public static void setStatus(DevicePollutant devicePollutant, String time){
+    public static void setStatus(Device device, String time){
         long differ= DateUtil.getMinDifference(time);
         if(differ>90){
-            devicePollutant.setStatus(0);
+            device.setStatus(String.valueOf(3));
         }else{
-            devicePollutant.setStatus(1);
+            device.setStatus(String.valueOf(1));
         }
     }
 
