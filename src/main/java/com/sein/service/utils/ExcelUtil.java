@@ -153,33 +153,27 @@ public class ExcelUtil {
                         if(pollutant.getPm25()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getPm25()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getPm25(), "#.#"));
-                            }
+
                         }
                         break;
                     case "PM₁₀(µg/m³)":
                         if(pollutant.getPm10()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getPm10()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getPm10(), "#.#"));
-                            }
+
                         }
                         break;
                     case "PM₁(µg/m³)":
                         if(pollutant.getPm1()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getPm1()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getPm1(), "#.#"));
-                            }
+
                         }
                         break;
                     case "CO(ppm)":
@@ -187,11 +181,9 @@ public class ExcelUtil {
                         if(pollutant.getCo()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getCo()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getCo(), "#.###"));
-                            }
+
                         }
                         break;
                     case "CO₂(ppm)":
@@ -199,11 +191,9 @@ public class ExcelUtil {
                         if(pollutant.getCo2()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getCo2()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getCo2(), "#.###"));
-                            }
+
                         }
                         break;
                     case "NO(ppb)":
@@ -211,11 +201,9 @@ public class ExcelUtil {
                         if(pollutant.getNo()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getNo()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getNo(), "#.#"));
-                            }
+
                         }
                         break;
                     case "NO₂(ppb)":
@@ -223,23 +211,9 @@ public class ExcelUtil {
                         if(pollutant.getNo2()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getNo2()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getNo2(), "#.#"));
-                            }
-                        }
-                        break;
-                    case "SO(ppb)":
-                    case "SO(µg/m³)":
-                        if(pollutant.getSo()==null){
-                            cell.setCellValue("");
-                        }else{
-                            if(pollutant.getSo()<0){
-                                cell.setCellValue("");
-                            }else{
-                                cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getSo(), "#.#"));
-                            }
+
                         }
                         break;
                     case "SO₂(ppb)":
@@ -247,11 +221,9 @@ public class ExcelUtil {
                         if(pollutant.getSo2()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getSo2()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getSo2(), "#.#"));
-                            }
+
                         }
                         break;
                     case "O₃(ppb)":
@@ -259,11 +231,9 @@ public class ExcelUtil {
                         if(pollutant.getO3()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getO3()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getO3(), "#.#"));
-                            }
+
                         }
                         break;
                     case "CL2(ppb)":
@@ -271,11 +241,9 @@ public class ExcelUtil {
                         if(pollutant.getCl2()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getCl2()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getCl2(), "#.#"));
-                            }
+
                         }
                         break;
                     case "VOC(ppb)":
@@ -283,33 +251,27 @@ public class ExcelUtil {
                         if(pollutant.getVoc()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getVoc()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getVoc(), "#.#"));
-                            }
+
                         }
                         break;
                     case "温度(℃)":
                         if(pollutant.getTemp()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getTemp()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getTemp(), "#.#"));
-                            }
+
                         }
                         break;
                     case "湿度(%)":
                         if(pollutant.getHumi()==null){
                             cell.setCellValue("");
                         }else{
-                            if(pollutant.getHumi()<0){
-                                cell.setCellValue("");
-                            }else{
+
                                 cell.setCellValue(DecimalUtil.formatDecimal(pollutant.getHumi(), "#.#"));
-                            }
+
                         }
                         break;
                     case "经度":
