@@ -25,8 +25,6 @@ public class DisplayConfig {
     @JsonProperty("CO2")
     private Integer co2=0;
 
-    @JsonProperty("SO")
-    private Integer so=0;
 
     @JsonProperty("SO2")
     private Integer so2=0;
@@ -61,11 +59,6 @@ public class DisplayConfig {
     @JsonProperty("Press")
     private Integer press=0;
 
-    @JsonProperty("AQI")
-    private Integer aqi=0;
-
-    @JsonProperty("AQHI")
-    private Integer aqhi=0;
 
     @Column(name = "1min")
     @JsonProperty("1min")
@@ -136,14 +129,6 @@ public class DisplayConfig {
         this.co2 = co2;
     }
 
-    public Integer getSo() {
-        return so;
-    }
-
-    public void setSo(Integer so) {
-        this.so = so;
-    }
-
     public Integer getSo2() {
         return so2;
     }
@@ -208,21 +193,6 @@ public class DisplayConfig {
         this.humi = humi;
     }
 
-    public Integer getAqi() {
-        return aqi;
-    }
-
-    public void setAqi(Integer aqi) {
-        this.aqi = aqi;
-    }
-
-    public Integer getAqhi() {
-        return aqhi;
-    }
-
-    public void setAqhi(Integer aqhi) {
-        this.aqhi = aqhi;
-    }
 
     public Integer getMin1() {
         return min1;
@@ -312,48 +282,6 @@ public class DisplayConfig {
         this.original = original;
     }
 
-    @Override
-    public String toString() {
-        return "DisplayConfigPO{" +
-                "id=" + id +
-                ", pm25=" + pm25 +
-                ", pm10=" + pm10 +
-                ", co=" + co +
-                ", co2=" + co2 +
-                ", so=" + so +
-                ", so2=" + so2 +
-                ", no=" + no +
-                ", no2=" + no2 +
-                ", o3=" + o3 +
-                ", cl2=" + cl2 +
-                ", voc=" + voc +
-                ", temp=" + temp +
-                ", humi=" + humi +
-                ", aqi=" + aqi +
-                ", aqhi=" + aqhi +
-                ", min1=" + min1 +
-                ", min10=" + min10 +
-                ", min15=" + min15 +
-                ", min30=" + min30 +
-                ", h1=" + h1 +
-                ", d1=" + d1 +
-                '}';
-    }
 
-    public DisplayConfig() {
-    }
 
-    public DisplayConfig(Integer pm25, Integer pm10, Integer co, Integer co2, Integer no, Integer no2, Integer o3, Integer temp, Integer humi, Integer min1, Integer min10) {
-        this.pm25 = pm25;
-        this.pm10 = pm10;
-        this.co = co;
-        this.co2 = co2;
-        this.no = no;
-        this.no2 = no2;
-        this.o3 = o3;
-        this.temp = temp;
-        this.humi = humi;
-        this.min1=min1;
-        this.min10=min10;
-    }
 }

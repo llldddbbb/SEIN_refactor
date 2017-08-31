@@ -11,6 +11,7 @@ import com.sein.pojo.po.Pollutant;
 import com.sein.service.utils.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.shiro.crypto.hash.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,8 @@ public class PollutantService {
         HashMap<String,Object> param=new HashMap<>();
         param.put("startTime",startTime);
         param.put("endTime",endTime);
+        //封装表名
+        param.put("pollutantTable",device.getPollutantTable()+interval);
         //封装pollutantType和Alerm参数
         this.setPollutantTypeAndAlermParam(pollutantTypeAndAlerm,param);
         //封装分页参数
@@ -61,8 +64,7 @@ public class PollutantService {
         PageBean pageBean=new PageBean(Integer.parseInt(page),PAGE_SIZE);
         param.put("start",pageBean.getStart()+"");
         param.put("pageSize",pageBean.getPageSize()+"");
-        //封装表名
-        param.put("pollutantTable",device.getPollutantTable()+interval);
+
 
         //倒序显示
         param.put("desc",true);
@@ -109,10 +111,11 @@ public class PollutantService {
         HashMap<String,Object> param=new HashMap<>();
         param.put("startTime",startTime);
         param.put("endTime",endTime);
-        //封装pollutantType和Alerm参数
-        this.setPollutantTypeAndAlermParam(pollutantTypeAndAlerm,param);
         //封装表名
         param.put("pollutantTable",device.getPollutantTable()+interval);
+        //封装pollutantType和Alerm参数
+        this.setPollutantTypeAndAlermParam(pollutantTypeAndAlerm,param);
+
 
         //倒序显示
         param.put("desc",true);
@@ -157,17 +160,20 @@ public class PollutantService {
      * @return
      */
     private HashMap<String,Object> setPollutantTypeAndAlermParam(String pollutantTypeAndAlerm,HashMap<String,Object> param){
+
         //定义type封装参数
         StringBuilder typeParam=new StringBuilder(POLLUTANT_TYPE_BASE);
         String[] typeAndAlarmArr=pollutantTypeAndAlerm.split(",");
         //遍历typeAndAlarmArr，设置各个alerm
         for(String typeAndAlarm:typeAndAlarmArr){
             String type=typeAndAlarm.split("-")[0];
+
             //如果不带参数，则设置空
             if("-".equals(typeAndAlarm.substring(typeAndAlarm.length()-1,typeAndAlarm.length()))){
                 param.put(type,"");
             }else{
                 String alarm=typeAndAlarm.split("-")[1];
+
                 param.put(type,alarm);
             }
             typeParam.append(type+",");
@@ -199,6 +205,10 @@ public class PollutantService {
         param.put("desc",desc);
         List<Pollutant> pollutantList = pollutantDAO.listPollutant(param);
         return pollutantList;
+    }
+
+    public Integer isExistColumn(HashMap map){
+        return pollutantDAO.isExistColumn(map);
     }
 
 

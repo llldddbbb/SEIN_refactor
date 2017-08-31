@@ -22,8 +22,7 @@
         <div class="detail-left_content" >
             <div class="content_top">
                 <div class="content_top_left">
-                    <span th:text="AQI" th:if="${session.displayConfig.aqi}==1"></span>
-                    <span th:text="AQHI" th:if="${session.displayConfig.aqhi}==1"></span>
+                    <span th:text="AQI" ></span>
                 </div>
                 <div class="content_top_right"><span th:text="#{UPDATETIME}">最后更新时间:</span><br><span th:each="pollutant:${devicePollutant.pollutantItemList}"><span th:if="${pollutant.type}==time" th:utext="${pollutant.value}" id="time_real"></span></span><br/>
                     <span id="status_real"  style="color:#FF0000" th:text="#{STATUS_OFF}" th:if="${devicePollutant.device.status}==3">${device.getStatus() }</span>
@@ -46,7 +45,6 @@
                             <span th:if="${pollutant.type}==CO2" th:utext="'<tr><td>CO<sub>2</sub></td><td id=CO2_real >'+${#numbers.formatDecimal(pollutant.value,1,3)}+' &nbsp;ppm</b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==NO" th:utext="'<tr><td>NO</td><td id=NO_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==NO2" th:utext="'<tr><td>NO<sub>2</sub></td><td id=NO2_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
-                            <span th:if="${pollutant.type}==SO" th:utext="'<tr><td>SO</td><td id=SO_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==SO2" th:utext="'<tr><td>SO<sub>2</sub></td><td id=SO2_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==O3" th:utext="'<tr><td>O<sub>3</sub></td><td id=O3_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
                             <span th:if="${pollutant.type}==CL2" th:utext="'<tr><td>CL<sub>2</sub></td><td id=CL2_real >'+${#numbers.formatDecimal(pollutant.value,1,1)}+' &nbsp;ppb</b></td></tr>'"></span>
@@ -78,7 +76,6 @@
                         <option value="CO2" th:if="${session.displayConfig.getCo2()}==1">CO₂</option>
                         <option value="NO" th:if="${session.displayConfig.getNo()}==1">NO</option>
                         <option value="NO2" th:if="${session.displayConfig.getNo2()}==1">NO₂</option>
-                        <option value="SO" th:if="${session.displayConfig.getSo()}==1">SO</option>
                         <option value="SO2" th:if="${session.displayConfig.getSo2()}==1">SO₂</option>
                         <option value="O3" th:if="${session.displayConfig.getO3()}==1">O3</option>
                         <option value="Cl2" th:if="${session.displayConfig.getCl2()}==1">Cl₂</option>
@@ -354,7 +351,6 @@
             $("#CO2_real").html(realPollutant['co2']+" &nbsp;ppm</b>");
             $("#NO_real").html(realPollutant['no']+" &nbsp;ppb</b>");
             $("#NO2_real").html(realPollutant['no2']+" &nbsp;ppb</b>");
-            $("#SO_real").html(realPollutant['so']+" &nbsp;ppb</b>");
             $("#SO2_real").html(realPollutant['so2']+" &nbsp;ppb</b>");
             $("#O3_real").html(realPollutant['o3']+" &nbsp;ppb</b>");
             $("#CL2_real").html(realPollutant['cl2']+" &nbsp;ppb</b>");

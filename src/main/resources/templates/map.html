@@ -98,12 +98,8 @@
                         map.centerAndZoom(new BMap.Point(val.device.longitude, val.device.latitude), 9);
                     }
                     var content="<div class='mapInfo_content'><div class='mapInfo_content_left' ><span style='font-size: 14px;' id='AQITITLE'>空气质量指数<br></span><span>";
-                    if(displayConfig.AQI==1){
-                        content=content+"AQI</span></div><div class='mapInfo_content_middle'>"+val.aqi+"</div><div class='mapInfo_content_right'>";
-                    }
-                    if(displayConfig.AQHI==1){
-                        content=content+"AQHI</span></div><div class='mapInfo_content_middle'>"+val.aqhi+"</div><div class='mapInfo_content_right'>";
-                    }
+                    content=content+"AQI</span></div><div class='mapInfo_content_middle'>"+val.aqi+"</div><div class='mapInfo_content_right'>";
+
                     for(var j in val.pollutantItemList){
                         if(val.pollutantItemList[j].type=="Temp"){
                             content=content+"<span><span id='TEMP'>温度</span>:"+val.pollutantItemList[j].value+"℃<br/>";
@@ -131,8 +127,6 @@
                             content=content+"<tr><td >NO</td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
                         }else if(val.pollutantItemList[k].type=="NO2"){
                             content=content+"<tr><td >NO<sub>2</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
-                        }else if(val.pollutantItemList[k].type=="SO"){
-                            content=content+"<tr><td >SO</td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
                         }else if(val.pollutantItemList[k].type=="SO2"){
                             content=content+"<tr><td >SO<sub>2</sub></td><td>"+val.pollutantItemList[k].value+"&nbsp;ppb</td></tr>"
                         }else if(val.pollutantItemList[k].type=="O3"){

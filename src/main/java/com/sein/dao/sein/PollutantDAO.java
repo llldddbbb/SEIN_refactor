@@ -2,6 +2,7 @@ package com.sein.dao.sein;
 
 import com.sein.pojo.po.Pollutant;
 import org.apache.ibatis.annotations.Param;
+import org.apache.shiro.crypto.hash.Hash;
 
 import java.util.HashMap;
 import java.util.List;
@@ -71,5 +72,12 @@ public interface PollutantDAO {
      * @return
      */
     List<String> getTableNameList(@Param("pollutantTable")String pollutantTable);
+
+    /**
+     * 查询是否有该列
+     * @param map
+     * @return
+     */
+    Integer isExistColumn(HashMap<String,Object> map);
 
 }

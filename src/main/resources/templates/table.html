@@ -76,71 +76,68 @@
                     <div>
                         <div class="table-select" th:if="${session.displayConfig.getPm25()}==1">
                             <div class="table-select2" th:text="#{POLLUTANTTYPE}">污染物</div>
-                            <input type="checkbox" name="airQulityType" id="PM25" value="PM25" checked class="radio" >PM<sub>2.5</sub>
+                            <input type="checkbox" name="airQulityType" id="PM25" value="PM25"  class="radio" >PM<sub>2.5</sub>
                             <br>
                             <div th:if="${session.displayConfig.getPress()}==1" style="margin-top: 3px;">
-                                <input type="checkbox" name="airQulityType" id="Press" value="Press" checked class="radio" th:text="#{Press}"><br>
+                                <input type="checkbox" name="airQulityType" id="Press" value="Press"  class="radio" th:text="#{Press}"><br>
                             </div>
                         </div>
-                        <div class="table-select" >
+                        <div class="table-select" th:if="${session.displayConfig.getPm10()}==1">
                             <div>&nbsp;</div>
-                            <input th:if="${session.displayConfig.getPm10()}==1" type="checkbox" name="airQulityType" id="PM10" value="PM10" checked class="radio" >PM<sub>10</sub><br>
+                            <input  type="checkbox" name="airQulityType" id="PM10" value="PM10"  class="radio" >PM<sub>10</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getPm1()}==1">
                             <div>&nbsp;</div>
-                            <input  type="checkbox" name="airQulityType" id="PM1" value="PM1" checked class="radio" >PM<sub>1</sub><br>
+                            <input  type="checkbox" name="airQulityType" id="PM1" value="PM1"  class="radio" >PM<sub>1</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getCo()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="CO" value="CO" checked class="radio" >CO<br>
+                            <input type="checkbox" name="airQulityType" id="CO" value="CO"  class="radio" >CO<br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getCo2()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="CO2" value="CO2" checked class="radio" >CO<sub>2</sub><br>
+                            <input type="checkbox" name="airQulityType" id="CO2" value="CO2"  class="radio" >CO<sub>2</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getNo()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="NO" value="NO" checked class="radio" >NO<br>
+                            <input type="checkbox" name="airQulityType" id="NO" value="NO"  class="radio" >NO<br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getNo2()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="NO2" value="NO2" checked class="radio" >NO<sub>2</sub><br>
+                            <input type="checkbox" name="airQulityType" id="NO2" value="NO2"  class="radio" >NO<sub>2</sub><br>
                         </div>
-                        <div class="table-select" th:if="${session.displayConfig.getSo()}==1">
-                            <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="SO" value="SO" checked class="radio" >SO<br>
-                        </div>
+
                         <div class="table-select" th:if="${session.displayConfig.getSo2()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="SO2" value="SO2" checked class="radio" >SO<sub>2</sub><br>
+                            <input type="checkbox" name="airQulityType" id="SO2" value="SO2"  class="radio" >SO<sub>2</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getO3()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="O3" value="O3" checked class="radio" >O<sub>3</sub><br>
+                            <input type="checkbox" name="airQulityType" id="O3" value="O3"  class="radio" >O<sub>3</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getCl2()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="CL2" value="CL2" checked  class="radio" >CL<sub>2</sub><br>
+                            <input type="checkbox" name="airQulityType" id="CL2" value="CL2"   class="radio" >CL<sub>2</sub><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getVoc()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="VOC" value="VOC" checked  class="radio" >VOC<br>
+                            <input type="checkbox" name="airQulityType" id="VOC" value="VOC"   class="radio" >VOC<br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getTemp()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="Temp" value="Temp" checked  class="radio" th:text="#{TEMP}" ><br>
+                            <input type="checkbox" name="airQulityType" id="Temp" value="Temp"   class="radio" th:text="#{TEMP}" ><br>
                         </div>
                         <div class="table-select"th:if="${session.displayConfig.getHumi()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="Humi" value="Humi" checked class="radio" th:text="#{HUMI}"><br>
+                            <input type="checkbox" name="airQulityType" id="Humi" value="Humi"  class="radio" th:text="#{HUMI}"><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getLongitude()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="Longitude" value="Longitude" checked class="radio" th:text="#{Longitude}"><br>
+                            <input type="checkbox" name="airQulityType" id="Longitude" value="Longitude"  class="radio" th:text="#{Longitude}"><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getLatitude()}==1" >
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="Latitude" value="Latitude" checked class="radio" th:text="#{Latitude}"><br>
+                            <input type="checkbox" name="airQulityType" id="Latitude" value="Latitude"  class="radio" th:text="#{Latitude}"><br>
                         </div>
                     </div>
                 </div>
@@ -166,8 +163,6 @@
                                 <td th:if="${session.displayConfig.getNo()}==1"><input type="text" id="NO_alerm"  /></td>
                                 <td style="padding-top: 10px;" th:if="${session.displayConfig.getNo2()}==1" >NO<sub>2</sub>&nbsp;</td>
                                 <td th:if="${session.displayConfig.getNo2()}==1"><input type="text" id="NO2_alerm"  /></td>
-                                <td style="padding-top: 10px;" th:if="${session.displayConfig.getSo()}==1" >SO&nbsp;</td>
-                                <td th:if="${session.displayConfig.getSo()}==1"><input type="text" id="SO_alerm"  /></td>
                                 <td style="padding-top: 10px;" th:if="${session.displayConfig.getSo2()}==1" >SO<sub>2</sub>&nbsp;</td>
                                 <td th:if="${session.displayConfig.getSo2()}==1"><input type="text" id="SO2_alerm"  /></td>
                                 <td style="padding-top: 10px;" th:if="${session.displayConfig.getO3()}==1">O<sub>3</sub>&nbsp;</td>
@@ -256,8 +251,6 @@
                 pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO_alerm").val());
             }else if($(this).val()=="NO2"){
                 pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO2_alerm").val());
-            }else if($(this).val()=="SO"){
-                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO_alerm").val());
             }else if($(this).val()=="SO2"){
                 pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO2_alerm").val());
             }else if($(this).val()=="O3"){
@@ -298,8 +291,13 @@
                 unit,unit
             },
             success:function (result) {
-                $("#pageNation").html(result['pageNation']);
-                $("#pollutantTable").html(result['tableHeader']+result['tableBody']);
+                if(result.success){
+                    $("#pageNation").html(result.data['pageNation']);
+                    $("#pollutantTable").html(result.data['tableHeader']+result.data['tableBody']);
+                }else{
+                    alert(result.msg);
+                }
+
             }
         });
     }
@@ -325,8 +323,6 @@
                 pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO_alerm").val());
             }else if($(this).val()=="NO2"){
                 pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#NO2_alerm").val());
-            }else if($(this).val()=="SO"){
-                pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO_alerm").val());
             }else if($(this).val()=="SO2"){
                 pollutantTypeAndAlermArr.push($(this).val()+"-"+$("#SO2_alerm").val());
             }else if($(this).val()=="O3"){

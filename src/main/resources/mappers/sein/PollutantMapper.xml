@@ -164,6 +164,10 @@
         SELECT * FROM ${pollutantTable} WHERE Longitude>0  ORDER BY DATETIME DESC LIMIT 1
     </select>
 
+    <select id="isExistColumn" resultType="Integer" parameterType="Map">
+        SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='sein' AND table_name = #{pollutantTable} AND column_name = #{columnName}
+    </select>
+
     <select id="isExistGPSColumn" resultType="Integer" parameterType="String">
         SELECT COUNT(*) FROM information_schema.columns WHERE table_schema='sein' AND table_name = #{pollutantTable} AND column_name = 'Latitude'
     </select>

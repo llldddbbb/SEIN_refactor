@@ -134,17 +134,7 @@ public class PollutantUtil {
                 }
             }
         }
-        if (displayConfig.getSo() == 1) {
-            if (pollutant.getSo() == null) {
-                itemList.add(new PollutantItem("SO", null));
-            } else {
-                if (pollutant.getSo() < 0) {
-                    itemList.add(new PollutantItem("SO", null));
-                } else {
-                    itemList.add(new PollutantItem("SO", DecimalUtil.formatDecimal(pollutant.getSo(),"#.#").toString()));
-                }
-            }
-        }
+
         if (displayConfig.getSo2() == 1) {
             if (pollutant.getSo2() == null) {
                 itemList.add(new PollutantItem("SO2", null));

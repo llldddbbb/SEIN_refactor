@@ -46,8 +46,6 @@
                                               th:utext="'[ NO : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
                                         <span th:if="${pollutant.type}==NO2"
                                               th:utext="'[ NO<sub>2</sub> : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
-                                        <span th:if="${pollutant.type}==SO"
-                                              th:utext="'[ SO : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
                                         <span th:if="${pollutant.type}==SO2"
                                               th:utext="'[ SO<sub>2</sub> : '+${#numbers.formatInteger(pollutant.value,0)}+' ppb ]'"></span>
                                         <span th:if="${pollutant.type}==O3"
