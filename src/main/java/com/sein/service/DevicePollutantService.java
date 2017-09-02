@@ -222,9 +222,13 @@ public class DevicePollutantService {
         //封装所有设备折线图
         for (Device device : deviceList) {
             DevicePollutantChart devicePollutantChart = new DevicePollutantChart();
-
+            param.put("columnName",pollutantType);
             //设置设备对应表名
             param.put("pollutantTable", device.getPollutantTable() + interval);
+            if(pollutantDAO.isExistColumn(param)<=0){
+                continue;
+            }
+
             List<Pollutant> pollutantList = pollutantDAO.listPollutant(param);
             //获取单个浓度折线图
             List<PollutantChartItem> pollutantChartList = PollutantUtil.getPollutantChartList(pollutantType, pollutantList, xaisMaxSet);

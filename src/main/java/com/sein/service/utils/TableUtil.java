@@ -39,14 +39,14 @@ public class TableUtil {
                     break;
                 case "CO":
                     if ("umgm".equals(unit)) {
-                        tableHeader.append("<th>CO(µg/m³)</th>");
+                        tableHeader.append("<th>CO(mg/m³)</th>");
                     } else {
                         tableHeader.append("<th>CO(ppm)</th>");
                     }
                     break;
                 case "CO2":
                     if ("umgm".equals(unit)) {
-                        tableHeader.append("<th>CO<sub>2</sub>(µg/m³)</th>");
+                        tableHeader.append("<th>CO<sub>2</sub>(mg/m³)</th>");
                     } else {
                         tableHeader.append("<th>CO<sub>2</sub>(ppm)</th>");
                     }
@@ -137,58 +137,55 @@ public class TableUtil {
             for (String pollutantTypeStr : pollutantTypeStrArr) {
                 switch (pollutantTypeStr) {
                     case "DateTime":
-                        tableBody.append("<td>" + DateUtil.formatStrToStr(pollutant.getTime(),"yyyy-MM-dd HH:mm:ss") + "</td>");
+                        tableBody.append("<td>"+pollutant.getTime()+"</td>");
                         break;
                     case "PM25":
-                        tableBody.append("<td>" + (pollutant.getPm25() == null ? null : DecimalUtil.formatDecimal(pollutant.getPm25(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getPm25()==null?null:pollutant.getPm25()<0?null:DecimalUtil.formatDecimal(pollutant.getPm25(),"#.#"))+"</td>");
                         break;
                     case "PM10":
-                        tableBody.append("<td>" + (pollutant.getPm10() == null ? null : DecimalUtil.formatDecimal(pollutant.getPm10(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getPm10()==null?null:pollutant.getPm10()<0?null:DecimalUtil.formatDecimal(pollutant.getPm10(),"#.#"))+"</td>");
                         break;
                     case "PM1":
-                        tableBody.append("<td>" + (pollutant.getPm1() == null ? null : DecimalUtil.formatDecimal(pollutant.getPm1(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getPm1()==null?null:pollutant.getPm1()<0?null:DecimalUtil.formatDecimal(pollutant.getPm1(),"#.#"))+"</td>");
                         break;
                     case "CO":
-                        tableBody.append("<td>" + (pollutant.getCo() == null ? null : DecimalUtil.formatDecimal(pollutant.getCo(), "#.###")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getCo()==null?null:pollutant.getCo()<0?null:DecimalUtil.formatDecimal(pollutant.getCo(),"#.###"))+"</td>");
                         break;
                     case "CO2":
-                        tableBody.append("<td>" + (pollutant.getCo2() == null ? null : DecimalUtil.formatDecimal(pollutant.getCo2(), "#.###")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getCo2()==null?null:pollutant.getCo2()<0?null:DecimalUtil.formatDecimal(pollutant.getCo2(),"#.###"))+"</td>");
                         break;
                     case "NO":
-                        tableBody.append("<td>" + (pollutant.getNo() == null ? null : DecimalUtil.formatDecimal(pollutant.getNo(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getNo()==null?null:pollutant.getNo()<0?null:DecimalUtil.formatDecimal(pollutant.getNo(),"#.#"))+"</td>");
                         break;
                     case "NO2":
-                        tableBody.append("<td>" + (pollutant.getNo2() == null ? null : DecimalUtil.formatDecimal(pollutant.getNo2(), "#.#")) + "</td>");
-                        break;
-                    case "SO":
-                        tableBody.append("<td>" + (pollutant.getSo() == null ? null : DecimalUtil.formatDecimal(pollutant.getSo(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getNo2()==null?null:pollutant.getNo2()<0?null:DecimalUtil.formatDecimal(pollutant.getNo2(),"#.#"))+"</td>");
                         break;
                     case "SO2":
-                        tableBody.append("<td>" + (pollutant.getSo2() == null ? null : DecimalUtil.formatDecimal(pollutant.getSo2(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getSo2()==null?null:pollutant.getSo2()<0?null:DecimalUtil.formatDecimal(pollutant.getSo2(),"#.#"))+"</td>");
                         break;
                     case "CL2":
-                        tableBody.append("<td>" + (pollutant.getCl2() == null ? null : DecimalUtil.formatDecimal(pollutant.getCl2(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getCl2()==null?null:pollutant.getCl2()<0?null:DecimalUtil.formatDecimal(pollutant.getCl2(),"#.#"))+"</td>");
                         break;
                     case "O3":
-                        tableBody.append("<td>" + (pollutant.getO3() == null ? null : DecimalUtil.formatDecimal(pollutant.getO3(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getO3()==null?null:pollutant.getO3()<0?null:DecimalUtil.formatDecimal(pollutant.getO3(),"#.#"))+"</td>");
                         break;
                     case "VOC":
-                        tableBody.append("<td>" + (pollutant.getVoc() == null ? null : DecimalUtil.formatDecimal(pollutant.getVoc(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getVoc()==null?null:pollutant.getVoc()<0?null: DecimalUtil.formatDecimal(pollutant.getVoc(),"#.#"))+"</td>");
                         break;
                     case "Humi":
-                        tableBody.append("<td>" + (pollutant.getHumi() == null ? null : DecimalUtil.formatDecimal(pollutant.getHumi(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getHumi()==null?null:pollutant.getHumi()<0?null:DecimalUtil.formatDecimal(pollutant.getHumi(),"#.#"))+"</td>");
                         break;
                     case "Temp":
-                        tableBody.append("<td>" + (pollutant.getTemp() == null ? null : DecimalUtil.formatDecimal(pollutant.getTemp(), "#.#")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getTemp()==null?null:pollutant.getTemp()<0?null:DecimalUtil.formatDecimal(pollutant.getTemp(),"#.#"))+"</td>");
                         break;
                     case "Longitude":
-                        tableBody.append("<td>" + (pollutant.getLongitude() == null ? null : DecimalUtil.formatDecimal(pollutant.getLongitude(), "#.####")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getLongitude()==null?null:DecimalUtil.formatDecimal(pollutant.getLongitude(),"#.####"))+"</td>");
                         break;
                     case "Latitude":
-                        tableBody.append("<td>" + (pollutant.getLatitude() == null ? null : DecimalUtil.formatDecimal(pollutant.getLatitude(), "#.####")) + "</td>");
+                        tableBody.append("<td>"+(pollutant.getLatitude()==null?null:DecimalUtil.formatDecimal(pollutant.getLatitude(),"#.####"))+"</td>");
                         break;
                     case "Press":
-                        tableBody.append("<td>" + pollutant.getPress() + "</td>");
+                        tableBody.append("<td>"+pollutant.getPress()+"</td>");
                         break;
                 }
             }

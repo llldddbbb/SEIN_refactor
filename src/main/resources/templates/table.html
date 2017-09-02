@@ -79,7 +79,7 @@
                             <input type="checkbox" name="airQulityType" id="PM25" value="PM25"  class="radio" >PM<sub>2.5</sub>
                             <br>
                             <div th:if="${session.displayConfig.getPress()}==1" style="margin-top: 3px;">
-                                <input type="checkbox" name="airQulityType" id="Press" value="Press"  class="radio" th:text="#{Press}"><br>
+                                <input type="checkbox" name="airQulityType" id="Press" value="Press" checked  class="radio" th:text="#{Press}"><br>
                             </div>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getPm10()}==1">
@@ -125,11 +125,11 @@
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getTemp()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="Temp" value="Temp"   class="radio" th:text="#{TEMP}" ><br>
+                            <input type="checkbox" name="airQulityType" id="Temp" value="Temp"  checked  class="radio" th:text="#{TEMP}" ><br>
                         </div>
                         <div class="table-select"th:if="${session.displayConfig.getHumi()}==1">
                             <div>&nbsp;</div>
-                            <input type="checkbox" name="airQulityType" id="Humi" value="Humi"  class="radio" th:text="#{HUMI}"><br>
+                            <input type="checkbox" name="airQulityType" id="Humi" value="Humi" checked  class="radio" th:text="#{HUMI}"><br>
                         </div>
                         <div class="table-select" th:if="${session.displayConfig.getLongitude()}==1">
                             <div>&nbsp;</div>
@@ -235,6 +235,13 @@
         var id=$("#place").val();
         var interval= $('#timepicker').val();
         var unit=$('input[name="standard"]:checked ').val();
+        if(unit=="umgm"){
+            var tempCheck=$('input[id="Temp"]:checked ').val();
+            if(tempCheck==null||tempCheck==''){
+                alert("转换成µg/m³单位需要温度系数，请勾选温度");
+                return;
+            }
+        }
         var pollutantTypeAndAlermArr =[];
         $('input[name="airQulityType"]:checked').each(function(){
             if($(this).val()=="PM25"){
