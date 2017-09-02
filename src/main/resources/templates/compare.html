@@ -191,7 +191,12 @@
                         yAxis: {
                             name: "Unit("+unit+")",
                             type: 'value',
-                            boundaryGap: [0, '30%']
+                            boundaryGap: [0, '30%'],
+                            axisLabel: {
+                                formatter: function (value, index) {
+                                    return value.toFixed(1);
+                                }
+                            }
                         },
                         xAxis: {
                             type: 'category',
